@@ -1,6 +1,6 @@
 import './App.scss';
 
-function App() {
+function App(): JSX.Element {
   return <div>Mini paint</div>;
 }
 
