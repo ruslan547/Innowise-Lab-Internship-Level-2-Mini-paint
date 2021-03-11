@@ -1,7 +1,7 @@
 import './App.scss';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import PrivateRoute from './core/components/PrivateRoute/PrivateRoute';
-import { SIGNIN, REGISTER, HOME, PAINT } from './core/constants/routeConstants';
+import { SIGNIN, REGISTER, HOME, PAINT } from './core/constants/route.constants';
 
 function App(): JSX.Element {
   return (
