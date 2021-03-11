@@ -1,0 +1,15 @@
+@import '../../../index.scss';
+
+.modal-btn {
+  cursor: pointer;
+  width: 76px;
+  height: 33px;
+  padding: 5px;
+  box-sizing: border-box;
+  border: 1px solid $basic-color;
+  border-radius: 2px;
+  text-transform: uppercase;
+  color: $font-color;
+  font-size: 12px;
+  background-color: $primary-color;
+}

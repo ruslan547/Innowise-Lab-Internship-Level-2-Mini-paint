@@ -1,17 +1,20 @@
+import './Signin.scss';
+import Form from '../../core/components/Form/Form';
+import FormButton from '../../core/components/FormButton/FormButton';
+import Modal from '../../core/components/Modal/Modal';
+
+const FORM_BTN_VALUE = 'sign in';
+const MODAL_BTN_VALUE = 'register';
+const MODAL_TEXT = 'Need an account?';
+
 function Signin(): JSX.Element {
   return (
-    <div className="signin-page">
-      <div className="signin-modal">
-        <form className="signin-form">
-          <input className="signin-form__email" />
-          <input className="signin-form__password" />
-          <input className="signin-form__btn" type="submin" value={'SIGN IN'} />
-        </form>
-        <div className="signin-modal__footer">
-          Need an account?
-          <button className="sinin-modal__btn">REGISTER</button>
-        </div>
-      </div>
+    <div className="signin">
+      <Modal text={MODAL_TEXT} value={MODAL_BTN_VALUE}>
+        <Form>
+          <FormButton value={FORM_BTN_VALUE} />
+        </Form>
+      </Modal>
     </div>
   );
 }

@@ -2,11 +2,12 @@ $basic-color: #1f2325;
 $main-color: #2b2d30;
 $primary-color: #383f43;
 $durk-color: #000;
-$lite-color: #c6cccf;
+$font-color: #c6cccf;
 
 
 body {
   margin: 0;
+  color: $font-color;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;

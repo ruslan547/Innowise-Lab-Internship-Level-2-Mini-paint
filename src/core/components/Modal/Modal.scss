@@ -1,0 +1,23 @@
+@import '../../../index.scss';
+
+.modal {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  background-color: $main-color;
+
+  &__footer {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: $primary-color;
+  }
+
+  &__text {
+    margin-right: 10px;
+  }
+}
