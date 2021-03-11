@@ -4,7 +4,7 @@ import './Form.scss';
 interface IFormProps {
   onSubmit?: React.FormEventHandler<HTMLFormElement>;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  children?: JSX.Element;
+  children?: JSX.Element | Array<JSX.Element>;
 }
 
 function Form({ onSubmit, onChange, children }: IFormProps) {

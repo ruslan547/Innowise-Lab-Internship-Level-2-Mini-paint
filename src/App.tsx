@@ -3,6 +3,7 @@ import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import PrivateRoute from './core/components/PrivateRoute/PrivateRoute';
 import { routeConstants } from './core/constants/route.constants';
 import Signin from './pages/Signin/Signin';
+import Register from './pages/Register/Register';
 
 function App(): JSX.Element {
   return (
@@ -13,7 +14,7 @@ function App(): JSX.Element {
             <PrivateRoute exact path={routeConstants.HOME} component={() => <div>page1</div>} />
             <PrivateRoute path={routeConstants.PAINT} component={() => <div>page2</div>} />
             <Route path={routeConstants.SIGNIN} component={Signin} />
-            <Route path={routeConstants.REGISTER} component={() => <div>register</div>} />
+            <Route path={routeConstants.REGISTER} component={Register} />
           </Switch>
         </Router>
       </div>

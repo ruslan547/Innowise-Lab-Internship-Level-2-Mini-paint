@@ -17,6 +17,4 @@ function mapStateToProps(store: any) {
   return { loading };
 }
 
-connect(mapStateToProps)(PrivateRoute);
-
-export default PrivateRoute;
+export default connect(mapStateToProps)(PrivateRoute);

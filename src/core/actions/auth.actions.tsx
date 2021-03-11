@@ -33,6 +33,7 @@ function signin(email: string, password: string): any {
       })
       .catch(({ message }) => {
         dispatch(error());
+
         if (!toast.isActive(toastId)) {
           toastId = toast.error(message, { position: toast.POSITION.TOP_CENTER });
         }
@@ -43,7 +44,7 @@ function signin(email: string, password: string): any {
 function register(email: string, password: string): any {
   const request = () => ({ type: authConstants.REGISTER_REQUEST });
   const success = (user: User) => ({ type: authConstants.REGISTER_SUCCESS, user });
-  const error = (message: string) => ({ type: authConstants.REGISTER_ERROR, message });
+  const error = () => ({ type: authConstants.REGISTER_ERROR });
 
   return (dispatch: any) => {
     dispatch(request());
@@ -55,7 +56,11 @@ function register(email: string, password: string): any {
         history.push(routeConstants.HOME);
       })
       .catch(({ message }) => {
-        dispatch(error(message));
+        dispatch(error());
+
+        if (!toast.isActive(toastId)) {
+          toastId = toast.error(message, { position: toast.POSITION.TOP_CENTER });
+        }
       });
   };
 }
