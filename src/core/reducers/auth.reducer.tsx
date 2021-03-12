@@ -1,4 +1,3 @@
-import { AuthAction, AuthThunkAction } from '../actions/auth.actions';
 import { authConstants } from '../constants/auth.constants';
 
 const initState = {

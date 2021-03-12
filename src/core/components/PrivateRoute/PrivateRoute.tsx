@@ -1,11 +1,12 @@
 import { Route } from 'react-router-dom';
 import { Redirect, RouteProps } from 'react-router';
-import { connect } from 'react-redux';
+import { connect, ConnectedComponent } from 'react-redux';
 import { routeConstants } from '../../constants/route.constants';
 import { RootSate } from '../../reducers/root.reducer';
+import { FC } from 'react';
 
 export interface IPrivateRouteProps {
-  component: () => JSX.Element;
+  component: ConnectedComponent<FC, Omit<unknown, never>>;
   userId: string;
 }
 
