@@ -40,7 +40,7 @@ function Signin({ dispatch, loading }: ISigninProps): JSX.Element {
   };
 
   const handleClick = () => {
-    history.push(`/#${routeConstants.REGISTER}`);
+    history.push(routeConstants.REGISTER);
   };
 
   return (

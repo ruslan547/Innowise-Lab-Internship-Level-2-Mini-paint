@@ -6,6 +6,8 @@ import Form from '../../core/components/Form/Form';
 import FormButton from '../../core/components/FormButton/FormButton';
 import Loader from '../../core/components/Loader/Loader';
 import Modal from '../../core/components/Modal/Modal';
+import { routeConstants } from '../../core/constants/route.constants';
+import { history } from '../../core/helpers/history';
 import './Register.scss';
 
 const MODAL_TEXT = 'Already have an account?';
@@ -47,11 +49,15 @@ function Register({ dispatch, loading }: IRegisterProps) {
     }
   };
 
+  const handleClick = () => {
+    history.push(routeConstants.SIGNIN);
+  };
+
   return (
     <div className="register">
       {loading && <Loader />}
       <ToastContainer />
-      <Modal text={MODAL_TEXT} value={MODAL_BTN_VALUE}>
+      <Modal text={MODAL_TEXT} value={MODAL_BTN_VALUE} onClick={handleClick}>
         <Form onChange={handleChange} onSubmit={handleSubmit}>
           <input
             className="confirmation"
