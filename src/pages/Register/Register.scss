@@ -1,0 +1,5 @@
+@import '../../index.scss';
+
+.register { @extend %sign-page; }
+
+.confirmation { @extend %sign-input; }

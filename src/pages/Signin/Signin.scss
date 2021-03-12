@@ -1,9 +1,3 @@
 @import '../../index.scss';
 
-.signin {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+.signin { @extend %sign-page; }
