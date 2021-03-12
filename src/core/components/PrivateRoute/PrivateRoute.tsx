@@ -3,10 +3,11 @@ import { Redirect, RouteProps } from 'react-router';
 import { connect } from 'react-redux';
 import { User } from '../../actions/auth.actions';
 import { routeConstants } from '../../constants/route.constants';
+import { IAuthSate } from '../../reducers/auth.reducer';
 
 export interface IPrivateRouteProps {
   component: () => JSX.Element;
-  user: User;
+  user: User | null;
 }
 
 function PrivateRoute({ user, component: Component, ...rest }: IPrivateRouteProps & RouteProps): JSX.Element {
@@ -18,8 +19,7 @@ function PrivateRoute({ user, component: Component, ...rest }: IPrivateRouteProp
   );
 }
 
-function mapStateToProps(store: any) {
-  const { user } = store.authReducer;
+function mapStateToProps({ authReducer: { user } }: IAuthSate) {
   return { user };
 }
 
