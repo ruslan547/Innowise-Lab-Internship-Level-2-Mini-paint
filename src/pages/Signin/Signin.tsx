@@ -10,6 +10,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../../core/components/Loader/Loader';
 import { history } from '../../core/helpers/history';
 import { routeConstants } from '../../core/constants/route.constants';
+import { RootSate } from '../../core/reducers/root.reducer';
+import { Dispatch } from '../../core/helpers/store';
 
 const FORM_BTN_VALUE = 'sign in';
 const MODAL_BTN_VALUE = 'register';
@@ -19,10 +21,10 @@ toast.configure();
 
 interface ISigninProps {
   loading: boolean;
-  dispatch: (action: any) => void;
+  dispatch: Dispatch;
 }
 
-function Signin({ dispatch, loading }: ISigninProps): JSX.Element {
+function Signin({ loading, dispatch }: ISigninProps): JSX.Element {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -56,9 +58,8 @@ function Signin({ dispatch, loading }: ISigninProps): JSX.Element {
   );
 }
 
-function mapStateToProps(state: any) {
-  const { user, loading } = state.authReducer;
-  return { user, loading };
+function mapStateToProps({ authReducer: { loading, dispatch } }: RootSate) {
+  return { loading, dispatch };
 }
 
 export default connect(mapStateToProps)(Signin);

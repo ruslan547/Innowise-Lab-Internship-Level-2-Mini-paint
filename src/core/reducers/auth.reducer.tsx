@@ -1,32 +1,28 @@
-import { User } from '../actions/auth.actions';
+import { AuthAction, AuthThunkAction } from '../actions/auth.actions';
 import { authConstants } from '../constants/auth.constants';
 
 const initState = {
   loading: false,
-  user: null,
+  userId: null,
 };
 
-export interface IAuthSate {
-  authReducer: {
-    user: User | null;
-    loading: boolean;
-  };
+export interface AuthState {
+  loading: boolean;
+  userId: string | null | undefined;
 }
 
-export function authReducer(state = initState, action: any): any {
+export function authReducer(state = initState, action: any): AuthState {
   switch (action.type) {
-    case authConstants.SIGNIN_REQUEST || authConstants.REGISTER_REQUEST:
-      return { loading: true };
-    case authConstants.SIGNIN_SUCCESS || authConstants.REGISTER_SUCCESS:
+    case authConstants.REQUEST:
+      return { ...state, loading: true };
+    case authConstants.SUCCESS:
       return {
+        ...state,
         loading: false,
-        user: action.user,
+        userId: action.payload,
       };
-    case authConstants.SIGNIN_ERROR || authConstants.REGISTER_ERROR:
-      return {
-        loading: false,
-        user: null,
-      };
+    case authConstants.ERROR:
+      return { ...state, loading: false };
     case authConstants.SIGNOUT:
       return initState;
     default:

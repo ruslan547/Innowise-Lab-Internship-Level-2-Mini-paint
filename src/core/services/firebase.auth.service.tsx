@@ -7,11 +7,13 @@ export const firebaseAuthService = {
   signout,
 };
 
-function signin(email: string, password: string): Promise<firebase.auth.UserCredential> {
+export type UserCredential = firebase.auth.UserCredential;
+
+function signin(email: string, password: string): Promise<UserCredential> {
   return auth.signInWithEmailAndPassword(email, password);
 }
 
-function register(email: string, password: string): Promise<firebase.auth.UserCredential> {
+function register(email: string, password: string): Promise<UserCredential> {
   return auth.createUserWithEmailAndPassword(email, password);
 }
 

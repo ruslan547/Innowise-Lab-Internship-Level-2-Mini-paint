@@ -1,8 +1,11 @@
 import { authConstants } from '../constants/auth.constants';
 import { routeConstants } from '../constants/route.constants';
 import { history } from '../helpers/history';
-import { firebaseAuthService } from '../services/firebase.auth.service';
-import { toast } from 'react-toastify';
+import { firebaseAuthService, UserCredential } from '../services/firebase.auth.service';
+import { Id, toast } from 'react-toastify';
+import { ThunkAction } from 'redux-thunk';
+import { AuthState } from '../reducers/auth.reducer';
+import { Dispatch } from '../helpers/store';
 
 export const authActions = {
   signin,
@@ -10,25 +13,39 @@ export const authActions = {
   signout,
 };
 
-export interface User {
-  uid: string;
+export interface AuthAction {
+  type: string;
+  payload?: string;
 }
 
+export type AuthThunkAction = ThunkAction<void, AuthState, unknown, AuthAction>;
+
 toast.configure();
-let toastId: string | number;
+let toastId: Id;
 
-function signin(email: string, password: string): any {
-  const request = () => ({ type: authConstants.SIGNIN_REQUEST });
-  const success = (user: User) => ({ type: authConstants.SIGNIN_SUCCESS, user });
-  const error = () => ({ type: authConstants.SIGNIN_ERROR });
+function request(): AuthAction {
+  return { type: authConstants.REQUEST };
+}
 
-  return (dispatch: any) => {
+function success(uid: string): AuthAction {
+  return {
+    type: authConstants.SUCCESS,
+    payload: uid,
+  };
+}
+
+function error(): AuthAction {
+  return { type: authConstants.ERROR };
+}
+
+function signin(email: string, password: string): AuthThunkAction {
+  return (dispatch: Dispatch) => {
     dispatch(request());
 
     firebaseAuthService
       .signin(email, password)
-      .then(({ user }) => {
-        dispatch(success(user as User));
+      .then(({ user }: UserCredential) => {
+        dispatch(success(user?.uid as string));
         history.push(routeConstants.HOME);
       })
       .catch(({ message }) => {
@@ -41,18 +58,14 @@ function signin(email: string, password: string): any {
   };
 }
 
-function register(email: string, password: string): any {
-  const request = () => ({ type: authConstants.REGISTER_REQUEST });
-  const success = (user: User) => ({ type: authConstants.REGISTER_SUCCESS, user });
-  const error = () => ({ type: authConstants.REGISTER_ERROR });
-
-  return (dispatch: any) => {
+function register(email: string, password: string): AuthThunkAction {
+  return (dispatch) => {
     dispatch(request());
 
     firebaseAuthService
       .register(email, password)
-      .then(({ user }) => {
-        dispatch(success(user as User));
+      .then(({ user }: UserCredential) => {
+        dispatch(success(user?.uid as string));
         history.push(routeConstants.HOME);
       })
       .catch(({ message }) => {
@@ -65,8 +78,8 @@ function register(email: string, password: string): any {
   };
 }
 
-function signout(): any {
-  return (dispatch: any) => {
+function signout(): AuthThunkAction {
+  return (dispatch) => {
     firebaseAuthService.signout().then(() => {
       dispatch({ type: authConstants.SIGNOUT });
     });
