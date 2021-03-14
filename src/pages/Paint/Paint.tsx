@@ -7,7 +7,12 @@ function Paint(): JSX.Element {
     <div className="paint">
       <div className="toolbar">
         <PaintButton />
-        <div className="toolbar__draw"></div>
+        <div className="toolbar__draw">
+          <div className="paintbrush">
+            <PaintButton />
+            <div className="paintbrush__setting"></div>
+          </div>
+        </div>
         <PaintButton />
       </div>
       <canvas className="mainview"></canvas>
