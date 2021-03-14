@@ -3,10 +3,13 @@ import { Redirect, RouteProps } from 'react-router';
 import { connect, ConnectedComponent } from 'react-redux';
 import { routeConstants } from '../../constants/route.constants';
 import { RootSate } from '../../reducers/root.reducer';
-import { FC } from 'react';
+import { PaintProps } from '../../../pages/Paint/Paint';
 
 export interface IPrivateRouteProps {
-  component: ConnectedComponent<FC, Omit<unknown, never>>;
+  component: ConnectedComponent<
+    ({ drawingType, isDraw, dispatch }: PaintProps) => JSX.Element,
+    Omit<PaintProps, 'drawingType' | 'isDraw' | 'dispatch'>
+  >;
   userId: string;
 }
 

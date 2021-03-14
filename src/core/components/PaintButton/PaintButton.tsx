@@ -1,8 +1,13 @@
 import './PaintButton.scss';
 import { connect } from 'react-redux';
+import { MouseEventHandler } from 'react';
 
-function PaintButton() {
-  return <button className="paint-btn"></button>;
+interface PaintButtonProps {
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+}
+
+function PaintButton({ onClick }: PaintButtonProps) {
+  return <button type="button" className="paint-btn" onClick={onClick}></button>;
 }
 
 export default connect()(PaintButton);
