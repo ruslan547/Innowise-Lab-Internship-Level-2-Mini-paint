@@ -1,21 +1,29 @@
 import { drawConstants } from '../constants/draw.constants';
 
-const { PAINTBRUSH, DRAW } = drawConstants;
+const { PAINTBRUSH, START_DRAW, STOP_DRAW } = drawConstants;
 
 interface PaintbrushAction {
   type: typeof PAINTBRUSH;
 }
 
-interface DrawAction {
-  type: typeof DRAW;
+interface StartDrawAction {
+  type: typeof START_DRAW;
+}
+
+interface StopDrawAction {
+  type: typeof STOP_DRAW;
 }
 
 export function paintbrush(): PaintbrushAction {
   return { type: PAINTBRUSH };
 }
 
-export function draw(): DrawAction {
-  return { type: DRAW };
+export function startDraw(): StartDrawAction {
+  return { type: START_DRAW };
 }
 
-export type DrawActions = PaintbrushAction | DrawAction;
+export function stopDraw(): StopDrawAction {
+  return { type: STOP_DRAW };
+}
+
+export type DrawActions = PaintbrushAction | StartDrawAction | StopDrawAction;
