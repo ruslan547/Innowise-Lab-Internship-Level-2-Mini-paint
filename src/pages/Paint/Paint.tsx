@@ -7,6 +7,8 @@ import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
 import { drawByPaintbrush } from '../../core/services/draw.service';
 import './Paint.scss';
+import drawbrush from '../../assets/img/drawbrush.svg';
+console.log(drawbrush);
 
 const { PAINTBRUSH } = drawConstants;
 
@@ -94,7 +96,7 @@ function Paint({ tool, isDraw, dispatch }: PaintProps): JSX.Element {
         <PaintButton />
         <div className="toolbar__draw">
           <div className="paintbrush">
-            <PaintButton />
+            <PaintButton value={drawbrush} />
             <div className="paintbrush__setting"></div>
           </div>
         </div>
