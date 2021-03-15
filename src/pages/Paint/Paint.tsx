@@ -18,96 +18,88 @@ export interface PaintProps {
 
 function Paint({ tool, isDraw, dispatch }: PaintProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  let ctx: CanvasRenderingContext2D | null = null;
-  let canvasWidth = 0;
-  let canvasHeight = 0;
-  let canvasData: ImageData;
+  // let ctx: CanvasRenderingContext2D | null = null;
+  let context: CanvasRenderingContext2D | null = null;
+  const canvas = useRef<HTMLCanvasElement | null>(null);
+  let mouseX;
+  let mouseY;
+  let paint: boolean;
+  const clickX: any[] = [];
+  const clickY: any[] = [];
+  const clickDrag: any[] = [];
 
-  function drawPixel(x: number, y: number, r: number, g: number, b: number, a: number) {
-    const index = (x + y * canvasWidth) * 4;
-
-    canvasData.data[index + 0] = r;
-    canvasData.data[index + 1] = g;
-    canvasData.data[index + 2] = b;
-    canvasData.data[index + 3] = a;
+  function addClick(x: any, y: any, dragging?: any) {
+    clickX.push(x);
+    clickY.push(y);
+    clickDrag.push(dragging);
   }
 
-  function updateCanvas() {
-    if (ctx) {
-      ctx.putImageData(canvasData, 0, 0);
-    }
-  }
+  function redraw() {
+    if (context) {
+      context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
-  const handleMouseDown = () => {
-    dispatch(startDraw());
-    if (canvasRef && canvasRef.current) {
-    }
-  };
+      context.strokeStyle = '#df4b26';
+      context.lineJoin = 'round';
+      context.lineWidth = 5;
 
-  const handleMouseMove = ({ nativeEvent: { offsetX, offsetY } }: MouseEvent) => {
-    if (isDraw) {
-      if (tool === PAINTBRUSH) {
-        // drawByPaintbrush(target);
-        // console.log('draw');
-        // ctx?.beginPath();
-        // ctx?.moveTo(offsetX - 1, offsetY - 1);
-        // ctx?.lineTo(offsetX, offsetY);
-        // ctx?.stroke();
-        // drawPixel(offsetX, offsetY, 0, 0, 0, 0);
-        // updateCanvas();
-        if (ctx) {
-          ctx.fillStyle = 'red';
-          ctx.fillRect(offsetX, offsetY, 1, 1);
-          console.log(offsetX + ' ' + offsetY);
+      clickX.forEach((_, index) => {
+        context?.beginPath();
+        if (clickDrag[index] && index) {
+          context?.moveTo(clickX[index - 1], clickY[index - 1]);
+        } else {
+          context?.moveTo(clickX[index] - 1, clickY[index]);
         }
-      }
+
+        context?.lineTo(clickX[index], clickY[index]);
+        context?.closePath();
+        context?.stroke();
+      });
     }
-  };
-
-  const handleMouseUp = () => {
-    dispatch(stopDraw());
-  };
-
-  const handlePaintbrushClick = () => {
-    dispatch(paintbrush());
-  };
+  }
 
   useEffect(() => {
-    if (canvasRef && canvasRef.current) {
-      const { current } = canvasRef;
-      canvasWidth = current.width;
-      canvasHeight = current.height;
-      ctx = canvasRef.current.getContext('2d');
+    canvas.current = document.querySelector('canvas');
+    if (canvas && canvas.current) {
+      context = canvas.current.getContext('2d');
 
-      if (ctx) {
-        canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-      }
-      console.log(canvasWidth, canvasHeight);
+      canvas.current.addEventListener('mousedown', (e) => {
+        if (canvas && canvas.current) {
+          mouseX = e.pageX - canvas.current.offsetLeft;
+          mouseY = e.pageY - canvas.current.offsetTop;
+          paint = true;
+          addClick(e.pageX - canvas.current.offsetLeft, e.pageY - canvas.current.offsetTop);
+          redraw();
+        }
+      });
+
+      canvas.current.addEventListener('mousemove', (e) => {
+        if (paint) {
+          if (canvas && canvas.current) {
+            addClick(e.pageX - canvas.current.offsetLeft, e.pageY - canvas.current.offsetTop, true);
+            redraw();
+          }
+        }
+      });
+
+      canvas.current.addEventListener('mouseup', () => {
+        paint = false;
+      });
     }
-
-    document.addEventListener('mouseup', handleMouseUp);
   });
 
   return (
     <div className="paint">
+      <canvas className="mainview" width="712px" height="632px"></canvas>
       <div className="toolbar">
         <PaintButton />
         <div className="toolbar__draw">
           <div className="paintbrush">
-            <PaintButton onClick={handlePaintbrushClick} />
+            <PaintButton />
             <div className="paintbrush__setting"></div>
           </div>
         </div>
         <PaintButton />
       </div>
-      <canvas
-        className="mainview"
-        width="500px"
-        height="500px"
-        ref={canvasRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-      ></canvas>
     </div>
   );
 }
