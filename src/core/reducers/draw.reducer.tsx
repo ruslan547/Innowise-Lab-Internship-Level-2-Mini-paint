@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { DrawActions } from '../actions/draw.actions';
 import { drawConstants } from '../constants/draw.constants';
 
@@ -11,6 +10,8 @@ const {
   SHOW_SIZE_BAR,
   HIDE_SIZE_BAR,
   SET_SIZE,
+  SHOW_SHAPE_BAR,
+  HIDE_SHAPE_BAR,
 } = drawConstants;
 
 const initState = {
@@ -19,6 +20,7 @@ const initState = {
   color: '#000',
   isShowedSizeBar: false,
   size: '5',
+  isShowedShapeBar: false,
 };
 
 export interface DrawState {
@@ -27,6 +29,7 @@ export interface DrawState {
   color: string;
   isShowedSizeBar: boolean;
   size: string;
+  isShowedShapeBar: boolean;
 }
 
 export function drawReducer(state = initState, action: DrawActions): DrawState {
@@ -47,6 +50,10 @@ export function drawReducer(state = initState, action: DrawActions): DrawState {
       return { ...state, isShowedSizeBar: false };
     case SET_SIZE:
       return { ...state, size: action.payload };
+    case SHOW_SHAPE_BAR:
+      return { ...state, isShowedShapeBar: true };
+    case HIDE_SHAPE_BAR:
+      return { ...state, isShowedShapeBar: false };
     default:
       return state;
   }

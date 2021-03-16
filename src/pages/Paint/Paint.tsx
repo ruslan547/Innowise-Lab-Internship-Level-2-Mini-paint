@@ -1,7 +1,7 @@
 import { MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { hideSizeBar, startDraw, stopDraw } from '../../core/actions/draw.actions';
+import { hideShapeBar, hideSizeBar, showShapeBar, startDraw, stopDraw } from '../../core/actions/draw.actions';
 import PaintButton from '../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
@@ -19,14 +19,16 @@ export interface PaintProps {
   color: string;
   size: string;
   dispatch: Dispatch;
+  isShowedShapeBar: boolean;
 }
 
-function Paint({ tool, isDraw, color, size, dispatch }: PaintProps): JSX.Element {
+function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar }: PaintProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
 
   const handleMouseDown = (event: MouseEvent) => {
     dispatch(hideSizeBar());
+    dispatch(hideShapeBar());
     dispatch(startDraw());
     if (canvasRef && canvasRef.current) {
       const { offsetLeft, offsetTop } = canvasRef.current;
@@ -58,11 +60,19 @@ function Paint({ tool, isDraw, color, size, dispatch }: PaintProps): JSX.Element
     dispatch(stopDraw());
   };
 
+  const handleShapeBarClick = () => {
+    if (isShowedShapeBar) {
+      dispatch(hideShapeBar());
+    } else {
+      dispatch(showShapeBar());
+    }
+  };
+
   useEffect(() => {
     if (canvasRef && canvasRef.current) {
       context.current = canvasRef.current.getContext('2d');
     }
-  });
+  }, [canvasRef, context]);
 
   return (
     <div className="paint">
@@ -80,7 +90,30 @@ function Paint({ tool, isDraw, color, size, dispatch }: PaintProps): JSX.Element
         <PaintButton />
         <div className="toolbar__draw">
           <PaintBrush />
-          <PaintButton>figure</PaintButton>
+          <div className="shape-bar">
+            <PaintButton name="shape-bar" onClick={handleShapeBarClick}>
+              ...
+            </PaintButton>
+            {isShowedShapeBar && (
+              <ul className="shape-bar__setting">
+                <li className="shape-bar__item">
+                  <PaintButton>
+                    <img src="" alt="line" />
+                  </PaintButton>
+                </li>
+                <li className="shape-bar__item">
+                  <PaintButton>
+                    <img src="" alt="circle" />
+                  </PaintButton>
+                </li>
+                <li className="shape-bar__item">
+                  <PaintButton>
+                    <img src="" alt="rectangle" />
+                  </PaintButton>
+                </li>
+              </ul>
+            )}
+          </div>
           <SizeBar />
           <ColorBar />
         </div>
@@ -90,8 +123,8 @@ function Paint({ tool, isDraw, color, size, dispatch }: PaintProps): JSX.Element
   );
 }
 
-function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, size } }: RootSate) {
-  return { tool, isDraw, color, dispatch, size };
+function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, size, isShowedShapeBar } }: RootSate) {
+  return { tool, isDraw, color, dispatch, size, isShowedShapeBar };
 }
 
 export default connect(mapStateToProps)(Paint);

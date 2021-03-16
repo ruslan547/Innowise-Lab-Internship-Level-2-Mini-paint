@@ -6,15 +6,16 @@ import { RootSate } from '../../reducers/root.reducer';
 interface PaintButtonProps {
   tool: string;
   isShowedSizeBar: boolean;
+  isShowedShapeBar: boolean;
   name?: string;
   children?: JSX.Element | string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-function PaintButton({ tool, isShowedSizeBar, name, children, onClick }: PaintButtonProps) {
+function PaintButton({ tool, isShowedSizeBar, name, children, isShowedShapeBar, onClick }: PaintButtonProps) {
   let className = 'paint-btn';
 
-  if (name === tool || (name === 'size-bar' && isShowedSizeBar)) {
+  if (name === tool || (name === 'size-bar' && isShowedSizeBar) || (name === 'shape-bar' && isShowedShapeBar)) {
     className += ' active';
   }
 
@@ -25,8 +26,8 @@ function PaintButton({ tool, isShowedSizeBar, name, children, onClick }: PaintBu
   );
 }
 
-function mapStateToProps({ drawReducer: { tool, isShowedSizeBar } }: RootSate) {
-  return { tool, isShowedSizeBar };
+function mapStateToProps({ drawReducer: { tool, isShowedSizeBar, isShowedShapeBar } }: RootSate) {
+  return { tool, isShowedSizeBar, isShowedShapeBar };
 }
 
 export default connect(mapStateToProps)(PaintButton);

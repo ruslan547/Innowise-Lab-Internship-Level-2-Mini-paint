@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { drawConstants } from '../constants/draw.constants';
 
 const {
@@ -10,6 +9,8 @@ const {
   SHOW_SIZE_BAR,
   HIDE_SIZE_BAR,
   SET_SIZE,
+  SHOW_SHAPE_BAR,
+  HIDE_SHAPE_BAR,
 } = drawConstants;
 
 interface NoToolAction {
@@ -44,6 +45,14 @@ interface HideSizeBarAction {
 interface SetSizeAction {
   type: typeof SET_SIZE;
   payload: string;
+}
+
+interface ShowShapeBarAction {
+  type: typeof SHOW_SHAPE_BAR;
+}
+
+interface HideShapeBarAction {
+  type: typeof HIDE_SHAPE_BAR;
 }
 
 export function noTool(): NoToolAction {
@@ -84,6 +93,14 @@ export function setSize(size: string): SetSizeAction {
   };
 }
 
+export function showShapeBar(): ShowShapeBarAction {
+  return { type: SHOW_SHAPE_BAR };
+}
+
+export function hideShapeBar(): HideShapeBarAction {
+  return { type: HIDE_SHAPE_BAR };
+}
+
 export type DrawActions =
   | PaintbrushAction
   | StartDrawAction
@@ -92,4 +109,6 @@ export type DrawActions =
   | SetColorAction
   | ShowSizeBarAction
   | HideSizeBarAction
-  | SetSizeAction;
+  | SetSizeAction
+  | ShowShapeBarAction
+  | HideShapeBarAction;

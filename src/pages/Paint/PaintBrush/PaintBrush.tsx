@@ -5,6 +5,7 @@ import { Dispatch } from '../../../core/helpers/store';
 import { RootSate } from '../../../core/reducers/root.reducer';
 import pencil_img from '../../../assets/img/pencil.svg';
 import { noTool, paintbrush } from '../../../core/actions/draw.actions';
+import './PaintBrush.scss';
 
 const { PAINTBRUSH } = drawConstants;
 
@@ -23,9 +24,11 @@ function PaintBrush({ dispatch, tool }: PaintBrushProps) {
   };
 
   return (
-    <PaintButton name={PAINTBRUSH} onClick={handleClick}>
-      <img src={pencil_img} alt="" />
-    </PaintButton>
+    <div className="paintbrush">
+      <PaintButton name={PAINTBRUSH} onClick={handleClick}>
+        <img src={pencil_img} alt="" />
+      </PaintButton>
+    </div>
   );
 }
 
