@@ -4,6 +4,7 @@ import { hideSizeBar, setSize, showSizeBar } from '../../../core/actions/draw.ac
 import PaintButton from '../../../core/components/PaintButton/PaintButton';
 import { Dispatch } from '../../../core/helpers/store';
 import { RootSate } from '../../../core/reducers/root.reducer';
+import './SizeBar.scss';
 
 interface SizeBarProps {
   isShowedSizeBar: boolean;
@@ -26,7 +27,9 @@ function SizeBar({ isShowedSizeBar, size, dispatch }: SizeBarProps): JSX.Element
 
   return (
     <div className="size-bar">
-      <PaintButton onClick={handleClick}>size</PaintButton>
+      <PaintButton name="size-bar" onClick={handleClick}>
+        size
+      </PaintButton>
       {isShowedSizeBar && (
         <div className="size-bar__setting">
           <input type="range" name="range" min="1" max="50" value={size} onChange={handleChange} />

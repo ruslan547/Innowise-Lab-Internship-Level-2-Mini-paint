@@ -1,15 +1,15 @@
 import { MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { hideSizeBar, noTool, paintbrush, startDraw, stopDraw } from '../../core/actions/draw.actions';
+import { hideSizeBar, startDraw, stopDraw } from '../../core/actions/draw.actions';
 import PaintButton from '../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
 import { addClick, drawByPaintbrush } from '../../core/services/draw.service';
 import './Paint.scss';
-import pencil_img from '../../assets/img/pencil.svg';
 import SizeBar from './SizeBar/SizeBar';
 import ColorBar from './ColorBar/ColorBar';
+import PaintBrush from './PaintBrush/PaintBrush';
 
 const { PAINTBRUSH } = drawConstants;
 
@@ -24,14 +24,6 @@ export interface PaintProps {
 function Paint({ tool, isDraw, color, size, dispatch }: PaintProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
-
-  const handlePaintbrushClick = () => {
-    if (tool === PAINTBRUSH) {
-      dispatch(noTool());
-    } else {
-      dispatch(paintbrush());
-    }
-  };
 
   const handleMouseDown = (event: MouseEvent) => {
     dispatch(hideSizeBar());
@@ -87,12 +79,10 @@ function Paint({ tool, isDraw, color, size, dispatch }: PaintProps): JSX.Element
       <div className="toolbar">
         <PaintButton />
         <div className="toolbar__draw">
-          <PaintButton name={PAINTBRUSH} onClick={handlePaintbrushClick}>
-            <img src={pencil_img} alt="" />
-          </PaintButton>
+          <PaintBrush />
           <PaintButton>figure</PaintButton>
-          <ColorBar />
           <SizeBar />
+          <ColorBar />
         </div>
         <PaintButton />
       </div>

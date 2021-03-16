@@ -1,7 +1,17 @@
+/* eslint-disable prettier/prettier */
 import { DrawActions } from '../actions/draw.actions';
 import { drawConstants } from '../constants/draw.constants';
 
-const { NO_TOOL, PAINTBRUSH, START_DRAW, STOP_DRAW, SET_COLOR, SHOW_SIZE_BAR, HIDE_SIZE_BAR, SET_SIZE } = drawConstants;
+const {
+  NO_TOOL,
+  PAINTBRUSH,
+  START_DRAW,
+  STOP_DRAW,
+  SET_COLOR,
+  SHOW_SIZE_BAR,
+  HIDE_SIZE_BAR,
+  SET_SIZE,
+} = drawConstants;
 
 const initState = {
   tool: null,

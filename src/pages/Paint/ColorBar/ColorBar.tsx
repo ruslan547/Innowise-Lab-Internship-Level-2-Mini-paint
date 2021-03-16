@@ -1,9 +1,9 @@
 import { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { setColor } from '../../../core/actions/draw.actions';
-import PaintButton from '../../../core/components/PaintButton/PaintButton';
 import { Dispatch } from '../../../core/helpers/store';
 import { RootSate } from '../../../core/reducers/root.reducer';
+import './ColorBar.scss';
 
 interface ColorBarProps {
   dispatch: Dispatch;
@@ -15,11 +15,7 @@ function ColorBar({ dispatch, color }: ColorBarProps) {
     dispatch(setColor(value));
   };
 
-  return (
-    <PaintButton>
-      <input className="color-input" value={color} type="color" name="color" onChange={handleChange} />
-    </PaintButton>
-  );
+  return <input className="color-input" value={color} type="color" name="color" onChange={handleChange} />;
 }
 
 function mapStateToProps({ drawReducer: { dispatch, color } }: RootSate) {
