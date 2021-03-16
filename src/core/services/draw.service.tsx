@@ -1,41 +1,69 @@
-const clickX: number[] = [];
-const clickY: number[] = [];
-const clickDrag: Array<boolean | undefined> = [];
-const clickColor: Array<string> = [];
-const clickSize: Array<string> = [];
+const points: Array<Point> = [];
+const existingLines: Array<Line> = [];
 
-export function drawByPaintbrush(context: CanvasRenderingContext2D | null): void {
-  if (context) {
-    // context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-    context.lineJoin = 'round';
-
-    clickX.forEach((_, index) => {
-      context?.beginPath();
-      if (clickDrag[index] && index) {
-        context?.moveTo(clickX[index - 1], clickY[index - 1]);
-      } else {
-        context?.moveTo(clickX[index] - 1, clickY[index]);
-      }
-
-      context?.lineTo(clickX[index], clickY[index]);
-      context?.closePath();
-      context.strokeStyle = clickColor[index];
-      context.lineWidth = +clickSize[index];
-      context?.stroke();
-    });
-  }
+interface Point {
+  pointX: number;
+  pointY: number;
+  drag: boolean;
+  color: string;
+  size: string;
 }
 
-export function addClick(x: number, y: number, dragging: boolean, curColor: string, curSize: string): void {
-  clickX.push(x);
-  clickY.push(y);
-  clickDrag.push(dragging);
-  clickColor.push(curColor);
-  clickSize.push(curSize);
+interface Line {
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
+  color: string;
+  size: string;
 }
 
-export function drawByLine(context: CanvasRenderingContext2D | null): void {
-  if (context) {
-    //
-  }
+export function redraw(context: CanvasRenderingContext2D): void {
+  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+  context.lineJoin = 'round';
+
+  points.forEach((point, index, arr) => {
+    context.beginPath();
+    if (point.drag && index) {
+      context.moveTo(arr[index - 1].pointX, arr[index - 1].pointY);
+    } else {
+      context.moveTo(point.pointX - 1, point.pointY);
+    }
+
+    context.lineTo(point.pointX, point.pointY);
+    context.closePath();
+    context.strokeStyle = point.color;
+    context.lineWidth = +point.size;
+    context.stroke();
+  });
+
+  existingLines.forEach((line) => {
+    context?.beginPath();
+    context.strokeStyle = line.color;
+    context.lineWidth = +line.size;
+    context.moveTo(line.startX, line.startY);
+    context.lineTo(line.endX, line.endY);
+    context?.stroke();
+  });
+}
+
+export function addPoint(pointX: number, pointY: number, drag: boolean, color: string, size: string): void {
+  points.push({
+    pointX,
+    pointY,
+    drag,
+    color,
+    size,
+  });
+}
+
+export function addLine(startX: number, startY: number, endX: number, endY: number, color: string, size: string): void {
+  existingLines.push({
+    startX,
+    startY,
+    endX,
+    endY,
+    color,
+    size,
+  });
 }

@@ -5,7 +5,6 @@ import {
   circle,
   hideShapeBar,
   hideSizeBar,
-  line,
   rectangle,
   showShapeBar,
   startDraw,
@@ -14,14 +13,14 @@ import {
 import PaintButton from '../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
-import { addClick, drawByPaintbrush } from '../../core/services/draw.service';
+import { addPoint, addLine, redraw } from '../../core/services/draw.service';
 import './Paint.scss';
 import SizeBar from './SizeBar/SizeBar';
 import ColorBar from './ColorBar/ColorBar';
 import PaintBrush from './PaintBrush/PaintBrush';
-import line_img from '../../assets/img/line.svg';
 import rectangle_img from '../../assets/img/rectangle.svg';
 import circle_img from '../../assets/img/circle.svg';
+import Line from './components/Line/Line';
 
 const { PAINTBRUSH, LINE, RECTANGLE, CIRCLE } = drawConstants;
 
@@ -37,48 +36,73 @@ export interface PaintProps {
 function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar }: PaintProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
+  const startX = useRef<number>(0);
+  const startY = useRef<number>(0);
 
-  const handleMouseDown = (event: MouseEvent) => {
+  const handleMouseDown = ({ clientX, clientY }: MouseEvent) => {
     dispatch(hideSizeBar());
     dispatch(hideShapeBar());
     dispatch(startDraw());
     if (canvasRef && canvasRef.current) {
       const { offsetLeft, offsetTop } = canvasRef.current;
-      const mouseX = event.pageX - offsetLeft;
-      const mouseY = event.pageY - offsetTop;
 
       if (tool === PAINTBRUSH) {
-        addClick(mouseX, mouseY, false, color, size);
-        drawByPaintbrush(context.current);
+        addPoint(clientX - offsetLeft, clientY - offsetTop, false, color, size);
       } else if (tool === LINE) {
-        context.current?.beginPath();
-        context.current?.moveTo(mouseX, mouseY);
+        startX.current = clientX - offsetLeft;
+        startY.current = clientY - offsetTop;
+      }
+      if (context.current) {
+        redraw(context.current);
       }
     }
   };
 
-  const handleMouseMove = (event: MouseEvent) => {
-    if (isDraw && tool === PAINTBRUSH) {
-      if (canvasRef && canvasRef.current) {
-        const { offsetLeft, offsetTop } = canvasRef.current;
-        addClick(event.pageX - offsetLeft, event.pageY - offsetTop, true, color, size);
-        drawByPaintbrush(context.current);
-      }
-    } else if (isDraw && tool === LINE) {
-      if (canvasRef && canvasRef.current) {
-        const { offsetLeft, offsetTop } = canvasRef.current;
-        context.current?.lineTo(event.pageX - offsetLeft, event.pageY - offsetTop);
-        context.current?.closePath();
-        context.current?.stroke();
+  const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
+    if (canvasRef && canvasRef.current && context && context.current) {
+      const { offsetLeft, offsetTop } = canvasRef.current;
+      const ctx = context.current;
+      const mouseX = clientX - offsetLeft;
+      const mouseY = clientY - offsetTop;
+
+      if (isDraw && tool === PAINTBRUSH) {
+        addPoint(mouseX, mouseY, true, color, size);
+        redraw(context.current);
+      } else if (isDraw && tool === LINE) {
+        redraw(context.current);
+        ctx.lineWidth = +size;
+        ctx.strokeStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(startX.current, startY.current);
+        ctx.lineTo(mouseX, mouseY);
+        ctx.stroke();
       }
     }
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = ({ clientX, clientY }: MouseEvent) => {
+    if (canvasRef && canvasRef.current) {
+      const { offsetLeft, offsetTop } = canvasRef.current;
+      const mouseX = clientX - offsetLeft;
+      const mouseY = clientY - offsetTop;
+      if (tool === LINE && isDraw) {
+        addLine(startX.current, startY.current, mouseX, mouseY, color, size);
+      }
+    }
+
     dispatch(stopDraw());
   };
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = ({ clientX, clientY }: MouseEvent) => {
+    if (canvasRef && canvasRef.current) {
+      const { offsetLeft, offsetTop } = canvasRef.current;
+      const mouseX = clientX - offsetLeft;
+      const mouseY = clientY - offsetTop;
+      if (tool === LINE && isDraw) {
+        addLine(startX.current, startY.current, mouseX, mouseY, color, size);
+      }
+    }
+
     dispatch(stopDraw());
   };
 
@@ -119,9 +143,7 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar }: PaintP
             {isShowedShapeBar && (
               <ul className="shape-bar__setting">
                 <li className="shape-bar__item">
-                  <PaintButton name={LINE} onClick={() => dispatch(line())}>
-                    <img src={line_img} alt="line" />
-                  </PaintButton>
+                  <Line />
                 </li>
                 <li className="shape-bar__item">
                   <PaintButton name={CIRCLE} onClick={() => dispatch(circle())}>
