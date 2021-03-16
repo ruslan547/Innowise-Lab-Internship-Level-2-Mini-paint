@@ -4,6 +4,9 @@ import { drawConstants } from '../constants/draw.constants';
 const {
   NO_TOOL,
   PAINTBRUSH,
+  LINE,
+  RECTANGLE,
+  CIRCLE,
   START_DRAW,
   STOP_DRAW,
   SET_COLOR,
@@ -38,6 +41,12 @@ export function drawReducer(state = initState, action: DrawActions): DrawState {
       return { ...state, tool: null };
     case PAINTBRUSH:
       return { ...state, tool: PAINTBRUSH };
+    case LINE:
+      return { ...state, tool: LINE };
+    case RECTANGLE:
+      return { ...state, tool: RECTANGLE };
+    case CIRCLE:
+      return { ...state, tool: CIRCLE };
     case START_DRAW:
       return { ...state, isDraw: true };
     case STOP_DRAW:

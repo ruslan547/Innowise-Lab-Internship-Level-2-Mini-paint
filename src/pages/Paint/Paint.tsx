@@ -1,7 +1,16 @@
 import { MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { hideShapeBar, hideSizeBar, showShapeBar, startDraw, stopDraw } from '../../core/actions/draw.actions';
+import {
+  circle,
+  hideShapeBar,
+  hideSizeBar,
+  line,
+  rectangle,
+  showShapeBar,
+  startDraw,
+  stopDraw,
+} from '../../core/actions/draw.actions';
 import PaintButton from '../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
@@ -10,8 +19,11 @@ import './Paint.scss';
 import SizeBar from './SizeBar/SizeBar';
 import ColorBar from './ColorBar/ColorBar';
 import PaintBrush from './PaintBrush/PaintBrush';
+import line_img from '../../assets/img/line.svg';
+import rectangle_img from '../../assets/img/rectangle.svg';
+import circle_img from '../../assets/img/circle.svg';
 
-const { PAINTBRUSH } = drawConstants;
+const { PAINTBRUSH, LINE, RECTANGLE, CIRCLE } = drawConstants;
 
 export interface PaintProps {
   tool: string;
@@ -97,18 +109,18 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar }: PaintP
             {isShowedShapeBar && (
               <ul className="shape-bar__setting">
                 <li className="shape-bar__item">
-                  <PaintButton>
-                    <img src="" alt="line" />
+                  <PaintButton name={LINE} onClick={() => dispatch(line())}>
+                    <img src={line_img} alt="line" />
                   </PaintButton>
                 </li>
                 <li className="shape-bar__item">
-                  <PaintButton>
-                    <img src="" alt="circle" />
+                  <PaintButton name={CIRCLE} onClick={() => dispatch(circle())}>
+                    <img src={circle_img} alt="circle" />
                   </PaintButton>
                 </li>
                 <li className="shape-bar__item">
-                  <PaintButton>
-                    <img src="" alt="rectangle" />
+                  <PaintButton name={RECTANGLE} onClick={() => dispatch(rectangle())}>
+                    <img src={rectangle_img} alt="rectangle" />
                   </PaintButton>
                 </li>
               </ul>

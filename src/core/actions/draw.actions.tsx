@@ -3,6 +3,9 @@ import { drawConstants } from '../constants/draw.constants';
 const {
   NO_TOOL,
   PAINTBRUSH,
+  LINE,
+  RECTANGLE,
+  CIRCLE,
   START_DRAW,
   STOP_DRAW,
   SET_COLOR,
@@ -55,6 +58,18 @@ interface HideShapeBarAction {
   type: typeof HIDE_SHAPE_BAR;
 }
 
+interface LineAction {
+  type: typeof LINE;
+}
+
+interface RectangleAction {
+  type: typeof RECTANGLE;
+}
+
+interface CircleAction {
+  type: typeof CIRCLE;
+}
+
 export function noTool(): NoToolAction {
   return { type: NO_TOOL };
 }
@@ -101,6 +116,18 @@ export function hideShapeBar(): HideShapeBarAction {
   return { type: HIDE_SHAPE_BAR };
 }
 
+export function line() {
+  return { type: LINE };
+}
+
+export function rectangle() {
+  return { type: RECTANGLE };
+}
+
+export function circle() {
+  return { type: CIRCLE };
+}
+
 export type DrawActions =
   | PaintbrushAction
   | StartDrawAction
@@ -111,4 +138,7 @@ export type DrawActions =
   | HideSizeBarAction
   | SetSizeAction
   | ShowShapeBarAction
-  | HideShapeBarAction;
+  | HideShapeBarAction
+  | LineAction
+  | RectangleAction
+  | CircleAction;
