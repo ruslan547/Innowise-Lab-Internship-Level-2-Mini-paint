@@ -4,4 +4,7 @@ export enum drawConstants {
   START_DRAW = 'STARTDRAW',
   STOP_DRAW = 'STOP_DRAW',
   SET_COLOR = 'SET_COLOR',
+  SHOW_SIZE_BAR = 'SHOW_SIZE_BAR',
+  HIDE_SIZE_BAR = 'HIDE_SIZE_BAR',
+  SET_SIZE = 'SET_SIZE',
 }

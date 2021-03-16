@@ -2,6 +2,7 @@ const clickX: number[] = [];
 const clickY: number[] = [];
 const clickDrag: Array<boolean | undefined> = [];
 const clickColor: Array<string> = [];
+const clickSize: Array<string> = [];
 
 export function drawByPaintbrush(context: CanvasRenderingContext2D | null): void {
   if (context) {
@@ -9,7 +10,7 @@ export function drawByPaintbrush(context: CanvasRenderingContext2D | null): void
 
     // context.strokeStyle = '#df4b26';
     context.lineJoin = 'round';
-    context.lineWidth = 5;
+    // context.lineWidth = 5;
 
     clickX.forEach((_, index) => {
       context?.beginPath();
@@ -22,14 +23,16 @@ export function drawByPaintbrush(context: CanvasRenderingContext2D | null): void
       context?.lineTo(clickX[index], clickY[index]);
       context?.closePath();
       context.strokeStyle = clickColor[index];
+      context.lineWidth = +clickSize[index];
       context?.stroke();
     });
   }
 }
 
-export function addClick(x: number, y: number, dragging: boolean, curColor: string): void {
+export function addClick(x: number, y: number, dragging: boolean, curColor: string, curSize: string): void {
   clickX.push(x);
   clickY.push(y);
   clickDrag.push(dragging);
   clickColor.push(curColor);
+  clickSize.push(curSize);
 }

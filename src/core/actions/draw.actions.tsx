@@ -1,6 +1,6 @@
 import { drawConstants } from '../constants/draw.constants';
 
-const { NO_TOOL, PAINTBRUSH, START_DRAW, STOP_DRAW, SET_COLOR } = drawConstants;
+const { NO_TOOL, PAINTBRUSH, START_DRAW, STOP_DRAW, SET_COLOR, SHOW_SIZE_BAR, HIDE_SIZE_BAR, SET_SIZE } = drawConstants;
 
 interface NoToolAction {
   type: typeof NO_TOOL;
@@ -20,6 +20,19 @@ interface StopDrawAction {
 
 interface SetColorAction {
   type: typeof SET_COLOR;
+  payload: string;
+}
+
+interface ShowSizeBarAction {
+  type: typeof SHOW_SIZE_BAR;
+}
+
+interface HideSizeBarAction {
+  type: typeof HIDE_SIZE_BAR;
+}
+
+interface SetSizeAction {
+  type: typeof SET_SIZE;
   payload: string;
 }
 
@@ -46,4 +59,27 @@ export function setColor(color: string): SetColorAction {
   };
 }
 
-export type DrawActions = PaintbrushAction | StartDrawAction | StopDrawAction | NoToolAction | SetColorAction;
+export function showSizeBar(): ShowSizeBarAction {
+  return { type: SHOW_SIZE_BAR };
+}
+
+export function hideSizeBar(): HideSizeBarAction {
+  return { type: HIDE_SIZE_BAR };
+}
+
+export function setSize(size: string): SetSizeAction {
+  return {
+    type: SET_SIZE,
+    payload: size,
+  };
+}
+
+export type DrawActions =
+  | PaintbrushAction
+  | StartDrawAction
+  | StopDrawAction
+  | NoToolAction
+  | SetColorAction
+  | ShowSizeBarAction
+  | HideSizeBarAction
+  | SetSizeAction;

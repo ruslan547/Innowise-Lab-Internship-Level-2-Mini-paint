@@ -18,7 +18,7 @@ function PaintButton({ tool, name, children, onClick }: PaintButtonProps) {
   }
 
   return (
-    <button type="button" className={className} onClick={onClick}>
+    <button type="button" className={className} name={name} onClick={onClick}>
       {children}
     </button>
   );

@@ -1,30 +1,4 @@
-@import '../../index.scss';
-
-.paint {
-  width: 100%;
-  height: 100%;
-}
-
-.toolbar {
-  width: 50px;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 259px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  background-color: $main-color;
-  border: 1px solid $durk-color;
-  padding: 5px;
-  box-sizing: border-box;
-}
-
-.mainview {
-  margin-left: 50px;
-  background-color: $lite-color;
-}
+@import '../../../index.scss';
 
 .size-bar {
   position: relative;
@@ -55,8 +29,4 @@
     clip-path: polygon(0 50%, 100% 100%, 100% 0);
     background-color: $main-color;
   }
-}
-
-.color-input {
-  height: 20px;
 }

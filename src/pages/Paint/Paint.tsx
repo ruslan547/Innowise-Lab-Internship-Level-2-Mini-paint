@@ -1,13 +1,23 @@
 import { ChangeEvent, MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { noTool, paintbrush, setColor, startDraw, stopDraw } from '../../core/actions/draw.actions';
+import {
+  hideSizeBar,
+  noTool,
+  paintbrush,
+  setColor,
+  setSize,
+  showSizeBar,
+  startDraw,
+  stopDraw,
+} from '../../core/actions/draw.actions';
 import PaintButton from '../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
 import { addClick, drawByPaintbrush } from '../../core/services/draw.service';
 import './Paint.scss';
 import pencil_img from '../../assets/img/pencil.svg';
+import SizeBar from './SizeBar/SizeBar';
 
 const { PAINTBRUSH } = drawConstants;
 
@@ -15,16 +25,17 @@ export interface PaintProps {
   tool: string;
   isDraw: boolean;
   color: string;
+  isShowedSizeBar: boolean;
+  size: string;
   dispatch: Dispatch;
 }
 
-function Paint({ tool, isDraw, color, dispatch }: PaintProps): JSX.Element {
+function Paint({ tool, isDraw, color, isShowedSizeBar, size, dispatch }: PaintProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
-  let curColor: string;
 
   const handlePaintbrushClick = () => {
-    if (tool) {
+    if (tool === PAINTBRUSH) {
       dispatch(noTool());
     } else {
       dispatch(paintbrush());
@@ -32,6 +43,7 @@ function Paint({ tool, isDraw, color, dispatch }: PaintProps): JSX.Element {
   };
 
   const handleMouseDown = (event: MouseEvent) => {
+    dispatch(hideSizeBar());
     dispatch(startDraw());
     if (canvasRef && canvasRef.current) {
       const { offsetLeft, offsetTop } = canvasRef.current;
@@ -39,7 +51,7 @@ function Paint({ tool, isDraw, color, dispatch }: PaintProps): JSX.Element {
       const mouseY = event.pageY - offsetTop;
 
       if (tool === PAINTBRUSH) {
-        addClick(mouseX, mouseY, false, color);
+        addClick(mouseX, mouseY, false, color, size);
         drawByPaintbrush(context.current);
       }
     }
@@ -49,7 +61,7 @@ function Paint({ tool, isDraw, color, dispatch }: PaintProps): JSX.Element {
     if (isDraw && tool === PAINTBRUSH) {
       if (canvasRef && canvasRef.current) {
         const { offsetLeft, offsetTop } = canvasRef.current;
-        addClick(event.pageX - offsetLeft, event.pageY - offsetTop, true, color);
+        addClick(event.pageX - offsetLeft, event.pageY - offsetTop, true, color, size);
         drawByPaintbrush(context.current);
       }
     }
@@ -63,11 +75,9 @@ function Paint({ tool, isDraw, color, dispatch }: PaintProps): JSX.Element {
     dispatch(stopDraw());
   };
 
-  const handleChange = ({ target: { name, value } }: ChangeEvent<HTMLInputElement>) => {
-    if (name === 'color') {
-      if (context && context.current) {
-        dispatch(setColor(value));
-      }
+  const handleChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    if (context && context.current) {
+      dispatch(setColor(value));
     }
   };
 
@@ -99,9 +109,7 @@ function Paint({ tool, isDraw, color, dispatch }: PaintProps): JSX.Element {
           <PaintButton>
             <input className="color-input" value={color} type="color" name="color" onChange={handleChange} />
           </PaintButton>
-          <div className="paintbrush">
-            <div className="paintbrush__setting"></div>
-          </div>
+          <SizeBar />
         </div>
         <PaintButton />
       </div>
@@ -109,8 +117,8 @@ function Paint({ tool, isDraw, color, dispatch }: PaintProps): JSX.Element {
   );
 }
 
-function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch } }: RootSate) {
-  return { tool, isDraw, color, dispatch };
+function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, isShowedSizeBar, size } }: RootSate) {
+  return { tool, isDraw, color, dispatch, isShowedSizeBar, size };
 }
 
 export default connect(mapStateToProps)(Paint);
