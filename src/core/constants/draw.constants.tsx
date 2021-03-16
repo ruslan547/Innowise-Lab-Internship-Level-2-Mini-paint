@@ -1,5 +1,7 @@
 export enum drawConstants {
+  NO_TOOL = 'NO_TOOL',
   PAINTBRUSH = 'PAINTBRUSH',
   START_DRAW = 'STARTDRAW',
   STOP_DRAW = 'STOP_DRAW',
+  SET_COLOR = 'SET_COLOR',
 }

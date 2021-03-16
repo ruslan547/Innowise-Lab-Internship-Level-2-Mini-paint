@@ -4,9 +4,16 @@
   cursor: pointer;
   width: 40px;
   height: 40px;
-  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
   background-color: $primary-color;
   border: none;
   outline: none;
   margin-bottom: 3px;
+}
+
+.active {
+  background-color: $basic-color;
 }

@@ -1,14 +1,13 @@
-import { MouseEvent } from 'react';
-
-const clickX: any[] = [];
-const clickY: any[] = [];
-const clickDrag: any[] = [];
+const clickX: number[] = [];
+const clickY: number[] = [];
+const clickDrag: Array<boolean | undefined> = [];
+const clickColor: Array<string> = [];
 
 export function drawByPaintbrush(context: CanvasRenderingContext2D | null): void {
   if (context) {
     // context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
-    context.strokeStyle = '#df4b26';
+    // context.strokeStyle = '#df4b26';
     context.lineJoin = 'round';
     context.lineWidth = 5;
 
@@ -22,13 +21,15 @@ export function drawByPaintbrush(context: CanvasRenderingContext2D | null): void
 
       context?.lineTo(clickX[index], clickY[index]);
       context?.closePath();
+      context.strokeStyle = clickColor[index];
       context?.stroke();
     });
   }
 }
 
-export function addClick(x: any, y: any, dragging?: any) {
+export function addClick(x: number, y: number, dragging: boolean, curColor: string): void {
   clickX.push(x);
   clickY.push(y);
   clickDrag.push(dragging);
+  clickColor.push(curColor);
 }
