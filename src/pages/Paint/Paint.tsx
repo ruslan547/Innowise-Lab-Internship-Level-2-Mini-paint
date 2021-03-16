@@ -50,6 +50,9 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar }: PaintP
       if (tool === PAINTBRUSH) {
         addClick(mouseX, mouseY, false, color, size);
         drawByPaintbrush(context.current);
+      } else if (tool === LINE) {
+        context.current?.beginPath();
+        context.current?.moveTo(mouseX, mouseY);
       }
     }
   };
@@ -60,6 +63,13 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar }: PaintP
         const { offsetLeft, offsetTop } = canvasRef.current;
         addClick(event.pageX - offsetLeft, event.pageY - offsetTop, true, color, size);
         drawByPaintbrush(context.current);
+      }
+    } else if (isDraw && tool === LINE) {
+      if (canvasRef && canvasRef.current) {
+        const { offsetLeft, offsetTop } = canvasRef.current;
+        context.current?.lineTo(event.pageX - offsetLeft, event.pageY - offsetTop);
+        context.current?.closePath();
+        context.current?.stroke();
       }
     }
   };
