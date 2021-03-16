@@ -1,16 +1,7 @@
-import { ChangeEvent, MouseEvent, useEffect, useRef } from 'react';
+import { MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  hideSizeBar,
-  noTool,
-  paintbrush,
-  setColor,
-  setSize,
-  showSizeBar,
-  startDraw,
-  stopDraw,
-} from '../../core/actions/draw.actions';
+import { hideSizeBar, noTool, paintbrush, startDraw, stopDraw } from '../../core/actions/draw.actions';
 import PaintButton from '../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
@@ -18,6 +9,7 @@ import { addClick, drawByPaintbrush } from '../../core/services/draw.service';
 import './Paint.scss';
 import pencil_img from '../../assets/img/pencil.svg';
 import SizeBar from './SizeBar/SizeBar';
+import ColorBar from './ColorBar/ColorBar';
 
 const { PAINTBRUSH } = drawConstants;
 
@@ -25,12 +17,11 @@ export interface PaintProps {
   tool: string;
   isDraw: boolean;
   color: string;
-  isShowedSizeBar: boolean;
   size: string;
   dispatch: Dispatch;
 }
 
-function Paint({ tool, isDraw, color, isShowedSizeBar, size, dispatch }: PaintProps): JSX.Element {
+function Paint({ tool, isDraw, color, size, dispatch }: PaintProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
 
@@ -75,12 +66,6 @@ function Paint({ tool, isDraw, color, isShowedSizeBar, size, dispatch }: PaintPr
     dispatch(stopDraw());
   };
 
-  const handleChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    if (context && context.current) {
-      dispatch(setColor(value));
-    }
-  };
-
   useEffect(() => {
     if (canvasRef && canvasRef.current) {
       context.current = canvasRef.current.getContext('2d');
@@ -106,9 +91,7 @@ function Paint({ tool, isDraw, color, isShowedSizeBar, size, dispatch }: PaintPr
             <img src={pencil_img} alt="" />
           </PaintButton>
           <PaintButton>figure</PaintButton>
-          <PaintButton>
-            <input className="color-input" value={color} type="color" name="color" onChange={handleChange} />
-          </PaintButton>
+          <ColorBar />
           <SizeBar />
         </div>
         <PaintButton />
@@ -117,8 +100,8 @@ function Paint({ tool, isDraw, color, isShowedSizeBar, size, dispatch }: PaintPr
   );
 }
 
-function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, isShowedSizeBar, size } }: RootSate) {
-  return { tool, isDraw, color, dispatch, isShowedSizeBar, size };
+function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, size } }: RootSate) {
+  return { tool, isDraw, color, dispatch, size };
 }
 
 export default connect(mapStateToProps)(Paint);
