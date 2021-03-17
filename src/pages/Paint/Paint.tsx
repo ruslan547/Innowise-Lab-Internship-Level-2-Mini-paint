@@ -65,7 +65,6 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
 
       if (tool === PAINTBRUSH) {
         addPoint(mouseX.current, mouseY.current, false, color, size);
-        //addPoint(mouseX.current, mouseY.current, size, color);
       } else if (tool === LINE || tool === CIRCLE || tool === RECTANGLE) {
         startX.current = mouseX.current;
         startY.current = mouseY.current;
@@ -86,7 +85,6 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
 
       if (isDraw && tool === PAINTBRUSH) {
         addPoint(mouseX.current, mouseY.current, true, color, size);
-        //addPoint(mouseX.current, mouseY.current, size, color);
         redraw(context.current);
         if (img) {
           drawImage(context.current, img);
@@ -121,6 +119,15 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
     dispatch(stopDraw());
   };
 
+  const handleMouseLeave = () => {
+    if (tool === PAINTBRUSH) {
+      if (canvasRef && canvasRef.current) {
+        dispatch(setImg(createImg(canvasRef.current)));
+      }
+      clearCanvas();
+    }
+  };
+
   const handleShapeBarClick = () => {
     if (isShowedShapeBar) {
       dispatch(hideShapeBar());
@@ -153,6 +160,7 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
       ></canvas>
       <div className="toolbar">
         <PaintButton />
