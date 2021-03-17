@@ -26,6 +26,8 @@ import {
   drawLine,
   drawEclipse,
   addEclipse,
+  drawRectangle,
+  addRectangle,
 } from '../../core/services/draw.service';
 import './Paint.scss';
 import SizeBar from './SizeBar/SizeBar';
@@ -65,7 +67,7 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
 
       if (tool === PAINTBRUSH) {
         addPoint(mouseX.current, mouseY.current, false, color, size);
-      } else if (tool === LINE || tool === CIRCLE) {
+      } else if (tool === LINE || tool === CIRCLE || tool === RECTANGLE) {
         startX.current = mouseX.current;
         startY.current = mouseY.current;
       }
@@ -101,21 +103,21 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
         if (img) {
           drawImage(context.current, img);
         }
+      } else if (isDraw && tool === RECTANGLE) {
+        redraw(context.current);
+        drawRectangle(context.current, startX.current, startY.current, mouseX.current - startX.current, mouseY.current - startY.current, color);
+        if (img) {
+          drawImage(context.current, img);
+        }
       }
     }
   };
 
   const handleMouseUp = () => {
     if (canvasRef && canvasRef.current) {
-      if (tool === LINE && isDraw) {
-        addLine(startX.current, startY.current, mouseX.current, mouseY.current, color, size);
-      } else if (tool === CIRCLE && isDraw) {
-        addEclipse(startX.current, startY.current, mouseX.current, mouseY.current, color);
-      }
       dispatch(setImg(createImg(canvasRef.current)));
-      clearCanvas();
     }
-
+    clearCanvas();
     dispatch(stopDraw());
   };
 

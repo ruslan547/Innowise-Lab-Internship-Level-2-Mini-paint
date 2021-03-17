@@ -1,6 +1,7 @@
 const points: Array<Point> = [];
 const existingLines: Array<Line> = [];
 const eclipses: Array<Eclipse> = [];
+const rectangles: Array<Rectangle> = [];
 
 interface Point {
   pointX: number;
@@ -24,6 +25,14 @@ interface Eclipse {
   startY: number;
   endX: number;
   endY: number;
+  color: string;
+}
+
+interface Rectangle {
+  startX: number;
+  startY: number;
+  width: number;
+  height: number;
   color: string;
 }
 
@@ -52,6 +61,10 @@ export function redraw(context: CanvasRenderingContext2D): void {
 
   eclipses.forEach((item) => {
     drawEclipse(context, item.startX, item.startY, item.endX, item.endY, item.color);
+  });
+
+  rectangles.forEach((item) => {
+    drawRectangle(context, item.startX, item.startY, item.width, item.height, item.color);
   });
 }
 
@@ -86,10 +99,21 @@ export function addEclipse(startX: number, startY: number, endX: number, endY: n
   });
 }
 
+export function addRectangle(startX: number, startY: number, width: number, height: number, color: string): void {
+  rectangles.push({
+    startX,
+    startY,
+    width,
+    height,
+    color,
+  });
+}
+
 export function clearCanvas(): void {
   points.length = 0;
   existingLines.length = 0;
   eclipses.length = 0;
+  rectangles.length = 0;
 }
 
 export function drawImage(context: CanvasRenderingContext2D, img: HTMLImageElement): void {
@@ -138,6 +162,22 @@ export function drawEclipse(
   ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
   ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
   ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+  ctx.closePath();
+  ctx.stroke();
+}
+
+export function drawRectangle(
+  ctx: CanvasRenderingContext2D,
+  startX: number,
+  startY: number,
+  width: number,
+  height: number,
+  color: string,
+): void {
+  ctx.strokeStyle = 'transparent';
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.fillRect(startX, startY, width, height);
   ctx.closePath();
   ctx.stroke();
 }
