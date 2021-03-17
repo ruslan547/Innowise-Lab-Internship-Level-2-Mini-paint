@@ -18,16 +18,13 @@ import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
 import {
   addPoint,
-  addLine,
   redraw,
   clearCanvas,
   drawImage,
   createImg,
   drawLine,
   drawEclipse,
-  addEclipse,
   drawRectangle,
-  addRectangle,
 } from '../../core/services/draw.service';
 import './Paint.scss';
 import SizeBar from './SizeBar/SizeBar';

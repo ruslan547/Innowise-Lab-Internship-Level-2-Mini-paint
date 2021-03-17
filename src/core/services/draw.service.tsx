@@ -1,7 +1,4 @@
 const points: Array<Point> = [];
-const existingLines: Array<Line> = [];
-const eclipses: Array<Eclipse> = [];
-const rectangles: Array<Rectangle> = [];
 
 interface Point {
   pointX: number;
@@ -9,31 +6,6 @@ interface Point {
   drag: boolean;
   color: string;
   size: string;
-}
-
-interface Line {
-  startX: number;
-  startY: number;
-  endX: number;
-  endY: number;
-  color: string;
-  size: string;
-}
-
-interface Eclipse {
-  startX: number;
-  startY: number;
-  endX: number;
-  endY: number;
-  color: string;
-}
-
-interface Rectangle {
-  startX: number;
-  startY: number;
-  width: number;
-  height: number;
-  color: string;
 }
 
 export function redraw(context: CanvasRenderingContext2D): void {
@@ -54,18 +26,6 @@ export function redraw(context: CanvasRenderingContext2D): void {
     context.lineWidth = +point.size;
     context.stroke();
   });
-
-  existingLines.forEach((line) => {
-    drawLine(context, line.size, line.color, line.startX, line.startY, line.endX, line.endY);
-  });
-
-  eclipses.forEach((item) => {
-    drawEclipse(context, item.startX, item.startY, item.endX, item.endY, item.color);
-  });
-
-  rectangles.forEach((item) => {
-    drawRectangle(context, item.startX, item.startY, item.width, item.height, item.color);
-  });
 }
 
 export function addPoint(pointX: number, pointY: number, drag: boolean, color: string, size: string): void {
@@ -78,42 +38,8 @@ export function addPoint(pointX: number, pointY: number, drag: boolean, color: s
   });
 }
 
-export function addLine(startX: number, startY: number, endX: number, endY: number, color: string, size: string): void {
-  existingLines.push({
-    startX,
-    startY,
-    endX,
-    endY,
-    color,
-    size,
-  });
-}
-
-export function addEclipse(startX: number, startY: number, endX: number, endY: number, color: string): void {
-  eclipses.push({
-    startX,
-    startY,
-    endX,
-    endY,
-    color,
-  });
-}
-
-export function addRectangle(startX: number, startY: number, width: number, height: number, color: string): void {
-  rectangles.push({
-    startX,
-    startY,
-    width,
-    height,
-    color,
-  });
-}
-
 export function clearCanvas(): void {
   points.length = 0;
-  existingLines.length = 0;
-  eclipses.length = 0;
-  rectangles.length = 0;
 }
 
 export function drawImage(context: CanvasRenderingContext2D, img: HTMLImageElement): void {
