@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 /* eslint-disable prettier/prettier */
 import { MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
@@ -23,6 +24,8 @@ import {
   drawImage,
   createImg,
   drawLine,
+  drawEclipse,
+  addEclipse,
 } from '../../core/services/draw.service';
 import './Paint.scss';
 import SizeBar from './SizeBar/SizeBar';
@@ -62,7 +65,7 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
 
       if (tool === PAINTBRUSH) {
         addPoint(mouseX.current, mouseY.current, false, color, size);
-      } else if (tool === LINE) {
+      } else if (tool === LINE || tool === CIRCLE) {
         startX.current = mouseX.current;
         startY.current = mouseY.current;
       }
@@ -92,6 +95,12 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
         if (img) {
           drawImage(context.current, img);
         }
+      } else if (isDraw && tool === CIRCLE) {
+        redraw(context.current);
+        drawEclipse(context.current, startX.current, startY.current, mouseX.current - startX.current, mouseY.current - startY.current, color);
+        if (img) {
+          drawImage(context.current, img);
+        }
       }
     }
   };
@@ -100,6 +109,8 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
     if (canvasRef && canvasRef.current) {
       if (tool === LINE && isDraw) {
         addLine(startX.current, startY.current, mouseX.current, mouseY.current, color, size);
+      } else if (tool === CIRCLE && isDraw) {
+        addEclipse(startX.current, startY.current, mouseX.current, mouseY.current, color);
       }
       dispatch(setImg(createImg(canvasRef.current)));
       clearCanvas();
