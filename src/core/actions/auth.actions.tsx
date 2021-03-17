@@ -18,28 +18,42 @@ export interface User {
   uid: string;
 }
 
-export interface AuthAction {
-  type: string;
-  payload?: User | null;
-}
-
-export type AuthThunkAction = ThunkAction<void, AuthState, unknown, AuthAction>;
-
 toast.configure();
 let toastId: Id;
 
-function request(): AuthAction {
+interface RequestAction {
+  type: typeof authConstants.REQUEST;
+}
+
+interface SuccessAction {
+  type: typeof authConstants.SUCCESS;
+  payload: User | null;
+}
+
+interface ErrorAction {
+  type: typeof authConstants.ERROR;
+}
+
+interface SignoutAction {
+  type: typeof authConstants.SIGNOUT;
+}
+
+export type AuthAction = RequestAction | SuccessAction | ErrorAction | SignoutAction;
+
+export type AuthThunkAction = ThunkAction<void, AuthState, unknown, AuthAction>;
+
+function request(): RequestAction {
   return { type: authConstants.REQUEST };
 }
 
-function success(user: User | null): AuthAction {
+function success(user: User | null): SuccessAction {
   return {
     type: authConstants.SUCCESS,
     payload: user,
   };
 }
 
-function error(): AuthAction {
+function error(): ErrorAction {
   return { type: authConstants.ERROR };
 }
 

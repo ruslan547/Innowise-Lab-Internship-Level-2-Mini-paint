@@ -3,7 +3,7 @@ import Form from '../../core/components/Form/Form';
 import FormButton from '../../core/components/FormButton/FormButton';
 import Modal from '../../core/components/Modal/Modal';
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { authActions } from '../../core/actions/auth.actions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,7 +11,6 @@ import Loader from '../../core/components/Loader/Loader';
 import { history } from '../../core/helpers/history';
 import { routeConstants } from '../../core/constants/route.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
-import { Dispatch } from '../../core/helpers/store';
 
 const FORM_BTN_VALUE = 'sign in';
 const MODAL_BTN_VALUE = 'register';
@@ -21,12 +20,12 @@ toast.configure();
 
 interface ISigninProps {
   loading: boolean;
-  dispatch: Dispatch;
 }
 
-function Signin({ loading, dispatch }: ISigninProps): JSX.Element {
+function Signin({ loading }: ISigninProps): JSX.Element {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
 
   const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
     if (name === 'email') {
@@ -58,8 +57,8 @@ function Signin({ loading, dispatch }: ISigninProps): JSX.Element {
   );
 }
 
-function mapStateToProps({ authReducer: { loading, dispatch } }: RootSate) {
-  return { loading, dispatch };
+function mapStateToProps({ authReducer: { loading } }: RootSate) {
+  return { loading };
 }
 
 export default connect(mapStateToProps)(Signin);

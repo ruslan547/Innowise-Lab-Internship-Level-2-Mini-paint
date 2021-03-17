@@ -1,4 +1,4 @@
-import { User } from '../actions/auth.actions';
+import { AuthAction, User } from '../actions/auth.actions';
 import { authConstants } from '../constants/auth.constants';
 
 const initState = {
@@ -11,7 +11,7 @@ export interface AuthState {
   user: User | null;
 }
 
-export function authReducer(state = initState, action: any): AuthState {
+export function authReducer(state = initState, action: AuthAction): AuthState {
   switch (action.type) {
     case authConstants.REQUEST:
       return { ...state, loading: true };

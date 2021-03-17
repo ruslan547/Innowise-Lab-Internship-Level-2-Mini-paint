@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import { authActions } from '../../core/actions/auth.actions';
 import Form from '../../core/components/Form/Form';
@@ -8,7 +8,6 @@ import Loader from '../../core/components/Loader/Loader';
 import Modal from '../../core/components/Modal/Modal';
 import { routeConstants } from '../../core/constants/route.constants';
 import { history } from '../../core/helpers/history';
-import { Dispatch } from '../../core/helpers/store';
 import { RootSate } from '../../core/reducers/root.reducer';
 import './Register.scss';
 
@@ -20,15 +19,15 @@ const ERROR_TEXT = 'Passwords do not match';
 toast.configure();
 
 interface IRegisterProps {
-  dispatch: Dispatch;
   loading: boolean;
 }
 
-function Register({ dispatch, loading }: IRegisterProps) {
+function Register({ loading }: IRegisterProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmation, setConfirmation] = useState('');
   const toastId = useRef('');
+  const dispatch = useDispatch();
 
   const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
     if (name === 'email') {
@@ -75,8 +74,8 @@ function Register({ dispatch, loading }: IRegisterProps) {
   );
 }
 
-const mapStateToProps = ({ authReducer: { loading, dispatch } }: RootSate) => {
-  return { loading, dispatch };
+const mapStateToProps = ({ authReducer: { loading } }: RootSate) => {
+  return { loading };
 };
 
 export default connect(mapStateToProps)(Register);
