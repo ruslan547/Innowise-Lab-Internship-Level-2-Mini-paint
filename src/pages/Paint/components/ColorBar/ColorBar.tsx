@@ -1,8 +1,8 @@
 import { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
-import { setColor } from '../../../core/actions/draw.actions';
-import { Dispatch } from '../../../core/helpers/store';
-import { RootSate } from '../../../core/reducers/root.reducer';
+import { setColor } from '../../../../core/actions/draw.actions';
+import { Dispatch } from '../../../../core/helpers/store';
+import { RootSate } from '../../../../core/reducers/root.reducer';
 import './ColorBar.scss';
 
 interface ColorBarProps {

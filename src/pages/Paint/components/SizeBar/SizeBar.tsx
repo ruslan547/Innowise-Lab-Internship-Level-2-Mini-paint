@@ -1,9 +1,9 @@
 import { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
-import { hideSizeBar, setSize, showSizeBar } from '../../../core/actions/draw.actions';
-import PaintButton from '../../../core/components/PaintButton/PaintButton';
-import { Dispatch } from '../../../core/helpers/store';
-import { RootSate } from '../../../core/reducers/root.reducer';
+import { hideSizeBar, setSize, showSizeBar } from '../../../../core/actions/draw.actions';
+import PaintButton from '../../../../core/components/PaintButton/PaintButton';
+import { Dispatch } from '../../../../core/helpers/store';
+import { RootSate } from '../../../../core/reducers/root.reducer';
 import './SizeBar.scss';
 
 interface SizeBarProps {

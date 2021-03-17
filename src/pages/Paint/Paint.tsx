@@ -1,18 +1,7 @@
-/* eslint-disable no-var */
-/* eslint-disable prettier/prettier */
 import { MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  circle,
-  setImg,
-  hideShapeBar,
-  hideSizeBar,
-  rectangle,
-  showShapeBar,
-  startDraw,
-  stopDraw,
-} from '../../core/actions/draw.actions';
+import { setImg, hideShapeBar, hideSizeBar, startDraw, stopDraw } from '../../core/actions/draw.actions';
 import PaintButton from '../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
@@ -25,15 +14,9 @@ import {
   drawLine,
   drawEclipse,
   drawRectangle,
-  // drawPoint,
 } from '../../core/services/draw.service';
 import './Paint.scss';
-import SizeBar from './SizeBar/SizeBar';
-import ColorBar from './ColorBar/ColorBar';
-import PaintBrush from './PaintBrush/PaintBrush';
-import rectangle_img from '../../assets/img/rectangle.svg';
-import circle_img from '../../assets/img/circle.svg';
-import Line from './components/Line/Line';
+import ToolBar from './components/DrawBar/DrawBar';
 
 const { PAINTBRUSH, LINE, RECTANGLE, CIRCLE } = drawConstants;
 
@@ -43,31 +26,28 @@ export interface PaintProps {
   color: string;
   size: string;
   dispatch: Dispatch;
-  isShowedShapeBar: boolean;
   img: HTMLImageElement;
 }
 
-function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: PaintProps): JSX.Element {
+function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
   const startX = useRef<number>(0);
   const startY = useRef<number>(0);
-  const mouseX = useRef<number>(0);
-  const mouseY = useRef<number>(0);
 
   const handleMouseDown = ({ clientX, clientY }: MouseEvent) => {
     dispatch(hideSizeBar());
     dispatch(hideShapeBar());
     dispatch(startDraw());
     if (canvasRef && canvasRef.current && context && context.current) {
-      mouseX.current = clientX - canvasRef.current.offsetLeft;
-      mouseY.current = clientY - canvasRef.current.offsetTop;
+      const mouseX = clientX - canvasRef.current.offsetLeft;
+      const mouseY = clientY - canvasRef.current.offsetTop;
 
       if (tool === PAINTBRUSH) {
-        addPoint(mouseX.current, mouseY.current, false, color, size);
+        addPoint(mouseX, mouseY, false, color, size);
       } else if (tool === LINE || tool === CIRCLE || tool === RECTANGLE) {
-        startX.current = mouseX.current;
-        startY.current = mouseY.current;
+        startX.current = mouseX;
+        startY.current = mouseY;
       }
       if (context.current) {
         redraw(context.current);
@@ -80,30 +60,44 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
 
   const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
     if (canvasRef && canvasRef.current && context && context.current) {
-      mouseX.current = clientX - canvasRef.current.offsetLeft;
-      mouseY.current = clientY - canvasRef.current.offsetTop;
+      const mouseX = clientX - canvasRef.current.offsetLeft;
+      const mouseY = clientY - canvasRef.current.offsetTop;
 
       if (isDraw && tool === PAINTBRUSH) {
-        addPoint(mouseX.current, mouseY.current, true, color, size);
+        addPoint(mouseX, mouseY, true, color, size);
         redraw(context.current);
         if (img) {
           drawImage(context.current, img);
         }
       } else if (isDraw && tool === LINE) {
         redraw(context.current);
-        drawLine(context.current, size, color, startX.current, startY.current, mouseX.current, mouseY.current);
+        drawLine(context.current, size, color, startX.current, startY.current, mouseX, mouseY);
         if (img) {
           drawImage(context.current, img);
         }
       } else if (isDraw && tool === CIRCLE) {
         redraw(context.current);
-        drawEclipse(context.current, startX.current, startY.current, mouseX.current - startX.current, mouseY.current - startY.current, color);
+        drawEclipse(
+          context.current,
+          startX.current,
+          startY.current,
+          mouseX - startX.current,
+          mouseY - startY.current,
+          color,
+        );
         if (img) {
           drawImage(context.current, img);
         }
       } else if (isDraw && tool === RECTANGLE) {
         redraw(context.current);
-        drawRectangle(context.current, startX.current, startY.current, mouseX.current - startX.current, mouseY.current - startY.current, color);
+        drawRectangle(
+          context.current,
+          startX.current,
+          startY.current,
+          mouseX - startX.current,
+          mouseY - startY.current,
+          color,
+        );
         if (img) {
           drawImage(context.current, img);
         }
@@ -125,14 +119,6 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
         dispatch(setImg(createImg(canvasRef.current)));
       }
       clearCanvas();
-    }
-  };
-
-  const handleShapeBarClick = () => {
-    if (isShowedShapeBar) {
-      dispatch(hideShapeBar());
-    } else {
-      dispatch(showShapeBar());
     }
   };
 
@@ -164,41 +150,15 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
       ></canvas>
       <div className="toolbar">
         <PaintButton />
-        <div className="toolbar__draw">
-          <PaintBrush />
-          <div className="shape-bar">
-            <PaintButton name="shape-bar" onClick={handleShapeBarClick}>
-              ...
-            </PaintButton>
-            {isShowedShapeBar && (
-              <ul className="shape-bar__setting">
-                <li className="shape-bar__item">
-                  <Line />
-                </li>
-                <li className="shape-bar__item">
-                  <PaintButton name={CIRCLE} onClick={() => dispatch(circle())}>
-                    <img src={circle_img} alt="circle" />
-                  </PaintButton>
-                </li>
-                <li className="shape-bar__item">
-                  <PaintButton name={RECTANGLE} onClick={() => dispatch(rectangle())}>
-                    <img src={rectangle_img} alt="rectangle" />
-                  </PaintButton>
-                </li>
-              </ul>
-            )}
-          </div>
-          <SizeBar />
-          <ColorBar />
-        </div>
+        <ToolBar />
         <PaintButton />
       </div>
     </div>
   );
 }
 
-function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, size, isShowedShapeBar, img } }: RootSate) {
-  return { tool, isDraw, color, dispatch, size, isShowedShapeBar, img };
+function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, size, img } }: RootSate) {
+  return { tool, isDraw, color, dispatch, size, img };
 }
 
 export default connect(mapStateToProps)(Paint);

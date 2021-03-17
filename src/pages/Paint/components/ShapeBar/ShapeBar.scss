@@ -1,23 +1,20 @@
-@import '../../../index.scss';
+@import '../../../../index.scss';
 
-.size-bar {
+.shape-bar {
   position: relative;
   top: 0;
   left: 0;
-  margin-bottom: 3px;
+  padding-left: 0;
 
   &__setting {
-    width: 180px;
-    height: 30px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     position: absolute;
-    top: 6px;
+    top: 0;
     left: 70px;
-    padding: 5px;
     box-sizing: border-box;
     background-color: $main-color;
+    padding: 3px;
   }
 
   &__setting::after {
@@ -25,9 +22,18 @@
     width: 12px;
     height: 20px;
     position: absolute;
-    top: 6px;
+    top: 12px;
     left: -12px;
     clip-path: polygon(0 50%, 100% 100%, 100% 0);
     background-color: $main-color;
+  }
+
+  &__item {
+    list-style-type: none;
+    margin-right: 3px;
+  }
+
+  &__item:last-child {
+    margin-right: 0;
   }
 }

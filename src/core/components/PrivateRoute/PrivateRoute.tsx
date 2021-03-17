@@ -7,8 +7,8 @@ import { PaintProps } from '../../../pages/Paint/Paint';
 
 export interface IPrivateRouteProps {
   component: ConnectedComponent<
-    ({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: PaintProps) => JSX.Element,
-    Omit<PaintProps, 'tool' | 'isDraw' | 'dispatch' | 'color' | 'size' | 'isShowedShapeBar' | 'img'>
+    ({ tool, isDraw, color, size, dispatch, img }: PaintProps) => JSX.Element,
+    Omit<PaintProps, 'tool' | 'isDraw' | 'dispatch' | 'color' | 'size' | 'img'>
   >;
   userId: string;
 }

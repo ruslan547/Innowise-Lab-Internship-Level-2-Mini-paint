@@ -1,0 +1,12 @@
+.drawbar {
+  padding-left: 0;
+
+  &__item {
+    list-style-type: none;
+    margin-bottom: 3px;
+  }
+
+  &__item:last-child {
+    margin-bottom: 0;
+  }
+}
