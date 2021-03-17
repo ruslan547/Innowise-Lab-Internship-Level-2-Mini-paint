@@ -1,7 +1,6 @@
 import { MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { setImg, hideShapeBar, hideSizeBar, startDraw, stopDraw } from '../../core/actions/draw.actions';
 import PaintButton from '../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
@@ -17,6 +16,7 @@ import {
 } from '../../core/services/draw.service';
 import './Paint.scss';
 import ToolBar from './components/DrawBar/DrawBar';
+import { drawActions } from '../../core/actions/draw.actions';
 
 const { PAINTBRUSH, LINE, RECTANGLE, CIRCLE } = drawConstants;
 
@@ -36,9 +36,9 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
   const startY = useRef<number>(0);
 
   const handleMouseDown = ({ clientX, clientY }: MouseEvent) => {
-    dispatch(hideSizeBar());
-    dispatch(hideShapeBar());
-    dispatch(startDraw());
+    dispatch(drawActions.hideSizeBar());
+    dispatch(drawActions.hideShapeBar());
+    dispatch(drawActions.startDraw());
     if (canvasRef && canvasRef.current && context && context.current) {
       const mouseX = clientX - canvasRef.current.offsetLeft;
       const mouseY = clientY - canvasRef.current.offsetTop;
@@ -107,16 +107,16 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
 
   const handleMouseUp = () => {
     if (canvasRef && canvasRef.current) {
-      dispatch(setImg(createImg(canvasRef.current)));
+      dispatch(drawActions.setImg(createImg(canvasRef.current)));
     }
     clearCanvas();
-    dispatch(stopDraw());
+    dispatch(drawActions.stopDraw());
   };
 
   const handleMouseLeave = () => {
     if (tool === PAINTBRUSH) {
       if (canvasRef && canvasRef.current) {
-        dispatch(setImg(createImg(canvasRef.current)));
+        dispatch(drawActions.setImg(createImg(canvasRef.current)));
       }
       clearCanvas();
     }

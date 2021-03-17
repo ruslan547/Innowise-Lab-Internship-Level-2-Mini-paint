@@ -17,6 +17,23 @@ const {
   SET_IMG,
 } = drawConstants;
 
+export const drawActions = {
+  noTool,
+  paintbrush,
+  startDraw,
+  stopDraw,
+  setColor,
+  showSizeBar,
+  hideSizeBar,
+  setSize,
+  showShapeBar,
+  hideShapeBar,
+  line,
+  rectangle,
+  circle,
+  setImg,
+};
+
 interface NoToolAction {
   type: typeof NO_TOOL;
 }
@@ -76,65 +93,65 @@ interface SetImgAction {
   payload: HTMLImageElement;
 }
 
-export function noTool(): NoToolAction {
+function noTool(): NoToolAction {
   return { type: NO_TOOL };
 }
 
-export function paintbrush(): PaintbrushAction {
+function paintbrush(): PaintbrushAction {
   return { type: PAINTBRUSH };
 }
 
-export function startDraw(): StartDrawAction {
+function startDraw(): StartDrawAction {
   return { type: START_DRAW };
 }
 
-export function stopDraw(): StopDrawAction {
+function stopDraw(): StopDrawAction {
   return { type: STOP_DRAW };
 }
 
-export function setColor(color: string): SetColorAction {
+function setColor(color: string): SetColorAction {
   return {
     type: SET_COLOR,
     payload: color,
   };
 }
 
-export function showSizeBar(): ShowSizeBarAction {
+function showSizeBar(): ShowSizeBarAction {
   return { type: SHOW_SIZE_BAR };
 }
 
-export function hideSizeBar(): HideSizeBarAction {
+function hideSizeBar(): HideSizeBarAction {
   return { type: HIDE_SIZE_BAR };
 }
 
-export function setSize(size: string): SetSizeAction {
+function setSize(size: string): SetSizeAction {
   return {
     type: SET_SIZE,
     payload: size,
   };
 }
 
-export function showShapeBar(): ShowShapeBarAction {
+function showShapeBar(): ShowShapeBarAction {
   return { type: SHOW_SHAPE_BAR };
 }
 
-export function hideShapeBar(): HideShapeBarAction {
+function hideShapeBar(): HideShapeBarAction {
   return { type: HIDE_SHAPE_BAR };
 }
 
-export function line(): LineAction {
+function line(): LineAction {
   return { type: LINE };
 }
 
-export function rectangle(): RectangleAction {
+function rectangle(): RectangleAction {
   return { type: RECTANGLE };
 }
 
-export function circle(): CircleAction {
+function circle(): CircleAction {
   return { type: CIRCLE };
 }
 
-export function setImg(img: HTMLImageElement): SetImgAction {
+function setImg(img: HTMLImageElement): SetImgAction {
   return {
     type: SET_IMG,
     payload: img,

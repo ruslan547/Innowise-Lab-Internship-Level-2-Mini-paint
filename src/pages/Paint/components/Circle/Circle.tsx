@@ -3,8 +3,8 @@ import PaintButton from '../../../../core/components/PaintButton/PaintButton';
 import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import circle_img from '../../../../assets/img/circle.svg';
-import { circle } from '../../../../core/actions/draw.actions';
 import { drawConstants } from '../../../../core/constants/draw.constants';
+import { drawActions } from '../../../../core/actions/draw.actions';
 
 const { CIRCLE } = drawConstants;
 
@@ -14,7 +14,7 @@ interface CircleProps {
 
 function Circle({ dispatch }: CircleProps): JSX.Element {
   const handleClick = () => {
-    dispatch(circle());
+    dispatch(drawActions.circle());
   };
 
   return (

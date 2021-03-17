@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import PaintButton from '../../../../core/components/PaintButton/PaintButton';
 import line_img from '../../../../assets/img/line.svg';
-import { line } from '../../../../core/actions/draw.actions';
 import { drawConstants } from '../../../../core/constants/draw.constants';
 import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
+import { drawActions } from '../../../../core/actions/draw.actions';
 
 const { LINE } = drawConstants;
 
@@ -14,7 +14,7 @@ interface LineProps {
 
 function Line({ dispatch }: LineProps): JSX.Element {
   const handleClick = () => {
-    dispatch(line());
+    dispatch(drawActions.line());
   };
 
   return (

@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
-import { setColor } from '../../../../core/actions/draw.actions';
+import { drawActions } from '../../../../core/actions/draw.actions';
 import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import './ColorBar.scss';
@@ -12,7 +12,7 @@ interface ColorBarProps {
 
 function ColorBar({ dispatch, color }: ColorBarProps) {
   const handleChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setColor(value));
+    dispatch(drawActions.setColor(value));
   };
 
   return <input className="color-input" value={color} type="color" name="color" onChange={handleChange} />;

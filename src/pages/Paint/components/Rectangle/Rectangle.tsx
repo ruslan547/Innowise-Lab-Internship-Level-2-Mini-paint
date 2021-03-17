@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import { rectangle } from '../../../../core/actions/draw.actions';
 import PaintButton from '../../../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../../../core/constants/draw.constants';
 import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import rectangle_img from '../../../../assets/img/rectangle.svg';
+import { drawActions } from '../../../../core/actions/draw.actions';
 
 const { RECTANGLE } = drawConstants;
 
@@ -14,7 +14,7 @@ interface RectangleProps {
 
 function Rectangle({ dispatch }: RectangleProps): JSX.Element {
   const handleClick = () => {
-    dispatch(rectangle());
+    dispatch(drawActions.rectangle());
   };
 
   return (

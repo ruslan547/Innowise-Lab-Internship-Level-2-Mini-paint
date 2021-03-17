@@ -1,13 +1,14 @@
+import { User } from '../actions/auth.actions';
 import { authConstants } from '../constants/auth.constants';
 
 const initState = {
   loading: false,
-  userId: null,
+  user: null,
 };
 
 export interface AuthState {
   loading: boolean;
-  userId: string | null | undefined;
+  user: User | null;
 }
 
 export function authReducer(state = initState, action: any): AuthState {
@@ -18,7 +19,7 @@ export function authReducer(state = initState, action: any): AuthState {
       return {
         ...state,
         loading: false,
-        userId: action.payload,
+        user: action.payload,
       };
     case authConstants.ERROR:
       return { ...state, loading: false };

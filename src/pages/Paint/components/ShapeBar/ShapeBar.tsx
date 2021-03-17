@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { hideShapeBar, showShapeBar } from '../../../../core/actions/draw.actions';
+import { drawActions } from '../../../../core/actions/draw.actions';
 import PaintButton from '../../../../core/components/PaintButton/PaintButton';
 import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
@@ -16,9 +16,9 @@ interface ShapeBarProps {
 function ShapeBar({ dispatch, isShowedShapeBar }: ShapeBarProps): JSX.Element {
   const handleShapeBarClick = () => {
     if (isShowedShapeBar) {
-      dispatch(hideShapeBar());
+      dispatch(drawActions.hideShapeBar());
     } else {
-      dispatch(showShapeBar());
+      dispatch(drawActions.showShapeBar());
     }
   };
 

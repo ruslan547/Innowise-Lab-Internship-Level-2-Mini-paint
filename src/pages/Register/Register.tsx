@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
-import { authActions, AuthThunkAction } from '../../core/actions/auth.actions';
+import { authActions } from '../../core/actions/auth.actions';
 import Form from '../../core/components/Form/Form';
 import FormButton from '../../core/components/FormButton/FormButton';
 import Loader from '../../core/components/Loader/Loader';

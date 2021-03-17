@@ -13,9 +13,14 @@ export const authActions = {
   signout,
 };
 
+export interface User {
+  email: string | null;
+  uid: string;
+}
+
 export interface AuthAction {
   type: string;
-  payload?: string;
+  payload?: User | null;
 }
 
 export type AuthThunkAction = ThunkAction<void, AuthState, unknown, AuthAction>;
@@ -27,10 +32,10 @@ function request(): AuthAction {
   return { type: authConstants.REQUEST };
 }
 
-function success(uid: string): AuthAction {
+function success(user: User | null): AuthAction {
   return {
     type: authConstants.SUCCESS,
-    payload: uid,
+    payload: user,
   };
 }
 
@@ -45,7 +50,7 @@ function signin(email: string, password: string): AuthThunkAction {
     firebaseAuthService
       .signin(email, password)
       .then(({ user }: UserCredential) => {
-        dispatch(success(user?.uid as string));
+        dispatch(success(user));
         history.push(routeConstants.HOME);
       })
       .catch(({ message }) => {
@@ -65,7 +70,7 @@ function register(email: string, password: string): AuthThunkAction {
     firebaseAuthService
       .register(email, password)
       .then(({ user }: UserCredential) => {
-        dispatch(success(user?.uid as string));
+        dispatch(success(user));
         history.push(routeConstants.HOME);
       })
       .catch(({ message }) => {

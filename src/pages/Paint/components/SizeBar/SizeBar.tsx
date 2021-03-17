@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
-import { hideSizeBar, setSize, showSizeBar } from '../../../../core/actions/draw.actions';
+import { drawActions } from '../../../../core/actions/draw.actions';
 import PaintButton from '../../../../core/components/PaintButton/PaintButton';
 import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
@@ -15,14 +15,14 @@ interface SizeBarProps {
 function SizeBar({ isShowedSizeBar, size, dispatch }: SizeBarProps): JSX.Element {
   const handleClick = () => {
     if (isShowedSizeBar) {
-      dispatch(hideSizeBar());
+      dispatch(drawActions.hideSizeBar());
     } else {
-      dispatch(showSizeBar());
+      dispatch(drawActions.showSizeBar());
     }
   };
 
   const handleChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSize(value));
+    dispatch(drawActions.setSize(value));
   };
 
   return (
