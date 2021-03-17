@@ -4,19 +4,12 @@ import { Dispatch } from 'redux';
 import PaintButton from '../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
-import {
-  addPoint,
-  redraw,
-  clearCanvas,
-  drawImage,
-  createImg,
-  drawLine,
-  drawEclipse,
-  drawRectangle,
-} from '../../core/services/draw.service';
 import './Paint.scss';
 import ToolBar from './components/DrawBar/DrawBar';
 import { drawActions } from '../../core/actions/draw.actions';
+import { firebaseDbService } from '../../core/services/firebase.db.service';
+import { User } from '../../core/actions/auth.actions';
+import { drawService } from '../../core/services/draw.service';
 
 const { PAINTBRUSH, LINE, RECTANGLE, CIRCLE } = drawConstants;
 
@@ -27,9 +20,10 @@ export interface PaintProps {
   size: string;
   dispatch: Dispatch;
   img: HTMLImageElement;
+  user: User;
 }
 
-function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.Element {
+function Paint({ tool, isDraw, color, size, dispatch, img, user }: PaintProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
   const startX = useRef<number>(0);
@@ -44,15 +38,15 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
       const mouseY = clientY - canvasRef.current.offsetTop;
 
       if (tool === PAINTBRUSH) {
-        addPoint(mouseX, mouseY, false, color, size);
+        drawService.addPoint(mouseX, mouseY, false, color, size);
       } else if (tool === LINE || tool === CIRCLE || tool === RECTANGLE) {
         startX.current = mouseX;
         startY.current = mouseY;
       }
       if (context.current) {
-        redraw(context.current);
+        drawService.redraw(context.current);
         if (img) {
-          drawImage(context.current, img);
+          drawService.drawImage(context.current, img);
         }
       }
     }
@@ -64,20 +58,20 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
       const mouseY = clientY - canvasRef.current.offsetTop;
 
       if (isDraw && tool === PAINTBRUSH) {
-        addPoint(mouseX, mouseY, true, color, size);
-        redraw(context.current);
+        drawService.addPoint(mouseX, mouseY, true, color, size);
+        drawService.redraw(context.current);
         if (img) {
-          drawImage(context.current, img);
+          drawService.drawImage(context.current, img);
         }
       } else if (isDraw && tool === LINE) {
-        redraw(context.current);
-        drawLine(context.current, size, color, startX.current, startY.current, mouseX, mouseY);
+        drawService.redraw(context.current);
+        drawService.drawLine(context.current, size, color, startX.current, startY.current, mouseX, mouseY);
         if (img) {
-          drawImage(context.current, img);
+          drawService.drawImage(context.current, img);
         }
       } else if (isDraw && tool === CIRCLE) {
-        redraw(context.current);
-        drawEclipse(
+        drawService.redraw(context.current);
+        drawService.drawCircle(
           context.current,
           startX.current,
           startY.current,
@@ -86,11 +80,11 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
           color,
         );
         if (img) {
-          drawImage(context.current, img);
+          drawService.drawImage(context.current, img);
         }
       } else if (isDraw && tool === RECTANGLE) {
-        redraw(context.current);
-        drawRectangle(
+        drawService.redraw(context.current);
+        drawService.drawRectangle(
           context.current,
           startX.current,
           startY.current,
@@ -99,7 +93,7 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
           color,
         );
         if (img) {
-          drawImage(context.current, img);
+          drawService.drawImage(context.current, img);
         }
       }
     }
@@ -107,18 +101,26 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
 
   const handleMouseUp = () => {
     if (canvasRef && canvasRef.current) {
-      dispatch(drawActions.setImg(createImg(canvasRef.current)));
+      dispatch(drawActions.setImg(drawService.createImg(canvasRef.current)));
     }
-    clearCanvas();
+    drawService.clearFromPaintbrush();
     dispatch(drawActions.stopDraw());
   };
 
   const handleMouseLeave = () => {
     if (tool === PAINTBRUSH) {
       if (canvasRef && canvasRef.current) {
-        dispatch(drawActions.setImg(createImg(canvasRef.current)));
+        dispatch(drawActions.setImg(drawService.createImg(canvasRef.current)));
       }
-      clearCanvas();
+      drawService.clearFromPaintbrush();
+    }
+  };
+
+  const handleSaveClick = async () => {
+    await firebaseDbService.sendImg(img.src, user.email);
+    dispatch(drawActions.deleteImg());
+    if (context.current) {
+      drawService.clearCanvas(context.current);
     }
   };
 
@@ -151,14 +153,17 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
       <div className="toolbar">
         <PaintButton />
         <ToolBar />
-        <PaintButton />
+        <PaintButton onClick={handleSaveClick}>Save</PaintButton>
       </div>
     </div>
   );
 }
 
-function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, size, img } }: RootSate) {
-  return { tool, isDraw, color, dispatch, size, img };
+function mapStateToProps({
+  drawReducer: { tool, isDraw, color, dispatch, size, img },
+  authReducer: { user },
+}: RootSate) {
+  return { tool, isDraw, color, dispatch, size, img, user };
 }
 
 export default connect(mapStateToProps)(Paint);

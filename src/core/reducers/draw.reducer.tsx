@@ -51,6 +51,8 @@ export function drawReducer(state = initState, action: DrawActions): DrawState {
       return { ...state, isShowedShapeBar: false };
     case drawConstants.SET_IMG:
       return { ...state, img: action.payload };
+    case drawConstants.DELETE_IMG:
+      return { ...state, img: null };
     default:
       return state;
   }

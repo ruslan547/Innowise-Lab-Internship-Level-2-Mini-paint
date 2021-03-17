@@ -8,7 +8,19 @@ interface Point {
   size: string;
 }
 
-export function redraw(context: CanvasRenderingContext2D): void {
+export const drawService = {
+  redraw,
+  addPoint,
+  clearFromPaintbrush,
+  clearCanvas,
+  drawLine,
+  drawCircle,
+  drawRectangle,
+  drawImage,
+  createImg,
+};
+
+function redraw(context: CanvasRenderingContext2D): void {
   context.clearRect(0, 0, context.canvas.width, context.canvas.height);
   context.lineJoin = 'round';
 
@@ -28,7 +40,7 @@ export function redraw(context: CanvasRenderingContext2D): void {
   });
 }
 
-export function addPoint(pointX: number, pointY: number, drag: boolean, color: string, size: string): void {
+function addPoint(pointX: number, pointY: number, drag: boolean, color: string, size: string): void {
   points.push({
     pointX,
     pointY,
@@ -38,11 +50,15 @@ export function addPoint(pointX: number, pointY: number, drag: boolean, color: s
   });
 }
 
-export function clearCanvas(): void {
+function clearFromPaintbrush(): void {
   points.length = 0;
 }
 
-export function drawLine(
+function clearCanvas(context: CanvasRenderingContext2D): void {
+  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+}
+
+function drawLine(
   context: CanvasRenderingContext2D,
   size: string,
   color: string,
@@ -59,8 +75,8 @@ export function drawLine(
   context.stroke();
 }
 
-export function drawEclipse(
-  ctx: CanvasRenderingContext2D,
+function drawCircle(
+  context: CanvasRenderingContext2D,
   x: number,
   y: number,
   w: number,
@@ -75,42 +91,42 @@ export function drawEclipse(
     xm = x + w / 2, // x-middle
     ym = y + h / 2; // y-middle
 
-  ctx.strokeStyle = 'transparent';
-  ctx.fillStyle = color;
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(x, ym);
-  ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
-  ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
-  ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
-  ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-  ctx.closePath();
-  ctx.stroke();
+  context.strokeStyle = 'transparent';
+  context.fillStyle = color;
+  context.fill();
+  context.beginPath();
+  context.moveTo(x, ym);
+  context.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+  context.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+  context.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+  context.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+  context.closePath();
+  context.stroke();
 }
 
-export function drawRectangle(
-  ctx: CanvasRenderingContext2D,
+function drawRectangle(
+  context: CanvasRenderingContext2D,
   startX: number,
   startY: number,
   width: number,
   height: number,
   color: string,
 ): void {
-  ctx.strokeStyle = 'transparent';
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.fillRect(startX, startY, width, height);
-  ctx.closePath();
-  ctx.stroke();
+  context.strokeStyle = 'transparent';
+  context.fillStyle = color;
+  context.beginPath();
+  context.fillRect(startX, startY, width, height);
+  context.closePath();
+  context.stroke();
 }
 
-export function drawImage(context: CanvasRenderingContext2D, img: HTMLImageElement): void {
+function drawImage(context: CanvasRenderingContext2D, img: HTMLImageElement): void {
   context.drawImage(img, 0, 0);
 }
 
-export function createImg(canvas: HTMLCanvasElement): HTMLImageElement {
-  const img = canvas.toDataURL('image/png');
-  const imgTag = new Image();
-  imgTag.src = img;
-  return imgTag;
+function createImg(canvas: HTMLCanvasElement): HTMLImageElement {
+  const image = canvas.toDataURL('image/png');
+  const img = new Image();
+  img.src = image;
+  return img;
 }

@@ -64,8 +64,11 @@ function signin(email: string, password: string): AuthThunkAction {
     firebaseAuthService
       .signin(email, password)
       .then(({ user }: UserCredential) => {
-        dispatch(success(user));
-        history.push(routeConstants.HOME);
+        if (user) {
+          const { uid, email } = user;
+          dispatch(success({ uid, email }));
+          history.push(routeConstants.HOME);
+        }
       })
       .catch(({ message }) => {
         dispatch(error());
@@ -84,8 +87,11 @@ function register(email: string, password: string): AuthThunkAction {
     firebaseAuthService
       .register(email, password)
       .then(({ user }: UserCredential) => {
-        dispatch(success(user));
-        history.push(routeConstants.HOME);
+        if (user) {
+          const { uid, email } = user;
+          dispatch(success({ uid, email }));
+          history.push(routeConstants.HOME);
+        }
       })
       .catch(({ message }) => {
         dispatch(error());

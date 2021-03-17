@@ -8,8 +8,8 @@ import { User } from '../../actions/auth.actions';
 
 export interface IPrivateRouteProps {
   component: ConnectedComponent<
-    ({ tool, isDraw, color, size, dispatch, img }: PaintProps) => JSX.Element,
-    Omit<PaintProps, 'tool' | 'isDraw' | 'dispatch' | 'color' | 'size' | 'img'>
+    ({ tool, isDraw, color, size, dispatch, img, user }: PaintProps) => JSX.Element,
+    Omit<PaintProps, 'tool' | 'isDraw' | 'dispatch' | 'color' | 'size' | 'img' | 'user'>
   >;
   user: User;
 }

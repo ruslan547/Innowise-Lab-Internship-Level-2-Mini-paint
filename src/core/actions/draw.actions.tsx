@@ -15,6 +15,7 @@ export const drawActions = {
   rectangle,
   circle,
   setImg,
+  deleteImg,
 };
 
 interface NoToolAction {
@@ -74,6 +75,10 @@ interface CircleAction {
 interface SetImgAction {
   type: typeof drawConstants.SET_IMG;
   payload: HTMLImageElement;
+}
+
+interface DeleteImgAction {
+  type: typeof drawConstants.DELETE_IMG;
 }
 
 function noTool(): NoToolAction {
@@ -141,6 +146,10 @@ function setImg(img: HTMLImageElement): SetImgAction {
   };
 }
 
+function deleteImg(): DeleteImgAction {
+  return { type: drawConstants.DELETE_IMG };
+}
+
 export type DrawActions =
   | PaintbrushAction
   | StartDrawAction
@@ -155,4 +164,5 @@ export type DrawActions =
   | LineAction
   | RectangleAction
   | CircleAction
-  | SetImgAction;
+  | SetImgAction
+  | DeleteImgAction;
