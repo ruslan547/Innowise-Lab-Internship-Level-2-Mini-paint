@@ -8,6 +8,13 @@ interface Point {
   size: string;
 }
 
+// interface Point {
+//   pointX: number;
+//   pointY: number;
+//   size: string;
+//   color: string;
+// }
+
 export function redraw(context: CanvasRenderingContext2D): void {
   context.clearRect(0, 0, context.canvas.width, context.canvas.height);
   context.lineJoin = 'round';
@@ -26,6 +33,9 @@ export function redraw(context: CanvasRenderingContext2D): void {
     context.lineWidth = +point.size;
     context.stroke();
   });
+  // points.forEach((item) => {
+  //   drawPoint(context, item.pointX, item.pointY, item.size, item.color);
+  // });
 }
 
 export function addPoint(pointX: number, pointY: number, drag: boolean, color: string, size: string): void {
@@ -38,9 +48,34 @@ export function addPoint(pointX: number, pointY: number, drag: boolean, color: s
   });
 }
 
+// export function addPoint(pointX: number, pointY: number, size: string, color: string): void {
+//   points.push({
+//     pointX,
+//     pointY,
+//     size,
+//     color,
+//   });
+// }
+
 export function clearCanvas(): void {
   points.length = 0;
 }
+
+// export function drawPoint(
+//   context: CanvasRenderingContext2D,
+//   startX: number,
+//   startY: number,
+//   size: string,
+//   color: string,
+// ): void {
+//   context.fillStyle = color;
+//   context.strokeStyle = 'transparent';
+//   context.beginPath();
+//   context.arc(startX, startY, +size, 0, 2 * Math.PI);
+//   context.fill();
+//   context.closePath();
+//   context.stroke();
+// }
 
 export function drawImage(context: CanvasRenderingContext2D, img: HTMLImageElement): void {
   context.drawImage(img, 0, 0);

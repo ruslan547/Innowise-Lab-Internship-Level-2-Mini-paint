@@ -25,6 +25,7 @@ import {
   drawLine,
   drawEclipse,
   drawRectangle,
+  // drawPoint,
 } from '../../core/services/draw.service';
 import './Paint.scss';
 import SizeBar from './SizeBar/SizeBar';
@@ -58,12 +59,13 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
     dispatch(hideSizeBar());
     dispatch(hideShapeBar());
     dispatch(startDraw());
-    if (canvasRef && canvasRef.current) {
+    if (canvasRef && canvasRef.current && context && context.current) {
       mouseX.current = clientX - canvasRef.current.offsetLeft;
       mouseY.current = clientY - canvasRef.current.offsetTop;
 
       if (tool === PAINTBRUSH) {
         addPoint(mouseX.current, mouseY.current, false, color, size);
+        //addPoint(mouseX.current, mouseY.current, size, color);
       } else if (tool === LINE || tool === CIRCLE || tool === RECTANGLE) {
         startX.current = mouseX.current;
         startY.current = mouseY.current;
@@ -84,6 +86,7 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: P
 
       if (isDraw && tool === PAINTBRUSH) {
         addPoint(mouseX.current, mouseY.current, true, color, size);
+        //addPoint(mouseX.current, mouseY.current, size, color);
         redraw(context.current);
         if (img) {
           drawImage(context.current, img);
