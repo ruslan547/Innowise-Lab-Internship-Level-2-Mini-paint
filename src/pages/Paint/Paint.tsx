@@ -10,6 +10,7 @@ import { drawActions } from '../../core/actions/draw.actions';
 import { firebaseDbService } from '../../core/services/firebase.db.service';
 import { User } from '../../core/actions/auth.actions';
 import { drawService } from '../../core/services/draw.service';
+import NavBar from './components/NavBar/NavBar';
 
 const { PAINTBRUSH, LINE, RECTANGLE, CIRCLE } = drawConstants;
 
@@ -151,7 +152,7 @@ function Paint({ tool, isDraw, color, size, dispatch, img, user }: PaintProps): 
         onMouseLeave={handleMouseLeave}
       ></canvas>
       <div className="toolbar">
-        <PaintButton />
+        <NavBar />
         <ToolBar />
         <PaintButton onClick={handleSaveClick}>Save</PaintButton>
       </div>

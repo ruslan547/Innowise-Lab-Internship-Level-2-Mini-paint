@@ -67,7 +67,7 @@ function signin(email: string, password: string): AuthThunkAction {
         if (user) {
           const { uid, email } = user;
           dispatch(success({ uid, email }));
-          history.push(routeConstants.HOME);
+          history.push(routeConstants.GALLERY);
         }
       })
       .catch(({ message }) => {
@@ -90,7 +90,7 @@ function register(email: string, password: string): AuthThunkAction {
         if (user) {
           const { uid, email } = user;
           dispatch(success({ uid, email }));
-          history.push(routeConstants.HOME);
+          history.push(routeConstants.GALLERY);
         }
       })
       .catch(({ message }) => {

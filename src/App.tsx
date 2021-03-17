@@ -6,6 +6,7 @@ import Signin from './pages/Signin/Signin';
 import Register from './pages/Register/Register';
 import { history } from './core/helpers/history';
 import Paint from './pages/Paint/Paint';
+import Gallery from './pages/Gallery/Gallery';
 
 function App(): JSX.Element {
   return (
@@ -13,7 +14,7 @@ function App(): JSX.Element {
       <div className="container">
         <Router history={history}>
           <Switch>
-            <PrivateRoute exact path={routeConstants.HOME} component={Paint} />
+            <PrivateRoute exact path={routeConstants.GALLERY} component={Gallery} />
             <PrivateRoute path={routeConstants.PAINT} component={Paint} />
             <Route path={routeConstants.SIGNIN} component={Signin} />
             <Route path={routeConstants.REGISTER} component={Register} />

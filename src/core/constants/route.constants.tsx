@@ -1,6 +1,6 @@
 export enum routeConstants {
   SIGNIN = '/signin',
   REGISTER = '/register',
-  HOME = '/',
+  GALLERY = '/',
   PAINT = '/paint',
 }
