@@ -1,22 +1,5 @@
 import { drawConstants } from '../constants/draw.constants';
 
-const {
-  NO_TOOL,
-  PAINTBRUSH,
-  LINE,
-  RECTANGLE,
-  CIRCLE,
-  START_DRAW,
-  STOP_DRAW,
-  SET_COLOR,
-  SHOW_SIZE_BAR,
-  HIDE_SIZE_BAR,
-  SET_SIZE,
-  SHOW_SHAPE_BAR,
-  HIDE_SHAPE_BAR,
-  SET_IMG,
-} = drawConstants;
-
 export const drawActions = {
   noTool,
   paintbrush,
@@ -35,125 +18,125 @@ export const drawActions = {
 };
 
 interface NoToolAction {
-  type: typeof NO_TOOL;
+  type: typeof drawConstants.NO_TOOL;
 }
 
 interface PaintbrushAction {
-  type: typeof PAINTBRUSH;
+  type: typeof drawConstants.PAINTBRUSH;
 }
 
 interface StartDrawAction {
-  type: typeof START_DRAW;
+  type: typeof drawConstants.START_DRAW;
 }
 
 interface StopDrawAction {
-  type: typeof STOP_DRAW;
+  type: typeof drawConstants.STOP_DRAW;
 }
 
 interface SetColorAction {
-  type: typeof SET_COLOR;
+  type: typeof drawConstants.SET_COLOR;
   payload: string;
 }
 
 interface ShowSizeBarAction {
-  type: typeof SHOW_SIZE_BAR;
+  type: typeof drawConstants.SHOW_SIZE_BAR;
 }
 
 interface HideSizeBarAction {
-  type: typeof HIDE_SIZE_BAR;
+  type: typeof drawConstants.HIDE_SIZE_BAR;
 }
 
 interface SetSizeAction {
-  type: typeof SET_SIZE;
+  type: typeof drawConstants.SET_SIZE;
   payload: string;
 }
 
 interface ShowShapeBarAction {
-  type: typeof SHOW_SHAPE_BAR;
+  type: typeof drawConstants.SHOW_SHAPE_BAR;
 }
 
 interface HideShapeBarAction {
-  type: typeof HIDE_SHAPE_BAR;
+  type: typeof drawConstants.HIDE_SHAPE_BAR;
 }
 
 interface LineAction {
-  type: typeof LINE;
+  type: typeof drawConstants.LINE;
 }
 
 interface RectangleAction {
-  type: typeof RECTANGLE;
+  type: typeof drawConstants.RECTANGLE;
 }
 
 interface CircleAction {
-  type: typeof CIRCLE;
+  type: typeof drawConstants.CIRCLE;
 }
 
 interface SetImgAction {
-  type: typeof SET_IMG;
+  type: typeof drawConstants.SET_IMG;
   payload: HTMLImageElement;
 }
 
 function noTool(): NoToolAction {
-  return { type: NO_TOOL };
+  return { type: drawConstants.NO_TOOL };
 }
 
 function paintbrush(): PaintbrushAction {
-  return { type: PAINTBRUSH };
+  return { type: drawConstants.PAINTBRUSH };
 }
 
 function startDraw(): StartDrawAction {
-  return { type: START_DRAW };
+  return { type: drawConstants.START_DRAW };
 }
 
 function stopDraw(): StopDrawAction {
-  return { type: STOP_DRAW };
+  return { type: drawConstants.STOP_DRAW };
 }
 
 function setColor(color: string): SetColorAction {
   return {
-    type: SET_COLOR,
+    type: drawConstants.SET_COLOR,
     payload: color,
   };
 }
 
 function showSizeBar(): ShowSizeBarAction {
-  return { type: SHOW_SIZE_BAR };
+  return { type: drawConstants.SHOW_SIZE_BAR };
 }
 
 function hideSizeBar(): HideSizeBarAction {
-  return { type: HIDE_SIZE_BAR };
+  return { type: drawConstants.HIDE_SIZE_BAR };
 }
 
 function setSize(size: string): SetSizeAction {
   return {
-    type: SET_SIZE,
+    type: drawConstants.SET_SIZE,
     payload: size,
   };
 }
 
 function showShapeBar(): ShowShapeBarAction {
-  return { type: SHOW_SHAPE_BAR };
+  return { type: drawConstants.SHOW_SHAPE_BAR };
 }
 
 function hideShapeBar(): HideShapeBarAction {
-  return { type: HIDE_SHAPE_BAR };
+  return { type: drawConstants.HIDE_SHAPE_BAR };
 }
 
 function line(): LineAction {
-  return { type: LINE };
+  return { type: drawConstants.LINE };
 }
 
 function rectangle(): RectangleAction {
-  return { type: RECTANGLE };
+  return { type: drawConstants.RECTANGLE };
 }
 
 function circle(): CircleAction {
-  return { type: CIRCLE };
+  return { type: drawConstants.CIRCLE };
 }
 
 function setImg(img: HTMLImageElement): SetImgAction {
   return {
-    type: SET_IMG,
+    type: drawConstants.SET_IMG,
     payload: img,
   };
 }

@@ -1,23 +1,6 @@
 import { DrawActions } from '../actions/draw.actions';
 import { drawConstants } from '../constants/draw.constants';
 
-const {
-  NO_TOOL,
-  PAINTBRUSH,
-  LINE,
-  RECTANGLE,
-  CIRCLE,
-  START_DRAW,
-  STOP_DRAW,
-  SET_COLOR,
-  SHOW_SIZE_BAR,
-  HIDE_SIZE_BAR,
-  SET_SIZE,
-  SHOW_SHAPE_BAR,
-  HIDE_SHAPE_BAR,
-  SET_IMG,
-} = drawConstants;
-
 const initState = {
   tool: null,
   isDraw: false,
@@ -40,33 +23,33 @@ export interface DrawState {
 
 export function drawReducer(state = initState, action: DrawActions): DrawState {
   switch (action.type) {
-    case NO_TOOL:
+    case drawConstants.NO_TOOL:
       return { ...state, tool: null };
-    case PAINTBRUSH:
-      return { ...state, tool: PAINTBRUSH };
-    case LINE:
-      return { ...state, tool: LINE };
-    case RECTANGLE:
-      return { ...state, tool: RECTANGLE };
-    case CIRCLE:
-      return { ...state, tool: CIRCLE };
-    case START_DRAW:
+    case drawConstants.PAINTBRUSH:
+      return { ...state, tool: drawConstants.PAINTBRUSH };
+    case drawConstants.LINE:
+      return { ...state, tool: drawConstants.LINE };
+    case drawConstants.RECTANGLE:
+      return { ...state, tool: drawConstants.RECTANGLE };
+    case drawConstants.CIRCLE:
+      return { ...state, tool: drawConstants.CIRCLE };
+    case drawConstants.START_DRAW:
       return { ...state, isDraw: true };
-    case STOP_DRAW:
+    case drawConstants.STOP_DRAW:
       return { ...state, isDraw: false };
-    case SET_COLOR:
+    case drawConstants.SET_COLOR:
       return { ...state, color: action.payload };
-    case SHOW_SIZE_BAR:
+    case drawConstants.SHOW_SIZE_BAR:
       return { ...state, isShowedSizeBar: true };
-    case HIDE_SIZE_BAR:
+    case drawConstants.HIDE_SIZE_BAR:
       return { ...state, isShowedSizeBar: false };
-    case SET_SIZE:
+    case drawConstants.SET_SIZE:
       return { ...state, size: action.payload };
-    case SHOW_SHAPE_BAR:
+    case drawConstants.SHOW_SHAPE_BAR:
       return { ...state, isShowedShapeBar: true };
-    case HIDE_SHAPE_BAR:
+    case drawConstants.HIDE_SHAPE_BAR:
       return { ...state, isShowedShapeBar: false };
-    case SET_IMG:
+    case drawConstants.SET_IMG:
       return { ...state, img: action.payload };
     default:
       return state;
