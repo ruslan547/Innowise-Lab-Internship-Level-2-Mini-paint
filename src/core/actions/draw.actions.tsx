@@ -14,6 +14,7 @@ const {
   SET_SIZE,
   SHOW_SHAPE_BAR,
   HIDE_SHAPE_BAR,
+  SET_IMG,
 } = drawConstants;
 
 interface NoToolAction {
@@ -70,6 +71,11 @@ interface CircleAction {
   type: typeof CIRCLE;
 }
 
+interface SetImgAction {
+  type: typeof SET_IMG;
+  payload: HTMLImageElement;
+}
+
 export function noTool(): NoToolAction {
   return { type: NO_TOOL };
 }
@@ -116,16 +122,23 @@ export function hideShapeBar(): HideShapeBarAction {
   return { type: HIDE_SHAPE_BAR };
 }
 
-export function line() {
+export function line(): LineAction {
   return { type: LINE };
 }
 
-export function rectangle() {
+export function rectangle(): RectangleAction {
   return { type: RECTANGLE };
 }
 
-export function circle() {
+export function circle(): CircleAction {
   return { type: CIRCLE };
+}
+
+export function setImg(img: HTMLImageElement): SetImgAction {
+  return {
+    type: SET_IMG,
+    payload: img,
+  };
 }
 
 export type DrawActions =
@@ -141,4 +154,5 @@ export type DrawActions =
   | HideShapeBarAction
   | LineAction
   | RectangleAction
-  | CircleAction;
+  | CircleAction
+  | SetImgAction;

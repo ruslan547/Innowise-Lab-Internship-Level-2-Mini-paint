@@ -15,6 +15,7 @@ const {
   SET_SIZE,
   SHOW_SHAPE_BAR,
   HIDE_SHAPE_BAR,
+  SET_IMG,
 } = drawConstants;
 
 const initState = {
@@ -24,6 +25,7 @@ const initState = {
   isShowedSizeBar: false,
   size: '5',
   isShowedShapeBar: false,
+  img: null,
 };
 
 export interface DrawState {
@@ -33,6 +35,7 @@ export interface DrawState {
   isShowedSizeBar: boolean;
   size: string;
   isShowedShapeBar: boolean;
+  img: HTMLImageElement | null;
 }
 
 export function drawReducer(state = initState, action: DrawActions): DrawState {
@@ -63,6 +66,8 @@ export function drawReducer(state = initState, action: DrawActions): DrawState {
       return { ...state, isShowedShapeBar: true };
     case HIDE_SHAPE_BAR:
       return { ...state, isShowedShapeBar: false };
+    case SET_IMG:
+      return { ...state, img: action.payload };
     default:
       return state;
   }

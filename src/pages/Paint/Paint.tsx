@@ -1,8 +1,10 @@
+/* eslint-disable prettier/prettier */
 import { MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
   circle,
+  setImg,
   hideShapeBar,
   hideSizeBar,
   rectangle,
@@ -13,7 +15,15 @@ import {
 import PaintButton from '../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
-import { addPoint, addLine, redraw } from '../../core/services/draw.service';
+import {
+  addPoint,
+  addLine,
+  redraw,
+  clearCanvas,
+  drawImage,
+  createImg,
+  drawLine,
+} from '../../core/services/draw.service';
 import './Paint.scss';
 import SizeBar from './SizeBar/SizeBar';
 import ColorBar from './ColorBar/ColorBar';
@@ -31,76 +41,68 @@ export interface PaintProps {
   size: string;
   dispatch: Dispatch;
   isShowedShapeBar: boolean;
+  img: HTMLImageElement;
 }
 
-function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar }: PaintProps): JSX.Element {
+function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar, img }: PaintProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
   const startX = useRef<number>(0);
   const startY = useRef<number>(0);
+  const mouseX = useRef<number>(0);
+  const mouseY = useRef<number>(0);
 
   const handleMouseDown = ({ clientX, clientY }: MouseEvent) => {
     dispatch(hideSizeBar());
     dispatch(hideShapeBar());
     dispatch(startDraw());
     if (canvasRef && canvasRef.current) {
-      const { offsetLeft, offsetTop } = canvasRef.current;
+      mouseX.current = clientX - canvasRef.current.offsetLeft;
+      mouseY.current = clientY - canvasRef.current.offsetTop;
 
       if (tool === PAINTBRUSH) {
-        addPoint(clientX - offsetLeft, clientY - offsetTop, false, color, size);
+        addPoint(mouseX.current, mouseY.current, false, color, size);
       } else if (tool === LINE) {
-        startX.current = clientX - offsetLeft;
-        startY.current = clientY - offsetTop;
+        startX.current = mouseX.current;
+        startY.current = mouseY.current;
       }
       if (context.current) {
         redraw(context.current);
+        if (img) {
+          drawImage(context.current, img);
+        }
       }
     }
   };
 
   const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
     if (canvasRef && canvasRef.current && context && context.current) {
-      const { offsetLeft, offsetTop } = canvasRef.current;
-      const ctx = context.current;
-      const mouseX = clientX - offsetLeft;
-      const mouseY = clientY - offsetTop;
+      mouseX.current = clientX - canvasRef.current.offsetLeft;
+      mouseY.current = clientY - canvasRef.current.offsetTop;
 
       if (isDraw && tool === PAINTBRUSH) {
-        addPoint(mouseX, mouseY, true, color, size);
+        addPoint(mouseX.current, mouseY.current, true, color, size);
         redraw(context.current);
+        if (img) {
+          drawImage(context.current, img);
+        }
       } else if (isDraw && tool === LINE) {
         redraw(context.current);
-        ctx.lineWidth = +size;
-        ctx.strokeStyle = color;
-        ctx.beginPath();
-        ctx.moveTo(startX.current, startY.current);
-        ctx.lineTo(mouseX, mouseY);
-        ctx.stroke();
+        drawLine(context.current, size, color, startX.current, startY.current, mouseX.current, mouseY.current);
+        if (img) {
+          drawImage(context.current, img);
+        }
       }
     }
   };
 
-  const handleMouseUp = ({ clientX, clientY }: MouseEvent) => {
+  const handleMouseUp = () => {
     if (canvasRef && canvasRef.current) {
-      const { offsetLeft, offsetTop } = canvasRef.current;
-      const mouseX = clientX - offsetLeft;
-      const mouseY = clientY - offsetTop;
       if (tool === LINE && isDraw) {
-        addLine(startX.current, startY.current, mouseX, mouseY, color, size);
+        addLine(startX.current, startY.current, mouseX.current, mouseY.current, color, size);
       }
-    }
-
-    dispatch(stopDraw());
-  };
-
-  const handleMouseLeave = ({ clientX, clientY }: MouseEvent) => {
-    if (canvasRef && canvasRef.current) {
-      const { offsetLeft, offsetTop } = canvasRef.current;
-      const mouseX = clientX - offsetLeft;
-      const mouseY = clientY - offsetTop;
-      if (tool === LINE && isDraw) {
-        addLine(startX.current, startY.current, mouseX, mouseY, color, size);
-      }
+      dispatch(setImg(createImg(canvasRef.current)));
+      clearCanvas();
     }
 
     dispatch(stopDraw());
@@ -117,8 +119,16 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar }: PaintP
   useEffect(() => {
     if (canvasRef && canvasRef.current) {
       context.current = canvasRef.current.getContext('2d');
+      if (context && context.current) {
+        context.current.globalCompositeOperation = 'destination-over';
+      }
     }
   }, [canvasRef, context]);
+
+  useEffect(() => {
+    document.addEventListener('mouseup', handleMouseUp);
+    return () => document.removeEventListener('mouseup', handleMouseUp);
+  }, []);
 
   return (
     <div className="paint">
@@ -130,7 +140,6 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar }: PaintP
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseLeave}
       ></canvas>
       <div className="toolbar">
         <PaintButton />
@@ -167,8 +176,8 @@ function Paint({ tool, isDraw, color, size, dispatch, isShowedShapeBar }: PaintP
   );
 }
 
-function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, size, isShowedShapeBar } }: RootSate) {
-  return { tool, isDraw, color, dispatch, size, isShowedShapeBar };
+function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, size, isShowedShapeBar, img } }: RootSate) {
+  return { tool, isDraw, color, dispatch, size, isShowedShapeBar, img };
 }
 
 export default connect(mapStateToProps)(Paint);

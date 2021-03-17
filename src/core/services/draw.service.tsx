@@ -67,3 +67,36 @@ export function addLine(startX: number, startY: number, endX: number, endY: numb
     size,
   });
 }
+
+export function clearCanvas(): void {
+  points.length = 0;
+  existingLines.length = 0;
+}
+
+export function drawImage(context: CanvasRenderingContext2D, img: HTMLImageElement): void {
+  context.drawImage(img, 0, 0);
+}
+
+export function drawLine(
+  context: CanvasRenderingContext2D,
+  size: string,
+  color: string,
+  startX: number,
+  startY: number,
+  mouseX: number,
+  mouseY: number,
+): void {
+  context.lineWidth = +size;
+  context.strokeStyle = color;
+  context.beginPath();
+  context.moveTo(startX, startY);
+  context.lineTo(mouseX, mouseY);
+  context.stroke();
+}
+
+export function createImg(canvas: HTMLCanvasElement): HTMLImageElement {
+  const img = canvas.toDataURL('image/png');
+  const imgTag = new Image();
+  imgTag.src = img;
+  return imgTag;
+}
