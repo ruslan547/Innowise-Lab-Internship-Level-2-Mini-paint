@@ -7,9 +7,8 @@ export interface GalleryProps {
   user: User;
 }
 
-// eslint-disable-next-line prettier/prettier
 function Gallery({ user }: GalleryProps): JSX.Element {
-  return <div>gallery</div>;
+  return <div>{user.email}</div>;
 }
 
 function mapStateToProps({ authReducer: { user } }: RootSate) {
