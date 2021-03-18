@@ -1,20 +1,12 @@
-/* eslint-disable prettier/prettier */
 import { Route } from 'react-router-dom';
 import { Redirect, RouteProps } from 'react-router';
-import { connect, ConnectedComponent } from 'react-redux';
+import { connect } from 'react-redux';
 import { routeConstants } from '../../constants/route.constants';
 import { RootSate } from '../../reducers/root.reducer';
-import { PaintProps } from '../../../pages/Paint/Paint';
 import { User } from '../../actions/auth.actions';
-import { GalleryProps } from '../../../pages/Gallery/Gallery';
 
 export interface IPrivateRouteProps {
-  component:
-  | ConnectedComponent<
-    ({ tool, isDraw, color, size, dispatch, img, context }: PaintProps) => JSX.Element,
-    Omit<PaintProps, 'tool' | 'isDraw' | 'dispatch' | 'color' | 'size' | 'img' | 'context'>
-  >
-  | ConnectedComponent<({ user }: GalleryProps) => JSX.Element, Omit<GalleryProps, 'user'>>;
+  component: () => JSX.Element;
   user: User;
 }
 

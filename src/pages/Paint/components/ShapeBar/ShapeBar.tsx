@@ -14,7 +14,7 @@ interface ShapeBarProps {
 }
 
 function ShapeBar({ dispatch, isShowedShapeBar }: ShapeBarProps): JSX.Element {
-  const handleShapeBarClick = () => {
+  const handleClick = () => {
     if (isShowedShapeBar) {
       dispatch(drawActions.hideShapeBar());
     } else {
@@ -24,7 +24,7 @@ function ShapeBar({ dispatch, isShowedShapeBar }: ShapeBarProps): JSX.Element {
 
   return (
     <div className="shape-bar">
-      <PaintButton name="shape-bar" onClick={handleShapeBarClick}>
+      <PaintButton name="shape-bar" onClick={handleClick}>
         ...
       </PaintButton>
       {isShowedShapeBar && (

@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { connect } from 'react-redux';
 import { User } from '../../../../core/actions/auth.actions';
 import { drawActions } from '../../../../core/actions/draw.actions';
@@ -15,9 +16,15 @@ interface SaveButtonProps {
 }
 
 function SaveButton({ dispatch, img, user, context }: SaveButtonProps) {
+  const currentImg = useRef<string>('');
+
   const handleClick = async () => {
-    await firebaseDbService.sendImg(img.src, user.email);
+    if (currentImg.current !== img.src) {
+      await firebaseDbService.sendImg(img.src, user.email);
+    }
+    currentImg.current = img.src;
     dispatch(drawActions.deleteImg());
+
     if (context) {
       drawService.clearCanvas(context);
     }
