@@ -14,7 +14,7 @@ export const authActions = {
 };
 
 export interface User {
-  email: string | null;
+  email: string;
   uid: string;
 }
 
@@ -66,7 +66,7 @@ function signin(email: string, password: string): AuthThunkAction {
       .then(({ user }: UserCredential) => {
         if (user) {
           const { uid, email } = user;
-          dispatch(success({ uid, email }));
+          dispatch(success({ uid, email: email || 'unknowk' }));
           history.push(routeConstants.GALLERY);
         }
       })
@@ -89,7 +89,7 @@ function register(email: string, password: string): AuthThunkAction {
       .then(({ user }: UserCredential) => {
         if (user) {
           const { uid, email } = user;
-          dispatch(success({ uid, email }));
+          dispatch(success({ uid, email: email || 'unknowk' }));
           history.push(routeConstants.GALLERY);
         }
       })

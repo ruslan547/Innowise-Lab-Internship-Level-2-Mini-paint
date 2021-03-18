@@ -12,6 +12,7 @@ interface GalleryListProps {
 function GalleryList({ images }: GalleryListProps): JSX.Element {
   const dispatch = useDispatch();
   console.log(images);
+
   useEffect(() => {
     dispatch(showActions.getImages());
   }, []);

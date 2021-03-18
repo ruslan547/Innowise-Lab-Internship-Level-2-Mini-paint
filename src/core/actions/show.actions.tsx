@@ -5,6 +5,7 @@ import { firebaseDbService, Image } from '../services/firebase.db.service';
 
 export const showActions = {
   getImages,
+  sort,
 };
 
 interface SuccessDownloadAction {
@@ -12,7 +13,12 @@ interface SuccessDownloadAction {
   payload: Record<string, Image>;
 }
 
-export type ShowAction = SuccessDownloadAction;
+interface SortAction {
+  type: typeof showConstants.SORT;
+  payload: string;
+}
+
+export type ShowAction = SuccessDownloadAction | SortAction;
 
 export type ShowThunkAction = ThunkAction<void, ShowState, unknown, ShowAction>;
 
@@ -20,6 +26,13 @@ function successDownload(data: Record<string, Image>): SuccessDownloadAction {
   return {
     type: showConstants.SUCCESS_DOWNLOAD,
     payload: data,
+  };
+}
+
+function sort(key: string): SortAction {
+  return {
+    type: showConstants.SORT,
+    payload: key,
   };
 }
 

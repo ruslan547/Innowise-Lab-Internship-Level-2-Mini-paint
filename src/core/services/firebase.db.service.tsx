@@ -6,11 +6,11 @@ export const firebaseDbService = {
 };
 
 export interface Image {
-  email: string | null;
+  email: string;
   image: string;
 }
 
-async function sendImg(image: string, email: string | null): Promise<void> {
+async function sendImg(image: string, email: string): Promise<void> {
   database.ref().child('images').push({ image, email });
 }
 
