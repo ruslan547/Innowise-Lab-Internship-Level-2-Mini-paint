@@ -1,16 +1,12 @@
 import { MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import PaintButton from '../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../core/constants/draw.constants';
 import { RootSate } from '../../core/reducers/root.reducer';
 import './Paint.scss';
-import ToolBar from './components/DrawBar/DrawBar';
 import { drawActions } from '../../core/actions/draw.actions';
-import { firebaseDbService } from '../../core/services/firebase.db.service';
-import { User } from '../../core/actions/auth.actions';
 import { drawService } from '../../core/services/draw.service';
-import NavBar from './components/NavBar/NavBar';
+import PaintToolBar from './components/PaintToolBar/PaintToolBar';
 
 const { PAINTBRUSH, LINE, RECTANGLE, CIRCLE } = drawConstants;
 
@@ -21,10 +17,9 @@ export interface PaintProps {
   size: string;
   dispatch: Dispatch;
   img: HTMLImageElement;
-  user: User;
 }
 
-function Paint({ tool, isDraw, color, size, dispatch, img, user }: PaintProps): JSX.Element {
+function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
   const startX = useRef<number>(0);
@@ -117,19 +112,12 @@ function Paint({ tool, isDraw, color, size, dispatch, img, user }: PaintProps): 
     }
   };
 
-  const handleSaveClick = async () => {
-    await firebaseDbService.sendImg(img.src, user.email);
-    dispatch(drawActions.deleteImg());
-    if (context.current) {
-      drawService.clearCanvas(context.current);
-    }
-  };
-
   useEffect(() => {
     if (canvasRef && canvasRef.current) {
       context.current = canvasRef.current.getContext('2d');
       if (context && context.current) {
         context.current.globalCompositeOperation = 'destination-over';
+        dispatch(drawActions.setContext(context.current));
       }
     }
   }, [canvasRef, context]);
@@ -151,20 +139,13 @@ function Paint({ tool, isDraw, color, size, dispatch, img, user }: PaintProps): 
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
       ></canvas>
-      <div className="toolbar">
-        <NavBar />
-        <ToolBar />
-        <PaintButton onClick={handleSaveClick}>Save</PaintButton>
-      </div>
+      <PaintToolBar />
     </div>
   );
 }
 
-function mapStateToProps({
-  drawReducer: { tool, isDraw, color, dispatch, size, img },
-  authReducer: { user },
-}: RootSate) {
-  return { tool, isDraw, color, dispatch, size, img, user };
+function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, size, img } }: RootSate) {
+  return { tool, isDraw, color, dispatch, size, img };
 }
 
 export default connect(mapStateToProps)(Paint);

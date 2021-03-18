@@ -11,8 +11,8 @@ import { GalleryProps } from '../../../pages/Gallery/Gallery';
 export interface IPrivateRouteProps {
   component:
   | ConnectedComponent<
-    ({ tool, isDraw, color, size, dispatch, img, user }: PaintProps) => JSX.Element,
-    Omit<PaintProps, 'tool' | 'isDraw' | 'dispatch' | 'color' | 'size' | 'img' | 'user'>
+    ({ tool, isDraw, color, size, dispatch, img }: PaintProps) => JSX.Element,
+    Omit<PaintProps, 'tool' | 'isDraw' | 'dispatch' | 'color' | 'size' | 'img'>
   >
   | ConnectedComponent<({ user }: GalleryProps) => JSX.Element, Omit<GalleryProps, 'user'>>;
   user: User;

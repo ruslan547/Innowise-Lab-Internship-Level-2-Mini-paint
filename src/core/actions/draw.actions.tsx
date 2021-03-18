@@ -16,6 +16,7 @@ export const drawActions = {
   circle,
   setImg,
   deleteImg,
+  setContext,
 };
 
 interface NoToolAction {
@@ -79,6 +80,11 @@ interface SetImgAction {
 
 interface DeleteImgAction {
   type: typeof drawConstants.DELETE_IMG;
+}
+
+interface SetContextAction {
+  type: typeof drawConstants.SET_CONTEXT;
+  payload: CanvasRenderingContext2D;
 }
 
 function noTool(): NoToolAction {
@@ -150,6 +156,13 @@ function deleteImg(): DeleteImgAction {
   return { type: drawConstants.DELETE_IMG };
 }
 
+function setContext(context: CanvasRenderingContext2D): SetContextAction {
+  return {
+    type: drawConstants.SET_CONTEXT,
+    payload: context,
+  };
+}
+
 export type DrawActions =
   | PaintbrushAction
   | StartDrawAction
@@ -165,4 +178,5 @@ export type DrawActions =
   | RectangleAction
   | CircleAction
   | SetImgAction
-  | DeleteImgAction;
+  | DeleteImgAction
+  | SetContextAction;

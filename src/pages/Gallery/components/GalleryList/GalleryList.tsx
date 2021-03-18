@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { showActions } from '../../../../core/actions/show.actions';
 import { RootSate } from '../../../../core/reducers/root.reducer';
@@ -7,25 +7,36 @@ import './GalleryList.scss';
 
 interface GalleryListProps {
   images: Record<string, Image>;
+  filtredKey: string;
 }
 
-function GalleryList({ images }: GalleryListProps): JSX.Element {
+function createImgList(images: Record<string, Image>, filtredKey: string) {
+  let filteredImages = Object.values(images);
+
+  if (filtredKey !== 'all') {
+    filteredImages = filteredImages.filter((item) => item.email === filtredKey);
+  }
+
+  return filteredImages.map((item) => (
+    <li className="gallery-list__item" key={item.image}>
+      <img src={item.image} alt="" />
+    </li>
+  ));
+}
+
+function GalleryList({ images, filtredKey }: GalleryListProps): JSX.Element {
   const dispatch = useDispatch();
-  console.log(images);
+  const imgList = useMemo(() => createImgList(images, filtredKey), [images, filtredKey]);
 
   useEffect(() => {
     dispatch(showActions.getImages());
   }, []);
 
-  return (
-    <ul className="gallery-list">
-      <li className="gallery-list__item">li</li>
-    </ul>
-  );
+  return <ul className="gallery-list">{imgList}</ul>;
 }
 
-function mapStateToProps({ showReducer: { images } }: RootSate) {
-  return { images };
+function mapStateToProps({ showReducer: { images, filtredKey } }: RootSate) {
+  return { images, filtredKey };
 }
 
 export default connect(mapStateToProps)(GalleryList);

@@ -9,6 +9,7 @@ const initState = {
   size: '5',
   isShowedShapeBar: false,
   img: null,
+  context: null,
 };
 
 export interface DrawState {
@@ -19,6 +20,7 @@ export interface DrawState {
   size: string;
   isShowedShapeBar: boolean;
   img: HTMLImageElement | null;
+  context: CanvasRenderingContext2D | null;
 }
 
 export function drawReducer(state = initState, action: DrawActions): DrawState {
@@ -53,6 +55,8 @@ export function drawReducer(state = initState, action: DrawActions): DrawState {
       return { ...state, img: action.payload };
     case drawConstants.DELETE_IMG:
       return { ...state, img: null };
+    case drawConstants.SET_CONTEXT:
+      return { ...state, context: action.payload };
     default:
       return state;
   }

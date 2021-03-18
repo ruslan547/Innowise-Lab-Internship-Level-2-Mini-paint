@@ -1,13 +1,22 @@
-import { useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import PaintButton from '../../../../core/components/PaintButton/PaintButton';
 import './NavBar.scss';
 import picture_img from '../../../../assets/img/picture.svg';
 import { history } from '../../../../core/helpers/history';
 import { routeConstants } from '../../../../core/constants/route.constants';
 import SignoutButton from '../../../../core/components/SignoutButton/SignoutButton';
+import { RootSate } from '../../../../core/reducers/root.reducer';
+import { Dispatch } from '../../../../core/helpers/store';
+import { drawActions } from '../../../../core/actions/draw.actions';
 
-function NavBar(): JSX.Element {
-  const handleGalleryClick = () => {
+interface NavBarProps {
+  dispatch: Dispatch;
+  img: HTMLImageElement;
+}
+
+function NavBar({ dispatch, img }: NavBarProps): JSX.Element {
+  const handleClick = async () => {
+    dispatch(drawActions.deleteImg());
     history.push(routeConstants.GALLERY);
   };
 
@@ -17,7 +26,7 @@ function NavBar(): JSX.Element {
         <SignoutButton />
       </li>
       <li className="navbar__item">
-        <PaintButton onClick={handleGalleryClick}>
+        <PaintButton onClick={handleClick}>
           <img src={picture_img} alt="" />
         </PaintButton>
       </li>
@@ -25,4 +34,8 @@ function NavBar(): JSX.Element {
   );
 }
 
-export default NavBar;
+function mapStateToProps({ drawReducer: { img, dispatch } }: RootSate) {
+  return { dispatch, img };
+}
+
+export default connect(mapStateToProps)(NavBar);

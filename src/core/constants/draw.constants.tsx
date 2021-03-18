@@ -14,4 +14,5 @@ export enum drawConstants {
   HIDE_SHAPE_BAR = 'HIDE_SHAPE_BAR',
   SET_IMG = 'SET_IMG',
   DELETE_IMG = 'DELETE_IMG',
+  SET_CONTEXT = 'SET_CONTEXT',
 }

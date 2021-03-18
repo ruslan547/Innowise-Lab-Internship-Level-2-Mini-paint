@@ -4,22 +4,24 @@ import { Image } from '../services/firebase.db.service';
 
 const initState = {
   images: {},
-  sortedImages: {},
-  sortKey: 'all',
+  filtredImages: {},
+  filtredKey: 'all',
 };
 
 export interface ShowState {
   images: Record<string, Image>;
-  sortedImages: Record<string, Image>;
-  sortKey: string;
+  filtredImages: Record<string, Image>;
+  filtredKey: string;
 }
 
 export function showReducer(state = initState, action: ShowAction): ShowState {
   switch (action.type) {
     case showConstants.SUCCESS_DOWNLOAD:
       return { ...state, images: { ...action.payload } };
-    case showConstants.SORT:
-      return { ...state, sortKey: action.payload };
+    case showConstants.FILTER_IMAGES:
+      return { ...state, filtredKey: action.payload };
+    case showConstants.SET_IMAGES:
+      return { ...state, filtredImages: { ...action.payload } };
     default:
       return state;
   }

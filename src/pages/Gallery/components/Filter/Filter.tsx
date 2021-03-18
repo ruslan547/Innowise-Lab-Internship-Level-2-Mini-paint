@@ -4,11 +4,11 @@ import { showActions } from '../../../../core/actions/show.actions';
 import { store } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import { Image } from '../../../../core/services/firebase.db.service';
-import './Sorter.scss';
+import './Filter.scss';
 
-interface SorterProps {
+interface FilterProps {
   images: Record<string, Image>;
-  sortKey: string;
+  filtredKey: string;
 }
 
 function createOptions(images: Record<string, Image>): Array<JSX.Element> {
@@ -25,22 +25,22 @@ function createOptions(images: Record<string, Image>): Array<JSX.Element> {
   });
 }
 
-function Sorter({ sortKey, images }: SorterProps) {
+function Filter({ filtredKey, images }: FilterProps) {
   const options = useMemo(() => createOptions(images), [images]);
 
   const handleChange = ({ target: { value } }: ChangeEvent<HTMLSelectElement>) => {
-    store.dispatch(showActions.sort(value));
+    store.dispatch(showActions.filterImages(value));
   };
 
   return (
-    <select className="sorter" value={sortKey} onChange={handleChange}>
+    <select className="filter" value={filtredKey} onChange={handleChange}>
       {options}
     </select>
   );
 }
 
-function mapStateToProps({ showReducer: { sortKey, images } }: RootSate) {
-  return { sortKey, images };
+function mapStateToProps({ showReducer: { filtredKey, images } }: RootSate) {
+  return { filtredKey, images };
 }
 
-export default connect(mapStateToProps)(Sorter);
+export default connect(mapStateToProps)(Filter);

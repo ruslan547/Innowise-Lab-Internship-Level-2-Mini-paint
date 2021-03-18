@@ -1,4 +1,5 @@
 export enum showConstants {
   SUCCESS_DOWNLOAD = 'SUCCESS_DOWNLOAD',
-  SORT = 'SORT',
+  FILTER_IMAGES = 'FILTER_IMAGES',
+  SET_IMAGES = 'SET_IMAGES',
 }
