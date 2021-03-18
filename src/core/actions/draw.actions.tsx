@@ -84,7 +84,7 @@ interface DeleteImgAction {
 
 interface SetContextAction {
   type: typeof drawConstants.SET_CONTEXT;
-  payload: CanvasRenderingContext2D;
+  payload: CanvasRenderingContext2D | null;
 }
 
 function noTool(): NoToolAction {
@@ -156,7 +156,7 @@ function deleteImg(): DeleteImgAction {
   return { type: drawConstants.DELETE_IMG };
 }
 
-function setContext(context: CanvasRenderingContext2D): SetContextAction {
+function setContext(context: CanvasRenderingContext2D | null): SetContextAction {
   return {
     type: drawConstants.SET_CONTEXT,
     payload: context,

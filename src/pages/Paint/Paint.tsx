@@ -17,11 +17,11 @@ export interface PaintProps {
   size: string;
   dispatch: Dispatch;
   img: HTMLImageElement;
+  context: CanvasRenderingContext2D | null;
 }
 
-function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.Element {
+function Paint({ tool, isDraw, color, size, dispatch, img, context }: PaintProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const context = useRef<CanvasRenderingContext2D | null>(null);
   const startX = useRef<number>(0);
   const startY = useRef<number>(0);
 
@@ -29,46 +29,46 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
     dispatch(drawActions.hideSizeBar());
     dispatch(drawActions.hideShapeBar());
     dispatch(drawActions.startDraw());
-    if (canvasRef && canvasRef.current && context && context.current) {
+    if (canvasRef && canvasRef.current && context) {
       const mouseX = clientX - canvasRef.current.offsetLeft;
       const mouseY = clientY - canvasRef.current.offsetTop;
 
       if (tool === PAINTBRUSH) {
         drawService.addPoint(mouseX, mouseY, false, color, size);
-      } else if (tool === LINE || tool === CIRCLE || tool === RECTANGLE) {
+      } else {
         startX.current = mouseX;
         startY.current = mouseY;
       }
-      if (context.current) {
-        drawService.redraw(context.current);
-        if (img) {
-          drawService.drawImage(context.current, img);
-        }
+
+      drawService.redraw(context);
+
+      if (img) {
+        drawService.drawImage(context, img);
       }
     }
   };
 
   const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
-    if (canvasRef && canvasRef.current && context && context.current) {
+    if (canvasRef && canvasRef.current && context) {
       const mouseX = clientX - canvasRef.current.offsetLeft;
       const mouseY = clientY - canvasRef.current.offsetTop;
 
       if (isDraw && tool === PAINTBRUSH) {
         drawService.addPoint(mouseX, mouseY, true, color, size);
-        drawService.redraw(context.current);
+        drawService.redraw(context);
         if (img) {
-          drawService.drawImage(context.current, img);
+          drawService.drawImage(context, img);
         }
       } else if (isDraw && tool === LINE) {
-        drawService.redraw(context.current);
-        drawService.drawLine(context.current, size, color, startX.current, startY.current, mouseX, mouseY);
+        drawService.redraw(context);
+        drawService.drawLine(context, size, color, startX.current, startY.current, mouseX, mouseY);
         if (img) {
-          drawService.drawImage(context.current, img);
+          drawService.drawImage(context, img);
         }
       } else if (isDraw && tool === CIRCLE) {
-        drawService.redraw(context.current);
+        drawService.redraw(context);
         drawService.drawCircle(
-          context.current,
+          context,
           startX.current,
           startY.current,
           mouseX - startX.current,
@@ -76,12 +76,12 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
           color,
         );
         if (img) {
-          drawService.drawImage(context.current, img);
+          drawService.drawImage(context, img);
         }
       } else if (isDraw && tool === RECTANGLE) {
-        drawService.redraw(context.current);
+        drawService.redraw(context);
         drawService.drawRectangle(
-          context.current,
+          context,
           startX.current,
           startY.current,
           mouseX - startX.current,
@@ -89,7 +89,7 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
           color,
         );
         if (img) {
-          drawService.drawImage(context.current, img);
+          drawService.drawImage(context, img);
         }
       }
     }
@@ -114,13 +114,14 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
 
   useEffect(() => {
     if (canvasRef && canvasRef.current) {
-      context.current = canvasRef.current.getContext('2d');
-      if (context && context.current) {
-        context.current.globalCompositeOperation = 'destination-over';
-        dispatch(drawActions.setContext(context.current));
+      const context = canvasRef.current.getContext('2d');
+
+      if (context) {
+        context.globalCompositeOperation = 'destination-over';
       }
+      dispatch(drawActions.setContext(context));
     }
-  }, [canvasRef, context]);
+  }, []);
 
   useEffect(() => {
     document.addEventListener('mouseup', handleMouseUp);
@@ -144,8 +145,8 @@ function Paint({ tool, isDraw, color, size, dispatch, img }: PaintProps): JSX.El
   );
 }
 
-function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, size, img } }: RootSate) {
-  return { tool, isDraw, color, dispatch, size, img };
+function mapStateToProps({ drawReducer: { tool, isDraw, color, dispatch, size, img, context } }: RootSate) {
+  return { tool, isDraw, color, dispatch, size, img, context };
 }
 
 export default connect(mapStateToProps)(Paint);
