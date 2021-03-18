@@ -5,6 +5,7 @@ import { drawConstants } from '../../../../core/constants/draw.constants';
 import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import { drawService } from '../../../../core/services/draw.service';
+import { updateSizes } from '../../../../core/services/update.canvas';
 import './MainView.scss';
 
 interface MainViewProps {
@@ -109,6 +110,12 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
     }
   };
 
+  const handleResize = () => {
+    if (context) {
+      updateSizes(context);
+    }
+  };
+
   useEffect(() => {
     if (canvasRef && canvasRef.current) {
       const context = canvasRef.current.getContext('2d');
@@ -125,12 +132,18 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
     return () => document.removeEventListener('mouseup', handleMouseUp);
   }, []);
 
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <canvas
       className="mainview"
+      id="mainview"
       ref={canvasRef}
-      width="712px"
-      height="632px"
+      width="712"
+      height="632"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}

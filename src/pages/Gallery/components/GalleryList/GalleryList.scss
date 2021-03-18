@@ -2,7 +2,7 @@
 
 .gallery-list {
   width: 100%;
-  height: 100%;
+  height: 90%;
   overflow: hidden;
   overflow-y: auto;
   border: 1px solid $durk-color;
@@ -14,8 +14,10 @@
     display: flex;
     justify-content: center;
     list-style-type: none;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
   }
+
+  &__item:last-child { margin-bottom: 0; }
 
   &__item > img {
     width: 300px;
