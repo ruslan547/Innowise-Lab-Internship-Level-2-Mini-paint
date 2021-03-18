@@ -1,0 +1,10 @@
+@import '../../../../index.scss';
+
+.gallery-toolbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 3px;
+  box-sizing: border-box;
+  background-color: $main-color;
+}

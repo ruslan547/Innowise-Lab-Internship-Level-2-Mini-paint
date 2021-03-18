@@ -1,0 +1,19 @@
+@import '../../../../index.scss';
+
+.gallery-list {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+  border: 1px solid $durk-color;
+  padding: 10px 40px;
+  box-sizing: border-box;
+  margin: 3px 0;
+
+  &__item {
+    list-style-type: none;
+    margin-bottom: 5px;
+  }
+
+  &__item { margin-bottom: 0; }
+}
