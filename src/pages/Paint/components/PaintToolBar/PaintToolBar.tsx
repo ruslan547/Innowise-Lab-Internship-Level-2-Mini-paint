@@ -8,6 +8,7 @@ import { drawService } from '../../../../core/services/draw.service';
 import './PaintToolBar.scss';
 import { drawActions } from '../../../../core/actions/draw.actions';
 import { Dispatch } from '../../../../core/helpers/store';
+import trash from '../../../../assets/img/trash.svg';
 
 interface PaintToolBarProps {
   context: CanvasRenderingContext2D | null;
@@ -28,7 +29,9 @@ function PaintToolBar({ context, dispatch }: PaintToolBarProps) {
       <DrawBar />
       <div>
         <div className="clear-btn">
-          <PaintButton onClick={handleClick}>Clear</PaintButton>
+          <PaintButton onClick={handleClick}>
+            <img src={trash} alt="" />
+          </PaintButton>
         </div>
         <SaveButton />
       </div>

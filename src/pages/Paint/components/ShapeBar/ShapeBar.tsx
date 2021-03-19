@@ -9,6 +9,7 @@ import Polygon from '../Hexagon/Hexagon';
 import Rectangle from '../Rectangle/Rectangle';
 import Star from '../Star/Star';
 import './ShapeBar.scss';
+import points from '../../../../assets/img/points.svg';
 
 interface ShapeBarProps {
   dispatch: Dispatch;
@@ -27,7 +28,7 @@ function ShapeBar({ dispatch, isShowedShapeBar }: ShapeBarProps): JSX.Element {
   return (
     <div className="shape-bar">
       <PaintButton name="shape-bar" onClick={handleClick}>
-        ...
+        <img src={points} alt="" />
       </PaintButton>
       {isShowedShapeBar && (
         <ul className="shape-bar__setting">

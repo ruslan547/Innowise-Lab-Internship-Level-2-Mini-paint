@@ -8,11 +8,16 @@ import hexagon from '../../../../assets/img/hexagon.svg';
 
 interface HexagonProps {
   dispatch: Dispatch;
+  tool: string | null;
 }
 
-function Hexagon({ dispatch }: HexagonProps): JSX.Element {
+function Hexagon({ dispatch, tool }: HexagonProps): JSX.Element {
   const handleClick = () => {
-    dispatch(drawActions.hexagon());
+    if (tool === drawConstants.HEXAGON) {
+      dispatch(drawActions.noTool());
+    } else {
+      dispatch(drawActions.hexagon());
+    }
   };
 
   return (
@@ -22,8 +27,8 @@ function Hexagon({ dispatch }: HexagonProps): JSX.Element {
   );
 }
 
-function mapStateToProps({ drawReducer: { dispatch } }: RootSate) {
-  return { dispatch };
+function mapStateToProps({ drawReducer: { dispatch, tool } }: RootSate) {
+  return { dispatch, tool };
 }
 
 export default connect(mapStateToProps)(Hexagon);

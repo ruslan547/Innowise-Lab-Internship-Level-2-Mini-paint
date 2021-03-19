@@ -7,6 +7,7 @@ import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import { drawService } from '../../../../core/services/draw.service';
 import { firebaseDbService } from '../../../../core/services/firebase.db.service';
+import disk from '../../../../assets/img/disk.svg';
 
 interface SaveButtonProps {
   dispatch: Dispatch;
@@ -30,7 +31,11 @@ function SaveButton({ dispatch, img, user, context }: SaveButtonProps) {
     }
   };
 
-  return <PaintButton onClick={handleClick}>Save</PaintButton>;
+  return (
+    <PaintButton onClick={handleClick}>
+      <img src={disk} alt="" />
+    </PaintButton>
+  );
 }
 
 function mapStateToProps({ drawReducer: { img, dispatch, context }, authReducer: { user } }: RootSate) {

@@ -10,11 +10,16 @@ const { LINE } = drawConstants;
 
 interface LineProps {
   dispatch: Dispatch;
+  tool: string | null;
 }
 
-function Line({ dispatch }: LineProps): JSX.Element {
+function Line({ dispatch, tool }: LineProps): JSX.Element {
   const handleClick = () => {
-    dispatch(drawActions.line());
+    if (tool === drawConstants.LINE) {
+      dispatch(drawActions.noTool());
+    } else {
+      dispatch(drawActions.line());
+    }
   };
 
   return (
@@ -24,8 +29,8 @@ function Line({ dispatch }: LineProps): JSX.Element {
   );
 }
 
-function mapStateToProps({ drawReducer: { dispatch } }: RootSate) {
-  return { dispatch };
+function mapStateToProps({ drawReducer: { dispatch, tool } }: RootSate) {
+  return { dispatch, tool };
 }
 
 export default connect(mapStateToProps)(Line);

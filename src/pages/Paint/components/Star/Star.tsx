@@ -8,11 +8,16 @@ import { connect } from 'react-redux';
 
 interface StarProps {
   dispatch: Dispatch;
+  tool: string | null;
 }
 
-function Star({ dispatch }: StarProps): JSX.Element {
+function Star({ dispatch, tool }: StarProps): JSX.Element {
   const handleClick = () => {
-    dispatch(drawActions.star());
+    if (tool === drawConstants.STAR) {
+      dispatch(drawActions.noTool());
+    } else {
+      dispatch(drawActions.star());
+    }
   };
 
   return (
@@ -22,8 +27,8 @@ function Star({ dispatch }: StarProps): JSX.Element {
   );
 }
 
-function mapStateToProps({ drawReducer: { dispatch } }: RootSate) {
-  return { dispatch };
+function mapStateToProps({ drawReducer: { dispatch, tool } }: RootSate) {
+  return { dispatch, tool };
 }
 
 export default connect(mapStateToProps)(Star);

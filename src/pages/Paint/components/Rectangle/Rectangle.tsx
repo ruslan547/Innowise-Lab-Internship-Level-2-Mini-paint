@@ -8,11 +8,16 @@ import { drawActions } from '../../../../core/actions/draw.actions';
 
 interface RectangleProps {
   dispatch: Dispatch;
+  tool: string | null;
 }
 
-function Rectangle({ dispatch }: RectangleProps): JSX.Element {
+function Rectangle({ dispatch, tool }: RectangleProps): JSX.Element {
   const handleClick = () => {
-    dispatch(drawActions.rectangle());
+    if (tool === drawConstants.RECTANGLE) {
+      dispatch(drawActions.noTool());
+    } else {
+      dispatch(drawActions.rectangle());
+    }
   };
 
   return (
@@ -22,8 +27,8 @@ function Rectangle({ dispatch }: RectangleProps): JSX.Element {
   );
 }
 
-function mapStateToProps({ drawReducer: { dispatch } }: RootSate) {
-  return { dispatch };
+function mapStateToProps({ drawReducer: { dispatch, tool } }: RootSate) {
+  return { dispatch, tool };
 }
 
 export default connect(mapStateToProps)(Rectangle);

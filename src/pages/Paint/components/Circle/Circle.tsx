@@ -10,11 +10,16 @@ const { CIRCLE } = drawConstants;
 
 interface CircleProps {
   dispatch: Dispatch;
+  tool: string | null;
 }
 
-function Circle({ dispatch }: CircleProps): JSX.Element {
+function Circle({ dispatch, tool }: CircleProps): JSX.Element {
   const handleClick = () => {
-    dispatch(drawActions.circle());
+    if (tool === drawConstants.CIRCLE) {
+      dispatch(drawActions.noTool());
+    } else {
+      dispatch(drawActions.circle());
+    }
   };
 
   return (
@@ -24,8 +29,8 @@ function Circle({ dispatch }: CircleProps): JSX.Element {
   );
 }
 
-function mapStateToProps({ drawReducer: { dispatch } }: RootSate) {
-  return { dispatch };
+function mapStateToProps({ drawReducer: { dispatch, tool } }: RootSate) {
+  return { dispatch, tool };
 }
 
 export default connect(mapStateToProps)(Circle);
