@@ -15,6 +15,7 @@ export const drawActions = {
   rectangle,
   circle,
   star,
+  hexagon,
   setImg,
   deleteImg,
   setContext,
@@ -92,6 +93,10 @@ interface StarAction {
   type: typeof drawConstants.STAR;
 }
 
+interface HexagonAction {
+  type: typeof drawConstants.HEXAGON;
+}
+
 function noTool(): NoToolAction {
   return { type: drawConstants.NO_TOOL };
 }
@@ -154,6 +159,10 @@ function star(): StarAction {
   return { type: drawConstants.STAR };
 }
 
+function hexagon(): HexagonAction {
+  return { type: drawConstants.HEXAGON };
+}
+
 function setImg(img: HTMLImageElement): SetImgAction {
   return {
     type: drawConstants.SET_IMG,
@@ -187,6 +196,7 @@ export type DrawActions =
   | RectangleAction
   | CircleAction
   | StarAction
+  | HexagonAction
   | SetImgAction
   | DeleteImgAction
   | SetContextAction;

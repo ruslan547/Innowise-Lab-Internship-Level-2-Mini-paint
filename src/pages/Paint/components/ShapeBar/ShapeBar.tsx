@@ -5,6 +5,7 @@ import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import Circle from '../Circle/Circle';
 import Line from '../Line/Line';
+import Polygon from '../Hexagon/Hexagon';
 import Rectangle from '../Rectangle/Rectangle';
 import Star from '../Star/Star';
 import './ShapeBar.scss';
@@ -41,6 +42,9 @@ function ShapeBar({ dispatch, isShowedShapeBar }: ShapeBarProps): JSX.Element {
           </li>
           <li className="shape-bar__item">
             <Star />
+          </li>
+          <li className="shape-bar__item">
+            <Polygon />
           </li>
         </ul>
       )}

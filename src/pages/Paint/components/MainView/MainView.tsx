@@ -96,6 +96,13 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
         if (img) {
           drawService.drawImage(context, img);
         }
+      } else if (isDraw && tool === drawConstants.HEXAGON) {
+        const sideLength = mouseX - startX.current;
+        drawService.redraw(context);
+        drawService.drawHexagon(context, startX.current, startY.current, sideLength, color);
+        if (img) {
+          drawService.drawImage(context, img);
+        }
       }
     }
   };

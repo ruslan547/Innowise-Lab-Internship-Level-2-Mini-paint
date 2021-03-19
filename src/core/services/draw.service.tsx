@@ -1,9 +1,4 @@
 const SCALE_INIT = 0;
-const ARRAY_SIZE_INIT = 0;
-const KAPPA = 0.5522848;
-const SPIKES_COUNT = 5;
-const IMAGE_TYPE = 'image/png';
-const LINE_JOIN = 'round';
 const points: Array<Point> = [];
 
 interface Point {
@@ -25,11 +20,12 @@ export const drawService = {
   drawImage,
   createImg,
   drawStar,
+  drawHexagon,
 };
 
 function redraw(context: CanvasRenderingContext2D): void {
-  context.clearRect(SCALE_INIT, SCALE_INIT, context.canvas.width, context.canvas.height);
-  context.lineJoin = LINE_JOIN;
+  clearCanvas(context);
+  context.lineJoin = 'round';
 
   points.forEach((point, index, arr) => {
     context.beginPath();
@@ -58,7 +54,7 @@ function addPoint(pointX: number, pointY: number, drag: boolean, color: string, 
 }
 
 function clearFromPaintbrush(): void {
-  points.length = ARRAY_SIZE_INIT;
+  points.splice(0, points.length);
 }
 
 function clearCanvas(context: CanvasRenderingContext2D): void {
@@ -90,8 +86,9 @@ function drawCircle(
   height: number,
   color: string,
 ): void {
-  const ox = (width / 2) * KAPPA, // control point offset horizontal
-    oy = (height / 2) * KAPPA, // control point offset vertical
+  const kappa = 0.5522848,
+    ox = (width / 2) * kappa, // control point offset horizontal
+    oy = (height / 2) * kappa, // control point offset vertical
     xe = startX + width, // x-end
     ye = startY + height, // y-end
     xm = startX + width / 2, // x-middle
@@ -129,14 +126,15 @@ function drawStar(
   outerRadius: number,
   color: string,
 ): void {
+  const spikes = 5;
+  const step = Math.PI / spikes;
   let rot = (Math.PI / 2) * 3;
   let x = startX;
   let y = startY;
-  const step = Math.PI / SPIKES_COUNT;
 
   context.beginPath();
   context.moveTo(startX, startY - outerRadius);
-  for (let i = 0; i < SPIKES_COUNT; i++) {
+  for (let i = 0; i < spikes; i++) {
     x = startX + Math.cos(rot) * outerRadius;
     y = startY + Math.sin(rot) * outerRadius;
     context.lineTo(x, y);
@@ -153,12 +151,36 @@ function drawStar(
   context.fill();
 }
 
+function drawHexagon(
+  canvasContext: CanvasRenderingContext2D,
+  startX: number,
+  startY: number,
+  sideLength: number,
+  color: string,
+): void {
+  const hexagonAngle = 0.523598776; //30 градусов в радианах
+  const hexHeight = Math.sin(hexagonAngle) * sideLength;
+  const hexRadius = Math.cos(hexagonAngle) * sideLength;
+  const hexRectangleWidth = 2 * hexRadius;
+  const hexRectangleHeight = sideLength + 2 * hexHeight;
+  canvasContext.fillStyle = color;
+  canvasContext.beginPath();
+  canvasContext.moveTo(startX + hexRadius, startY);
+  canvasContext.lineTo(startX + hexRectangleWidth, startY + hexHeight);
+  canvasContext.lineTo(startX + hexRectangleWidth, startY + hexHeight + sideLength);
+  canvasContext.lineTo(startX + hexRadius, startY + hexRectangleHeight);
+  canvasContext.lineTo(startX, startY + sideLength + hexHeight);
+  canvasContext.lineTo(startX, startY + hexHeight);
+  canvasContext.closePath();
+  canvasContext.fill();
+}
+
 function drawImage(context: CanvasRenderingContext2D, img: HTMLImageElement): void {
   context.drawImage(img, SCALE_INIT, SCALE_INIT);
 }
 
 function createImg(canvas: HTMLCanvasElement): HTMLImageElement {
-  const image = canvas.toDataURL(IMAGE_TYPE);
+  const image = canvas.toDataURL('image/png');
   const img = new Image();
   img.src = image;
   return img;
