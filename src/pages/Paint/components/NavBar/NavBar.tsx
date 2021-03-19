@@ -17,6 +17,7 @@ interface NavBarProps {
 function NavBar({ dispatch, img }: NavBarProps): JSX.Element {
   const handleClick = async () => {
     dispatch(drawActions.deleteImg());
+    dispatch(drawActions.clear());
     history.push(routeConstants.GALLERY);
   };
 

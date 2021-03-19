@@ -10,6 +10,7 @@ const initState = {
   isShowedShapeBar: false,
   img: null,
   context: null,
+  isClean: true,
 };
 
 export interface DrawState {
@@ -21,6 +22,7 @@ export interface DrawState {
   isShowedShapeBar: boolean;
   img: HTMLImageElement | null;
   context: CanvasRenderingContext2D | null;
+  isClean: boolean;
 }
 
 export function drawReducer(state = initState, action: DrawActions): DrawState {
@@ -40,7 +42,7 @@ export function drawReducer(state = initState, action: DrawActions): DrawState {
     case drawConstants.HEXAGON:
       return { ...state, tool: drawConstants.HEXAGON };
     case drawConstants.START_DRAW:
-      return { ...state, isDraw: true };
+      return { ...state, isDraw: true, isClean: false };
     case drawConstants.STOP_DRAW:
       return { ...state, isDraw: false };
     case drawConstants.SET_COLOR:
@@ -61,6 +63,8 @@ export function drawReducer(state = initState, action: DrawActions): DrawState {
       return { ...state, img: null };
     case drawConstants.SET_CONTEXT:
       return { ...state, context: action.payload };
+    case drawConstants.CLEAR:
+      return { ...state, isClean: true };
     default:
       return state;
   }

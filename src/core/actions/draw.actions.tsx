@@ -19,6 +19,7 @@ export const drawActions = {
   setImg,
   deleteImg,
   setContext,
+  clear,
 };
 
 interface NoToolAction {
@@ -95,6 +96,10 @@ interface StarAction {
 
 interface HexagonAction {
   type: typeof drawConstants.HEXAGON;
+}
+
+interface ClearAction {
+  type: typeof drawConstants.CLEAR;
 }
 
 function noTool(): NoToolAction {
@@ -181,6 +186,10 @@ function setContext(context: CanvasRenderingContext2D | null): SetContextAction 
   };
 }
 
+function clear(): ClearAction {
+  return { type: drawConstants.CLEAR };
+}
+
 export type DrawActions =
   | PaintbrushAction
   | StartDrawAction
@@ -199,4 +208,5 @@ export type DrawActions =
   | HexagonAction
   | SetImgAction
   | DeleteImgAction
-  | SetContextAction;
+  | SetContextAction
+  | ClearAction;

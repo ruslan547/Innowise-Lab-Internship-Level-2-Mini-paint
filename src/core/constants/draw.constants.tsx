@@ -17,4 +17,5 @@ export enum drawConstants {
   SET_IMG = 'SET_IMG',
   DELETE_IMG = 'DELETE_IMG',
   SET_CONTEXT = 'SET_CONTEXT',
+  CLEAR = 'CLEAR',
 }

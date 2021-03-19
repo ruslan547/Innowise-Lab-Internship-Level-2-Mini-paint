@@ -18,8 +18,10 @@ interface PaintToolBarProps {
 function PaintToolBar({ context, dispatch }: PaintToolBarProps) {
   const handleClick = () => {
     dispatch(drawActions.deleteImg());
+
     if (context) {
       drawService.clearCanvas(context);
+      dispatch(drawActions.clear());
     }
   };
 

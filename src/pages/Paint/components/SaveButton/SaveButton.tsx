@@ -1,45 +1,51 @@
 import { useRef } from 'react';
 import { connect } from 'react-redux';
 import { User } from '../../../../core/actions/auth.actions';
-import { drawActions } from '../../../../core/actions/draw.actions';
 import PaintButton from '../../../../core/components/PaintButton/PaintButton';
-import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
-import { drawService } from '../../../../core/services/draw.service';
 import { firebaseDbService } from '../../../../core/services/firebase.db.service';
 import disk from '../../../../assets/img/disk.svg';
+import { Id, toast, ToastContainer } from 'react-toastify';
 
 interface SaveButtonProps {
-  dispatch: Dispatch;
   img: HTMLImageElement;
   user: User;
-  context: CanvasRenderingContext2D | null;
+  isClean: boolean;
 }
 
-function SaveButton({ dispatch, img, user, context }: SaveButtonProps) {
+toast.configure();
+let toastId: Id;
+
+function SaveButton({ img, user, isClean }: SaveButtonProps) {
   const currentImg = useRef<string>('');
 
   const handleClick = async () => {
-    if (currentImg.current !== img.src) {
-      await firebaseDbService.sendImg(img.src, user.email);
+    if (currentImg.current !== img.src && !isClean) {
+      try {
+        await firebaseDbService.sendImg(img.src, user.email);
+        toast.info('image saved', { position: toast.POSITION.TOP_CENTER });
+      } catch ({ message }) {
+        toast.error(message, { position: toast.POSITION.TOP_CENTER });
+      }
+    } else if (!toast.isActive(toastId)) {
+      toastId = toast.error('this image is already saved', { position: toast.POSITION.TOP_CENTER });
     }
-    currentImg.current = img.src;
-    dispatch(drawActions.deleteImg());
 
-    if (context) {
-      drawService.clearCanvas(context);
-    }
+    currentImg.current = img.src;
   };
 
   return (
-    <PaintButton onClick={handleClick}>
-      <img src={disk} alt="" />
-    </PaintButton>
+    <div>
+      <ToastContainer />
+      <PaintButton onClick={handleClick}>
+        <img src={disk} alt="" />
+      </PaintButton>
+    </div>
   );
 }
 
-function mapStateToProps({ drawReducer: { img, dispatch, context }, authReducer: { user } }: RootSate) {
-  return { dispatch, img, user, context };
+function mapStateToProps({ drawReducer: { img, isClean }, authReducer: { user } }: RootSate) {
+  return { img, user, isClean };
 }
 
 export default connect(mapStateToProps)(SaveButton);

@@ -26,8 +26,8 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
   const handleMouseDown = ({ clientX, clientY }: MouseEvent) => {
     dispatch(drawActions.hideSizeBar());
     dispatch(drawActions.hideShapeBar());
-    dispatch(drawActions.startDraw());
-    if (canvasRef && canvasRef.current && context) {
+    if (canvasRef && canvasRef.current && context && tool) {
+      dispatch(drawActions.startDraw());
       const mouseX = clientX - canvasRef.current.offsetLeft;
       const mouseY = clientY - canvasRef.current.offsetTop;
 
