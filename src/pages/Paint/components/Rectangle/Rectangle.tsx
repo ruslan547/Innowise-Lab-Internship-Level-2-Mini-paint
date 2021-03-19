@@ -6,8 +6,6 @@ import { RootSate } from '../../../../core/reducers/root.reducer';
 import rectangle_img from '../../../../assets/img/rectangle.svg';
 import { drawActions } from '../../../../core/actions/draw.actions';
 
-const { RECTANGLE } = drawConstants;
-
 interface RectangleProps {
   dispatch: Dispatch;
 }
@@ -18,7 +16,7 @@ function Rectangle({ dispatch }: RectangleProps): JSX.Element {
   };
 
   return (
-    <PaintButton name={RECTANGLE} onClick={handleClick}>
+    <PaintButton name={drawConstants.RECTANGLE} onClick={handleClick}>
       <img src={rectangle_img} alt="rectangle" />
     </PaintButton>
   );

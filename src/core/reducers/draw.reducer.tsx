@@ -35,6 +35,8 @@ export function drawReducer(state = initState, action: DrawActions): DrawState {
       return { ...state, tool: drawConstants.RECTANGLE };
     case drawConstants.CIRCLE:
       return { ...state, tool: drawConstants.CIRCLE };
+    case drawConstants.STAR:
+      return { ...state, tool: drawConstants.STAR };
     case drawConstants.START_DRAW:
       return { ...state, isDraw: true };
     case drawConstants.STOP_DRAW:

@@ -14,6 +14,7 @@ export const drawActions = {
   line,
   rectangle,
   circle,
+  star,
   setImg,
   deleteImg,
   setContext,
@@ -87,6 +88,10 @@ interface SetContextAction {
   payload: CanvasRenderingContext2D | null;
 }
 
+interface StarAction {
+  type: typeof drawConstants.STAR;
+}
+
 function noTool(): NoToolAction {
   return { type: drawConstants.NO_TOOL };
 }
@@ -145,6 +150,10 @@ function circle(): CircleAction {
   return { type: drawConstants.CIRCLE };
 }
 
+function star(): StarAction {
+  return { type: drawConstants.STAR };
+}
+
 function setImg(img: HTMLImageElement): SetImgAction {
   return {
     type: drawConstants.SET_IMG,
@@ -177,6 +186,7 @@ export type DrawActions =
   | LineAction
   | RectangleAction
   | CircleAction
+  | StarAction
   | SetImgAction
   | DeleteImgAction
   | SetContextAction;

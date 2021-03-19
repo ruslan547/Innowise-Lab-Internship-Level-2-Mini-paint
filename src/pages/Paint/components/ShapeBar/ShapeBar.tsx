@@ -6,6 +6,7 @@ import { RootSate } from '../../../../core/reducers/root.reducer';
 import Circle from '../Circle/Circle';
 import Line from '../Line/Line';
 import Rectangle from '../Rectangle/Rectangle';
+import Star from '../Star/Star';
 import './ShapeBar.scss';
 
 interface ShapeBarProps {
@@ -37,6 +38,9 @@ function ShapeBar({ dispatch, isShowedShapeBar }: ShapeBarProps): JSX.Element {
           </li>
           <li className="shape-bar__item">
             <Rectangle />
+          </li>
+          <li className="shape-bar__item">
+            <Star />
           </li>
         </ul>
       )}

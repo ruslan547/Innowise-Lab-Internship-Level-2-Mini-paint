@@ -4,6 +4,7 @@ export enum drawConstants {
   LINE = 'LINE',
   RECTANGLE = 'RECTANGLE',
   CIRCLE = 'CIRCLE',
+  STAR = 'STAR',
   START_DRAW = 'STARTDRAW',
   STOP_DRAW = 'STOP_DRAW',
   SET_COLOR = 'SET_COLOR',

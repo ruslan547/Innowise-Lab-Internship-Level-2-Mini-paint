@@ -1,3 +1,9 @@
+const SCALE_INIT = 0;
+const ARRAY_SIZE_INIT = 0;
+const KAPPA = 0.5522848;
+const SPIKES_COUNT = 5;
+const IMAGE_TYPE = 'image/png';
+const LINE_JOIN = 'round';
 const points: Array<Point> = [];
 
 interface Point {
@@ -18,11 +24,12 @@ export const drawService = {
   drawRectangle,
   drawImage,
   createImg,
+  drawStar,
 };
 
 function redraw(context: CanvasRenderingContext2D): void {
-  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-  context.lineJoin = 'round';
+  context.clearRect(SCALE_INIT, SCALE_INIT, context.canvas.width, context.canvas.height);
+  context.lineJoin = LINE_JOIN;
 
   points.forEach((point, index, arr) => {
     context.beginPath();
@@ -51,11 +58,11 @@ function addPoint(pointX: number, pointY: number, drag: boolean, color: string, 
 }
 
 function clearFromPaintbrush(): void {
-  points.length = 0;
+  points.length = ARRAY_SIZE_INIT;
 }
 
 function clearCanvas(context: CanvasRenderingContext2D): void {
-  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+  context.clearRect(SCALE_INIT, SCALE_INIT, context.canvas.width, context.canvas.height);
 }
 
 function drawLine(
@@ -77,31 +84,28 @@ function drawLine(
 
 function drawCircle(
   context: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
+  startX: number,
+  startY: number,
+  width: number,
+  height: number,
   color: string,
 ): void {
-  const kappa = 0.5522848,
-    ox = (w / 2) * kappa, // control point offset horizontal
-    oy = (h / 2) * kappa, // control point offset vertical
-    xe = x + w, // x-end
-    ye = y + h, // y-end
-    xm = x + w / 2, // x-middle
-    ym = y + h / 2; // y-middle
+  const ox = (width / 2) * KAPPA, // control point offset horizontal
+    oy = (height / 2) * KAPPA, // control point offset vertical
+    xe = startX + width, // x-end
+    ye = startY + height, // y-end
+    xm = startX + width / 2, // x-middle
+    ym = startY + height / 2; // y-middle
 
-  context.strokeStyle = 'transparent';
   context.fillStyle = color;
   context.fill();
   context.beginPath();
-  context.moveTo(x, ym);
-  context.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
-  context.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+  context.moveTo(startX, ym);
+  context.bezierCurveTo(startX, ym - oy, xm - ox, startY, xm, startY);
+  context.bezierCurveTo(xm + ox, startY, xe, ym - oy, xe, ym);
   context.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
-  context.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+  context.bezierCurveTo(xm - ox, ye, startX, ym + oy, startX, ym);
   context.closePath();
-  context.stroke();
 }
 
 function drawRectangle(
@@ -112,20 +116,49 @@ function drawRectangle(
   height: number,
   color: string,
 ): void {
-  context.strokeStyle = 'transparent';
   context.fillStyle = color;
   context.beginPath();
   context.fillRect(startX, startY, width, height);
   context.closePath();
-  context.stroke();
+}
+
+function drawStar(
+  context: CanvasRenderingContext2D,
+  startX: number,
+  startY: number,
+  outerRadius: number,
+  color: string,
+): void {
+  let rot = (Math.PI / 2) * 3;
+  let x = startX;
+  let y = startY;
+  const step = Math.PI / SPIKES_COUNT;
+
+  context.beginPath();
+  context.moveTo(startX, startY - outerRadius);
+  for (let i = 0; i < SPIKES_COUNT; i++) {
+    x = startX + Math.cos(rot) * outerRadius;
+    y = startY + Math.sin(rot) * outerRadius;
+    context.lineTo(x, y);
+    rot += step;
+
+    x = startX + Math.cos(rot) * (outerRadius / 2);
+    y = startY + Math.sin(rot) * (outerRadius / 2);
+    context.lineTo(x, y);
+    rot += step;
+  }
+  context.lineTo(startX, startY - outerRadius);
+  context.closePath();
+  context.fillStyle = color;
+  context.fill();
 }
 
 function drawImage(context: CanvasRenderingContext2D, img: HTMLImageElement): void {
-  context.drawImage(img, 0, 0);
+  context.drawImage(img, SCALE_INIT, SCALE_INIT);
 }
 
 function createImg(canvas: HTMLCanvasElement): HTMLImageElement {
-  const image = canvas.toDataURL('image/png');
+  const image = canvas.toDataURL(IMAGE_TYPE);
   const img = new Image();
   img.src = image;
   return img;

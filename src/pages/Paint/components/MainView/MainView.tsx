@@ -89,6 +89,13 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
         if (img) {
           drawService.drawImage(context, img);
         }
+      } else if (isDraw && tool === drawConstants.STAR) {
+        const outerRadius = mouseX - startX.current + mouseY - startY.current;
+        drawService.redraw(context);
+        drawService.drawStar(context, startX.current, startY.current, outerRadius, color);
+        if (img) {
+          drawService.drawImage(context, img);
+        }
       }
     }
   };
