@@ -2,7 +2,7 @@ import React from 'react';
 import ModalButton from '../ModalButton/ModalButton';
 import './Modal.scss';
 
-interface IModalProps {
+interface ModalProps {
   children?: JSX.Element;
   text?: string;
   value?: string;
@@ -10,7 +10,7 @@ interface IModalProps {
   onClick?: () => void;
 }
 
-function Modal({ children, text, value, onClick }: IModalProps) {
+function Modal({ children, text, value, onClick }: ModalProps) {
   return (
     <div className="modal">
       {children}

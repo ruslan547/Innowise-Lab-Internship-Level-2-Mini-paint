@@ -1,11 +1,11 @@
 import React from 'react';
 import './FormButton.scss';
 
-interface IFormButtonProps {
+interface FormButtonProps {
   value: string;
 }
 
-function FormButton({ value }: IFormButtonProps): JSX.Element {
+function FormButton({ value }: FormButtonProps): JSX.Element {
   return <input className="form-btn" type="submit" value={value} />;
 }
 

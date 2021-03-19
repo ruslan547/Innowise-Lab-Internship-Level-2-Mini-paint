@@ -1,8 +1,10 @@
+import React from 'react';
 import GalleryList from './components/GalleryList/GalleryList';
 import GalleryToolBar from './components/GalleryToolBar/GalleryToolBar';
 import './Gallery.scss';
 
 function Gallery(): JSX.Element {
+  console.log('gallery');
   return (
     <div className="gallery">
       <GalleryToolBar />
@@ -11,4 +13,4 @@ function Gallery(): JSX.Element {
   );
 }
 
-export default Gallery;
+export default React.memo(Gallery);

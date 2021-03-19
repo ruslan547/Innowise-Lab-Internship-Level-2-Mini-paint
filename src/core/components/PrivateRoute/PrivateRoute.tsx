@@ -4,13 +4,15 @@ import { connect } from 'react-redux';
 import { routeConstants } from '../../constants/route.constants';
 import { RootSate } from '../../reducers/root.reducer';
 import { User } from '../../actions/auth.actions';
+import { MemoExoticComponent } from 'react';
 
-export interface IPrivateRouteProps {
-  component: () => JSX.Element;
+export interface PrivateRouteProps {
+  component: MemoExoticComponent<() => JSX.Element>;
   user: User;
 }
 
-function PrivateRoute({ user, component: Component, ...rest }: IPrivateRouteProps & RouteProps): JSX.Element {
+function PrivateRoute({ user, component: Component, ...rest }: PrivateRouteProps & RouteProps): JSX.Element {
+  console.log('priv');
   return (
     <Route
       {...rest}

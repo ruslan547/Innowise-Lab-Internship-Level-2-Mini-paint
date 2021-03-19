@@ -5,6 +5,7 @@ import pencil from '../../../../assets/img/pencil.svg';
 import { history } from '../../../../core/helpers/history';
 import { routeConstants } from '../../../../core/constants/route.constants';
 import Filter from '../Filter/Filter';
+import React from 'react';
 
 function GalleryToolBar(): JSX.Element {
   const handlePaintBtnClick = () => {
@@ -22,4 +23,4 @@ function GalleryToolBar(): JSX.Element {
   );
 }
 
-export default GalleryToolBar;
+export default React.memo(GalleryToolBar);

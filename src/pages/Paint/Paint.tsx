@@ -1,6 +1,7 @@
 import './Paint.scss';
 import PaintToolBar from './components/PaintToolBar/PaintToolBar';
 import MainView from './components/MainView/MainView';
+import React from 'react';
 
 function Paint(): JSX.Element {
   return (
@@ -11,4 +12,4 @@ function Paint(): JSX.Element {
   );
 }
 
-export default Paint;
+export default React.memo(Paint);
