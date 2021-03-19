@@ -20,15 +20,21 @@ function SaveButton({ img, user, isClean }: SaveButtonProps) {
   const currentImg = useRef<string>('');
 
   const handleClick = useCallback(async () => {
-    if (currentImg.current !== img.src && !isClean) {
+    if (isClean) {
+      if (!toast.isActive(toastId)) {
+        toastId = toast.error('Error: the template is clean', { position: toast.POSITION.TOP_CENTER });
+      }
+    } else if (currentImg.current === img.src) {
+      if (!toast.isActive(toastId)) {
+        toastId = toast.error('Error: this image is already saved', { position: toast.POSITION.TOP_CENTER });
+      }
+    } else {
       try {
         await firebaseDbService.sendImg(img.src, user.email);
         toast.info('image saved', { position: toast.POSITION.TOP_CENTER });
       } catch ({ message }) {
         toast.error(message, { position: toast.POSITION.TOP_CENTER });
       }
-    } else if (!toast.isActive(toastId)) {
-      toastId = toast.error('Error', { position: toast.POSITION.TOP_CENTER });
     }
 
     currentImg.current = img.src;
