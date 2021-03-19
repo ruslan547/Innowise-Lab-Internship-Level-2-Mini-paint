@@ -5,8 +5,11 @@ import { drawConstants } from '../../../../core/constants/draw.constants';
 import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import { drawService } from '../../../../core/services/draw.service';
-import { updateSizes } from '../../../../core/services/update.canvas.service';
 import './MainView.scss';
+
+const CANVAS_WIDTH = 712;
+const CANVAS_HEIGHT = 632;
+const CANVAS_MARGIN = 50;
 
 interface MainViewProps {
   tool: string;
@@ -20,6 +23,7 @@ interface MainViewProps {
 
 function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainViewProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const mainviewRef = useRef<HTMLDivElement | null>(null);
   const startX = useRef<number>(0);
   const startY = useRef<number>(0);
 
@@ -80,8 +84,9 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
   };
 
   const handleResize = () => {
-    if (context) {
-      updateSizes(context);
+    if (canvasRef && canvasRef.current && mainviewRef && mainviewRef.current) {
+      canvasRef.current.width = mainviewRef.current.clientWidth;
+      canvasRef.current.height = mainviewRef.current.clientHeight;
     }
   };
 
@@ -103,23 +108,33 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
   }, []);
 
   useEffect(() => {
+    if (canvasRef && canvasRef.current) {
+      canvasRef.current.height = window.innerHeight;
+
+      if (window.innerWidth < CANVAS_WIDTH) {
+        canvasRef.current.width = window.innerWidth - CANVAS_MARGIN;
+      }
+    }
+
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
-    <canvas
-      className="mainview"
-      id="mainview"
-      ref={canvasRef}
-      width="712"
-      height="632"
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseLeave}
-    ></canvas>
+    <div className="mainview" ref={mainviewRef}>
+      <canvas
+        className="mainview__canvas"
+        id="mainview"
+        ref={canvasRef}
+        width={CANVAS_WIDTH}
+        height={CANVAS_HEIGHT}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
+      ></canvas>
+    </div>
   );
 }
 

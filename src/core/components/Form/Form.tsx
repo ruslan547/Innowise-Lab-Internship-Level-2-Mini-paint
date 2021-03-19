@@ -1,13 +1,13 @@
 import React from 'react';
 import './Form.scss';
 
-interface IFormProps {
+interface FormProps {
   onSubmit?: React.FormEventHandler<HTMLFormElement>;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   children?: JSX.Element | Array<JSX.Element>;
 }
 
-function Form({ onSubmit, onChange, children }: IFormProps) {
+function Form({ onSubmit, onChange, children }: FormProps) {
   return (
     <form className="form" onSubmit={onSubmit}>
       <input className="form__email" type="email" name="email" placeholder="email" onChange={onChange} required />
