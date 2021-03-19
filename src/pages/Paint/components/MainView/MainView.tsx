@@ -5,7 +5,7 @@ import { drawConstants } from '../../../../core/constants/draw.constants';
 import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import { drawService } from '../../../../core/services/draw.service';
-import { updateSizes } from '../../../../core/services/update.canvas';
+import { updateSizes } from '../../../../core/services/update.canvas.service';
 import './MainView.scss';
 
 interface MainViewProps {

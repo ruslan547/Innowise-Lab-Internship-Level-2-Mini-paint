@@ -9,8 +9,8 @@ function getPercentageOfWindow(context: CanvasRenderingContext2D) {
   const viewportSize = getViewportSize();
   const canvasSize = getCanvastSize(context);
   return {
-    x: canvasSize.width / (viewportSize.width - 10),
-    y: canvasSize.height / (viewportSize.height - 10),
+    x: canvasSize.width / viewportSize.width,
+    y: canvasSize.height / viewportSize.height,
   };
 }
 
