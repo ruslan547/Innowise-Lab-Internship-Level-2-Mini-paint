@@ -49,7 +49,6 @@ You will now have app running on localhost via port 3000  http://localhost:3000
 * react-router-dom
 * eslint
 * husky
-* pinst
 * prettier
 * react-toastify
 * redux
