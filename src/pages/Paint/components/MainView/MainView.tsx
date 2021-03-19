@@ -87,38 +87,29 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
     if (canvasRef && canvasRef.current && mainviewRef && mainviewRef.current) {
       canvasRef.current.width = mainviewRef.current.clientWidth;
       canvasRef.current.height = mainviewRef.current.clientHeight;
+      dispatch(drawActions.setContext(drawService.createContext(canvasRef.current)));
     }
   };
 
   useEffect(() => {
     if (canvasRef && canvasRef.current) {
-      const context = canvasRef.current.getContext('2d');
-
-      if (context) {
-        context.globalCompositeOperation = 'destination-over';
+      canvasRef.current.height = window.innerHeight;
+      if (window.innerWidth < CANVAS_WIDTH) {
+        canvasRef.current.width = window.innerWidth - CANVAS_MARGIN;
       }
-      dispatch(drawActions.setContext(context));
+
+      dispatch(drawActions.setContext(drawService.createContext(canvasRef.current)));
     }
+
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
     document.addEventListener('mouseup', handleMouseUp);
 
     return () => document.removeEventListener('mouseup', handleMouseUp);
-  }, []);
-
-  useEffect(() => {
-    if (canvasRef && canvasRef.current) {
-      canvasRef.current.height = window.innerHeight;
-
-      if (window.innerWidth < CANVAS_WIDTH) {
-        canvasRef.current.width = window.innerWidth - CANVAS_MARGIN;
-      }
-    }
-
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (

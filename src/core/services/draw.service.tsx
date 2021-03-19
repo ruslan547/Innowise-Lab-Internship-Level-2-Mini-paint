@@ -22,6 +22,7 @@ export const drawService = {
   createImg,
   drawStar,
   drawHexagon,
+  createContext,
 };
 
 function redraw(context: CanvasRenderingContext2D): void {
@@ -220,4 +221,14 @@ function createImg(canvas: HTMLCanvasElement): HTMLImageElement {
   img.src = image;
 
   return img;
+}
+
+function createContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D | null {
+  const context = canvas.getContext('2d');
+
+  if (context) {
+    context.globalCompositeOperation = 'destination-over';
+  }
+
+  return context;
 }
