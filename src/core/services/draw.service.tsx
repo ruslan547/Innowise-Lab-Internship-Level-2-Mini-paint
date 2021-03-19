@@ -14,6 +14,7 @@ export const drawService = {
   addPoint,
   clearFromPaintbrush,
   clearCanvas,
+  drawPoint,
   drawLine,
   drawCircle,
   drawRectangle,
@@ -61,6 +62,19 @@ function clearCanvas(context: CanvasRenderingContext2D): void {
   context.clearRect(SCALE_INIT, SCALE_INIT, context.canvas.width, context.canvas.height);
 }
 
+function drawPoint(
+  context: CanvasRenderingContext2D,
+  mouseX: number,
+  mouseY: number,
+  color: string,
+  size: string,
+  img: HTMLImageElement,
+): void {
+  addPoint(mouseX, mouseY, true, color, size);
+  redraw(context);
+  drawImage(context, img);
+}
+
 function drawLine(
   context: CanvasRenderingContext2D,
   size: string,
@@ -77,10 +91,9 @@ function drawLine(
   context.beginPath();
   context.moveTo(startX, startY);
   context.lineTo(mouseX, mouseY);
+  context.closePath();
   context.stroke();
-  if (img) {
-    drawService.drawImage(context, img);
-  }
+  drawImage(context, img);
 }
 
 function drawCircle(
@@ -90,17 +103,18 @@ function drawCircle(
   width: number,
   height: number,
   color: string,
+  img: HTMLImageElement,
 ): void {
-  const kappa = 0.5522848,
-    ox = (width / 2) * kappa, // control point offset horizontal
-    oy = (height / 2) * kappa, // control point offset vertical
-    xe = startX + width, // x-end
-    ye = startY + height, // y-end
-    xm = startX + width / 2, // x-middle
-    ym = startY + height / 2; // y-middle
+  const kappa = 0.5522848;
+  const ox = (width / 2) * kappa; // control point offset horizontal
+  const oy = (height / 2) * kappa; // control point offset vertical
+  const xe = startX + width; // x-end
+  const ye = startY + height; // y-end
+  const xm = startX + width / 2; // x-middle
+  const ym = startY + height / 2; // y-middle
 
+  redraw(context);
   context.fillStyle = color;
-  context.fill();
   context.beginPath();
   context.moveTo(startX, ym);
   context.bezierCurveTo(startX, ym - oy, xm - ox, startY, xm, startY);
@@ -108,6 +122,8 @@ function drawCircle(
   context.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
   context.bezierCurveTo(xm - ox, ye, startX, ym + oy, startX, ym);
   context.closePath();
+  context.fill();
+  drawImage(context, img);
 }
 
 function drawRectangle(
@@ -117,11 +133,14 @@ function drawRectangle(
   width: number,
   height: number,
   color: string,
+  img: HTMLImageElement,
 ): void {
+  redraw(context);
   context.fillStyle = color;
   context.beginPath();
   context.fillRect(startX, startY, width, height);
   context.closePath();
+  drawImage(context, img);
 }
 
 function drawStar(
@@ -130,6 +149,7 @@ function drawStar(
   startY: number,
   outerRadius: number,
   color: string,
+  img: HTMLImageElement,
 ): void {
   const spikes = 5;
   const step = Math.PI / spikes;
@@ -137,56 +157,67 @@ function drawStar(
   let x = startX;
   let y = startY;
 
+  redraw(context);
+  context.fillStyle = color;
   context.beginPath();
   context.moveTo(startX, startY - outerRadius);
-  for (let i = 0; i < spikes; i++) {
+
+  new Array(spikes).fill(null).forEach(() => {
     x = startX + Math.cos(rot) * outerRadius;
     y = startY + Math.sin(rot) * outerRadius;
     context.lineTo(x, y);
     rot += step;
-
     x = startX + Math.cos(rot) * (outerRadius / 2);
     y = startY + Math.sin(rot) * (outerRadius / 2);
     context.lineTo(x, y);
     rot += step;
-  }
+  });
+
   context.lineTo(startX, startY - outerRadius);
   context.closePath();
-  context.fillStyle = color;
   context.fill();
+  drawImage(context, img);
 }
 
 function drawHexagon(
-  canvasContext: CanvasRenderingContext2D,
+  context: CanvasRenderingContext2D,
   startX: number,
   startY: number,
   sideLength: number,
   color: string,
+  img: HTMLImageElement,
 ): void {
-  const hexagonAngle = 0.523598776; //30 градусов в радианах
+  const hexagonAngle = 0.523598776; //30 degrees in radians
   const hexHeight = Math.sin(hexagonAngle) * sideLength;
   const hexRadius = Math.cos(hexagonAngle) * sideLength;
   const hexRectangleWidth = 2 * hexRadius;
   const hexRectangleHeight = sideLength + 2 * hexHeight;
-  canvasContext.fillStyle = color;
-  canvasContext.beginPath();
-  canvasContext.moveTo(startX + hexRadius, startY);
-  canvasContext.lineTo(startX + hexRectangleWidth, startY + hexHeight);
-  canvasContext.lineTo(startX + hexRectangleWidth, startY + hexHeight + sideLength);
-  canvasContext.lineTo(startX + hexRadius, startY + hexRectangleHeight);
-  canvasContext.lineTo(startX, startY + sideLength + hexHeight);
-  canvasContext.lineTo(startX, startY + hexHeight);
-  canvasContext.closePath();
-  canvasContext.fill();
+
+  redraw(context);
+  context.fillStyle = color;
+  context.beginPath();
+  context.moveTo(startX + hexRadius, startY);
+  context.lineTo(startX + hexRectangleWidth, startY + hexHeight);
+  context.lineTo(startX + hexRectangleWidth, startY + hexHeight + sideLength);
+  context.lineTo(startX + hexRadius, startY + hexRectangleHeight);
+  context.lineTo(startX, startY + sideLength + hexHeight);
+  context.lineTo(startX, startY + hexHeight);
+  context.closePath();
+  context.fill();
+  drawImage(context, img);
 }
 
 function drawImage(context: CanvasRenderingContext2D, img: HTMLImageElement): void {
-  context.drawImage(img, SCALE_INIT, SCALE_INIT);
+  if (img) {
+    context.drawImage(img, SCALE_INIT, SCALE_INIT);
+  }
 }
 
 function createImg(canvas: HTMLCanvasElement): HTMLImageElement {
   const image = canvas.toDataURL('image/png');
   const img = new Image();
+
   img.src = image;
+
   return img;
 }

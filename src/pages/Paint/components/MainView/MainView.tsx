@@ -32,16 +32,10 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
       const mouseY = clientY - canvasRef.current.offsetTop;
 
       if (tool === drawConstants.PAINTBRUSH) {
-        drawService.addPoint(mouseX, mouseY, false, color, size);
+        drawService.drawPoint(context, mouseX, mouseY, color, size, img);
       } else {
         startX.current = mouseX;
         startY.current = mouseY;
-      }
-
-      drawService.redraw(context);
-
-      if (img) {
-        drawService.drawImage(context, img);
       }
     }
   };
@@ -50,55 +44,22 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
     if (canvasRef && canvasRef.current && context) {
       const mouseX = clientX - canvasRef.current.offsetLeft;
       const mouseY = clientY - canvasRef.current.offsetTop;
+      const width = mouseX - startX.current;
+      const height = mouseY - startY.current;
 
       if (isDraw && tool === drawConstants.PAINTBRUSH) {
-        drawService.addPoint(mouseX, mouseY, true, color, size);
-        drawService.redraw(context);
-        if (img) {
-          drawService.drawImage(context, img);
-        }
+        drawService.drawPoint(context, mouseX, mouseY, color, size, img);
       } else if (isDraw && tool === drawConstants.LINE) {
         drawService.drawLine(context, size, color, startX.current, startY.current, mouseX, mouseY, img);
       } else if (isDraw && tool === drawConstants.CIRCLE) {
-        drawService.redraw(context);
-        drawService.drawCircle(
-          context,
-          startX.current,
-          startY.current,
-          mouseX - startX.current,
-          mouseY - startY.current,
-          color,
-        );
-        if (img) {
-          drawService.drawImage(context, img);
-        }
+        drawService.drawCircle(context, startX.current, startY.current, width, height, color, img);
       } else if (isDraw && tool === drawConstants.RECTANGLE) {
-        drawService.redraw(context);
-        drawService.drawRectangle(
-          context,
-          startX.current,
-          startY.current,
-          mouseX - startX.current,
-          mouseY - startY.current,
-          color,
-        );
-        if (img) {
-          drawService.drawImage(context, img);
-        }
+        drawService.drawRectangle(context, startX.current, startY.current, width, height, color, img);
       } else if (isDraw && tool === drawConstants.STAR) {
-        const outerRadius = mouseX - startX.current + mouseY - startY.current;
-        drawService.redraw(context);
-        drawService.drawStar(context, startX.current, startY.current, outerRadius, color);
-        if (img) {
-          drawService.drawImage(context, img);
-        }
+        const outerRadius = width + height;
+        drawService.drawStar(context, startX.current, startY.current, outerRadius, color, img);
       } else if (isDraw && tool === drawConstants.HEXAGON) {
-        const sideLength = mouseX - startX.current;
-        drawService.redraw(context);
-        drawService.drawHexagon(context, startX.current, startY.current, sideLength, color);
-        if (img) {
-          drawService.drawImage(context, img);
-        }
+        drawService.drawHexagon(context, startX.current, startY.current, width, color, img);
       }
     }
   };
@@ -112,10 +73,8 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
   };
 
   const handleMouseLeave = () => {
-    if (tool === drawConstants.PAINTBRUSH) {
-      if (canvasRef && canvasRef.current) {
-        dispatch(drawActions.setImg(drawService.createImg(canvasRef.current)));
-      }
+    if (tool === drawConstants.PAINTBRUSH && canvasRef && canvasRef.current) {
+      dispatch(drawActions.setImg(drawService.createImg(canvasRef.current)));
       drawService.clearFromPaintbrush();
     }
   };
@@ -139,11 +98,13 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
 
   useEffect(() => {
     document.addEventListener('mouseup', handleMouseUp);
+
     return () => document.removeEventListener('mouseup', handleMouseUp);
   }, []);
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
+
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
