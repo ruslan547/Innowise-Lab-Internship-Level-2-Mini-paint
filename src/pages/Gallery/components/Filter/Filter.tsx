@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo } from 'react';
+import React, { ChangeEvent, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { showActions } from '../../../../core/actions/show.actions';
 import { store } from '../../../../core/helpers/store';
@@ -43,4 +43,4 @@ function mapStateToProps({ showReducer: { filtredKey, images } }: RootSate) {
   return { filtredKey, images };
 }
 
-export default connect(mapStateToProps)(Filter);
+export default connect(mapStateToProps)(React.memo(Filter));

@@ -5,6 +5,7 @@ import { drawConstants } from '../../../../core/constants/draw.constants';
 import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import hexagon from '../../../../assets/img/hexagon.svg';
+import React, { useCallback } from 'react';
 
 interface HexagonProps {
   dispatch: Dispatch;
@@ -12,13 +13,13 @@ interface HexagonProps {
 }
 
 function Hexagon({ dispatch, tool }: HexagonProps): JSX.Element {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (tool === drawConstants.HEXAGON) {
       dispatch(drawActions.noTool());
     } else {
       dispatch(drawActions.hexagon());
     }
-  };
+  }, [tool, dispatch]);
 
   return (
     <PaintButton name={drawConstants.HEXAGON} onClick={handleClick}>
@@ -31,4 +32,4 @@ function mapStateToProps({ drawReducer: { dispatch, tool } }: RootSate) {
   return { dispatch, tool };
 }
 
-export default connect(mapStateToProps)(Hexagon);
+export default connect(mapStateToProps)(React.memo(Hexagon));

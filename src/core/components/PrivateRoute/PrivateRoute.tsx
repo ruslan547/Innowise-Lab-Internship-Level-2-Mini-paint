@@ -12,7 +12,6 @@ export interface PrivateRouteProps {
 }
 
 function PrivateRoute({ user, component: Component, ...rest }: PrivateRouteProps & RouteProps): JSX.Element {
-  console.log('priv');
   return (
     <Route
       {...rest}

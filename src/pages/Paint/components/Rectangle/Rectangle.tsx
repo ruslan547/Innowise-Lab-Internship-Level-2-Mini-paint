@@ -3,8 +3,9 @@ import PaintButton from '../../../../core/components/PaintButton/PaintButton';
 import { drawConstants } from '../../../../core/constants/draw.constants';
 import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
-import rectangle_img from '../../../../assets/img/rectangle.svg';
+import rectangle from '../../../../assets/img/rectangle.svg';
 import { drawActions } from '../../../../core/actions/draw.actions';
+import React, { useCallback } from 'react';
 
 interface RectangleProps {
   dispatch: Dispatch;
@@ -12,17 +13,17 @@ interface RectangleProps {
 }
 
 function Rectangle({ dispatch, tool }: RectangleProps): JSX.Element {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (tool === drawConstants.RECTANGLE) {
       dispatch(drawActions.noTool());
     } else {
       dispatch(drawActions.rectangle());
     }
-  };
+  }, [tool, dispatch]);
 
   return (
     <PaintButton name={drawConstants.RECTANGLE} onClick={handleClick}>
-      <img src={rectangle_img} alt="rectangle" />
+      <img src={rectangle} alt="rectangle" />
     </PaintButton>
   );
 }
@@ -31,4 +32,4 @@ function mapStateToProps({ drawReducer: { dispatch, tool } }: RootSate) {
   return { dispatch, tool };
 }
 
-export default connect(mapStateToProps)(Rectangle);
+export default connect(mapStateToProps)(React.memo(Rectangle));

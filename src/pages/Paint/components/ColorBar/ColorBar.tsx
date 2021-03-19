@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { drawActions } from '../../../../core/actions/draw.actions';
 import { Dispatch } from '../../../../core/helpers/store';
@@ -22,4 +22,4 @@ function mapStateToProps({ drawReducer: { dispatch, color } }: RootSate) {
   return { dispatch, color };
 }
 
-export default connect(mapStateToProps)(ColorBar);
+export default connect(mapStateToProps)(React.memo(ColorBar));

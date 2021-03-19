@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
 import PaintButton from '../../../../core/components/PaintButton/PaintButton';
-import line_img from '../../../../assets/img/line.svg';
+import line from '../../../../assets/img/line.svg';
 import { drawConstants } from '../../../../core/constants/draw.constants';
 import { Dispatch } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import { drawActions } from '../../../../core/actions/draw.actions';
-
-const { LINE } = drawConstants;
+import React, { useCallback } from 'react';
 
 interface LineProps {
   dispatch: Dispatch;
@@ -14,17 +13,17 @@ interface LineProps {
 }
 
 function Line({ dispatch, tool }: LineProps): JSX.Element {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (tool === drawConstants.LINE) {
       dispatch(drawActions.noTool());
     } else {
       dispatch(drawActions.line());
     }
-  };
+  }, [tool, dispatch]);
 
   return (
-    <PaintButton name={LINE} onClick={handleClick}>
-      <img src={line_img} alt="line" />
+    <PaintButton name={drawConstants.LINE} onClick={handleClick}>
+      <img src={line} alt="line" />
     </PaintButton>
   );
 }
@@ -33,4 +32,4 @@ function mapStateToProps({ drawReducer: { dispatch, tool } }: RootSate) {
   return { dispatch, tool };
 }
 
-export default connect(mapStateToProps)(Line);
+export default connect(mapStateToProps)(React.memo(Line));

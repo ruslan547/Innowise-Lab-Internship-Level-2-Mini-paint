@@ -10,6 +10,7 @@ import Rectangle from '../Rectangle/Rectangle';
 import Star from '../Star/Star';
 import './ShapeBar.scss';
 import points from '../../../../assets/img/points.svg';
+import { useCallback } from 'react';
 
 interface ShapeBarProps {
   dispatch: Dispatch;
@@ -17,13 +18,13 @@ interface ShapeBarProps {
 }
 
 function ShapeBar({ dispatch, isShowedShapeBar }: ShapeBarProps): JSX.Element {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (isShowedShapeBar) {
       dispatch(drawActions.hideShapeBar());
     } else {
       dispatch(drawActions.showShapeBar());
     }
-  };
+  }, [isShowedShapeBar, dispatch]);
 
   return (
     <div className="shape-bar">

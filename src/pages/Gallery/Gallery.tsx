@@ -4,7 +4,6 @@ import GalleryToolBar from './components/GalleryToolBar/GalleryToolBar';
 import './Gallery.scss';
 
 function Gallery(): JSX.Element {
-  console.log('gallery');
   return (
     <div className="gallery">
       <GalleryToolBar />

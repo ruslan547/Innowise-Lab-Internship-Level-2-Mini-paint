@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { showActions } from '../../../../core/actions/show.actions';
 import { RootSate } from '../../../../core/reducers/root.reducer';
@@ -30,7 +30,7 @@ function GalleryList({ images, filtredKey }: GalleryListProps): JSX.Element {
 
   useEffect(() => {
     dispatch(showActions.getImages());
-  }, []);
+  }, [dispatch]);
 
   return <ul className="gallery-list">{imgList}</ul>;
 }
@@ -39,4 +39,4 @@ function mapStateToProps({ showReducer: { images, filtredKey } }: RootSate) {
   return { images, filtredKey };
 }
 
-export default connect(mapStateToProps)(GalleryList);
+export default connect(mapStateToProps)(React.memo(GalleryList));

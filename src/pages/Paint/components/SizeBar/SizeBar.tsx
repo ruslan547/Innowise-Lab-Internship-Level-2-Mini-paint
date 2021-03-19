@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { drawActions } from '../../../../core/actions/draw.actions';
 import PaintButton from '../../../../core/components/PaintButton/PaintButton';
@@ -13,13 +13,13 @@ interface SizeBarProps {
 }
 
 function SizeBar({ isShowedSizeBar, size, dispatch }: SizeBarProps): JSX.Element {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (isShowedSizeBar) {
       dispatch(drawActions.hideSizeBar());
     } else {
       dispatch(drawActions.showSizeBar());
     }
-  };
+  }, [isShowedSizeBar, dispatch]);
 
   const handleChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
     dispatch(drawActions.setSize(value));

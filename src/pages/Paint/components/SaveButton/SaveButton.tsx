@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { connect } from 'react-redux';
 import { User } from '../../../../core/actions/auth.actions';
 import PaintButton from '../../../../core/components/PaintButton/PaintButton';
@@ -19,7 +19,7 @@ let toastId: Id;
 function SaveButton({ img, user, isClean }: SaveButtonProps) {
   const currentImg = useRef<string>('');
 
-  const handleClick = async () => {
+  const handleClick = useCallback(async () => {
     if (currentImg.current !== img.src && !isClean) {
       try {
         await firebaseDbService.sendImg(img.src, user.email);
@@ -28,11 +28,11 @@ function SaveButton({ img, user, isClean }: SaveButtonProps) {
         toast.error(message, { position: toast.POSITION.TOP_CENTER });
       }
     } else if (!toast.isActive(toastId)) {
-      toastId = toast.error('this image is already saved', { position: toast.POSITION.TOP_CENTER });
+      toastId = toast.error('Error', { position: toast.POSITION.TOP_CENTER });
     }
 
     currentImg.current = img.src;
-  };
+  }, [isClean, img, user]);
 
   return (
     <div>
@@ -48,4 +48,4 @@ function mapStateToProps({ drawReducer: { img, isClean }, authReducer: { user } 
   return { img, user, isClean };
 }
 
-export default connect(mapStateToProps)(SaveButton);
+export default connect(mapStateToProps)(React.memo(SaveButton));

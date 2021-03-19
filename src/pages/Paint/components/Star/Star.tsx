@@ -5,6 +5,7 @@ import { Dispatch } from '../../../../core/helpers/store';
 import star from '../../../../assets/img/star.svg';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import { connect } from 'react-redux';
+import React, { useCallback } from 'react';
 
 interface StarProps {
   dispatch: Dispatch;
@@ -12,13 +13,13 @@ interface StarProps {
 }
 
 function Star({ dispatch, tool }: StarProps): JSX.Element {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (tool === drawConstants.STAR) {
       dispatch(drawActions.noTool());
     } else {
       dispatch(drawActions.star());
     }
-  };
+  }, [tool, dispatch]);
 
   return (
     <PaintButton name={drawConstants.STAR} onClick={handleClick}>
@@ -31,4 +32,4 @@ function mapStateToProps({ drawReducer: { dispatch, tool } }: RootSate) {
   return { dispatch, tool };
 }
 
-export default connect(mapStateToProps)(Star);
+export default connect(mapStateToProps)(React.memo(Star));

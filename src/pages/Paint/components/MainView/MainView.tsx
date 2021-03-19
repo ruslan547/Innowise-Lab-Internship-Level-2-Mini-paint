@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useRef } from 'react';
+import { MouseEvent, useCallback, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { drawActions } from '../../../../core/actions/draw.actions';
 import { drawConstants } from '../../../../core/constants/draw.constants';
@@ -68,13 +68,13 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
     }
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     if (canvasRef && canvasRef.current) {
       dispatch(drawActions.setImg(drawService.createImg(canvasRef.current)));
     }
     drawService.clearFromPaintbrush();
     dispatch(drawActions.stopDraw());
-  };
+  }, [dispatch]);
 
   const handleMouseLeave = () => {
     if (tool === drawConstants.PAINTBRUSH && canvasRef && canvasRef.current) {
@@ -83,13 +83,13 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
     }
   };
 
-  const handleResize = () => {
+  const handleResize = useCallback(() => {
     if (canvasRef && canvasRef.current && mainviewRef && mainviewRef.current) {
       canvasRef.current.width = mainviewRef.current.clientWidth;
       canvasRef.current.height = mainviewRef.current.clientHeight;
       dispatch(drawActions.setContext(drawService.createContext(canvasRef.current)));
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     if (canvasRef && canvasRef.current) {
@@ -104,13 +104,13 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [dispatch, handleResize]);
 
   useEffect(() => {
     document.addEventListener('mouseup', handleMouseUp);
 
     return () => document.removeEventListener('mouseup', handleMouseUp);
-  }, []);
+  }, [handleMouseUp]);
 
   return (
     <div className="mainview" ref={mainviewRef}>

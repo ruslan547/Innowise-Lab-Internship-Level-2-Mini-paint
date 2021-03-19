@@ -9,6 +9,7 @@ import './PaintToolBar.scss';
 import { drawActions } from '../../../../core/actions/draw.actions';
 import { Dispatch } from '../../../../core/helpers/store';
 import trash from '../../../../assets/img/trash.svg';
+import React, { useCallback } from 'react';
 
 interface PaintToolBarProps {
   context: CanvasRenderingContext2D | null;
@@ -16,14 +17,14 @@ interface PaintToolBarProps {
 }
 
 function PaintToolBar({ context, dispatch }: PaintToolBarProps) {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     dispatch(drawActions.deleteImg());
 
     if (context) {
       drawService.clearCanvas(context);
       dispatch(drawActions.clear());
     }
-  };
+  }, [dispatch, context]);
 
   return (
     <div className="paint-toolbar">
@@ -45,4 +46,4 @@ function mapStateToProps({ drawReducer: { context, dispatch } }: RootSate) {
   return { context, dispatch };
 }
 
-export default connect(mapStateToProps)(PaintToolBar);
+export default connect(mapStateToProps)(React.memo(PaintToolBar));
