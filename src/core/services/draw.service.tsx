@@ -69,13 +69,18 @@ function drawLine(
   startY: number,
   mouseX: number,
   mouseY: number,
+  img: HTMLImageElement,
 ): void {
+  redraw(context);
   context.lineWidth = +size;
   context.strokeStyle = color;
   context.beginPath();
   context.moveTo(startX, startY);
   context.lineTo(mouseX, mouseY);
   context.stroke();
+  if (img) {
+    drawService.drawImage(context, img);
+  }
 }
 
 function drawCircle(

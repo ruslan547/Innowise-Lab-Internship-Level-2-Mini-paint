@@ -58,11 +58,7 @@ function MainView({ tool, isDraw, color, size, dispatch, img, context }: MainVie
           drawService.drawImage(context, img);
         }
       } else if (isDraw && tool === drawConstants.LINE) {
-        drawService.redraw(context);
-        drawService.drawLine(context, size, color, startX.current, startY.current, mouseX, mouseY);
-        if (img) {
-          drawService.drawImage(context, img);
-        }
+        drawService.drawLine(context, size, color, startX.current, startY.current, mouseX, mouseY, img);
       } else if (isDraw && tool === drawConstants.CIRCLE) {
         drawService.redraw(context);
         drawService.drawCircle(
