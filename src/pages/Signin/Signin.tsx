@@ -2,7 +2,7 @@ import './Signin.scss';
 import Form from '../../core/components/Form/Form';
 import FormButton from '../../core/components/FormButton/FormButton';
 import Modal from '../../core/components/Modal/Modal';
-import React, { useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { authActions } from '../../core/actions/auth.actions';
 import { ToastContainer, toast } from 'react-toastify';
@@ -27,7 +27,7 @@ function Signin({ loading }: SigninProps): JSX.Element {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
 
-  const handleChange = useCallback(({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback(({ target: { name, value } }: ChangeEvent<HTMLInputElement>) => {
     if (name === 'email') {
       setEmail(value);
     } else if (name === 'password') {

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import React, { ChangeEvent, useCallback, useRef, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import { authActions } from '../../core/actions/auth.actions';
@@ -18,18 +18,18 @@ const ERROR_TEXT = 'Passwords do not match';
 
 toast.configure();
 
-interface IRegisterProps {
+interface RegisterProps {
   loading: boolean;
 }
 
-function Register({ loading }: IRegisterProps) {
+function Register({ loading }: RegisterProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmation, setConfirmation] = useState('');
   const toastId = useRef('');
   const dispatch = useDispatch();
 
-  const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback(({ target: { name, value } }: ChangeEvent<HTMLInputElement>) => {
     if (name === 'email') {
       setEmail(value);
     } else if (name === 'password') {
@@ -37,18 +37,21 @@ function Register({ loading }: IRegisterProps) {
     } else if (name === 'confirmation') {
       setConfirmation(value);
     }
-  };
+  }, []);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (password === confirmation) {
-      dispatch(authActions.register(email, password));
-    } else {
-      if (!toast.isActive(toastId.current)) {
-        toast.error(ERROR_TEXT, { position: toast.POSITION.TOP_CENTER });
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if (password === confirmation) {
+        dispatch(authActions.register(email, password));
+      } else {
+        if (!toast.isActive(toastId.current)) {
+          toast.error(ERROR_TEXT, { position: toast.POSITION.TOP_CENTER });
+        }
       }
-    }
-  };
+    },
+    [email, password, confirmation, dispatch],
+  );
 
   const handleClick = () => {
     history.push(routeConstants.SIGNIN);
@@ -78,4 +81,4 @@ const mapStateToProps = ({ authReducer: { loading } }: RootSate) => {
   return { loading };
 };
 
-export default connect(mapStateToProps)(Register);
+export default connect(mapStateToProps)(React.memo(Register));
