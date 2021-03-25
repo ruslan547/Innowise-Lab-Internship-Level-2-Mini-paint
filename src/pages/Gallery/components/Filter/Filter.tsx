@@ -18,7 +18,7 @@ function createOptions(images: Record<string, Image>, users: Record<string, User
     .filter(({ uid }) => users.hasOwnProperty(uid))
     .map(({ uid }) => users[uid].email);
 
-  const usersWithImg = Object.entries(users).filter(([_, value]) => emails.includes(value.email));
+  const usersWithImg = Object.entries(users).filter((user) => emails.includes(user[1].email));
 
   usersWithImg.push(['all', { email: 'all' }]);
 
