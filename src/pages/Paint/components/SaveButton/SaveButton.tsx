@@ -1,6 +1,5 @@
 import React, { useCallback, useRef } from 'react';
 import { connect } from 'react-redux';
-import { User } from '../../../../core/actions/auth.actions';
 import PaintButton from '../../../../core/components/PaintButton/PaintButton';
 import { RootSate } from '../../../../core/reducers/root.reducer';
 import { firebaseDbService } from '../../../../core/services/firebase.db.service';
@@ -9,14 +8,14 @@ import { Id, toast, ToastContainer } from 'react-toastify';
 
 interface SaveButtonProps {
   img: HTMLImageElement;
-  user: User;
   isClean: boolean;
+  currentUserId: string;
 }
 
 toast.configure();
 let toastId: Id;
 
-function SaveButton({ img, user, isClean }: SaveButtonProps) {
+function SaveButton({ img, isClean, currentUserId }: SaveButtonProps) {
   const currentImg = useRef<string>('');
 
   const handleClick = useCallback(async () => {
@@ -30,7 +29,7 @@ function SaveButton({ img, user, isClean }: SaveButtonProps) {
       }
     } else {
       try {
-        await firebaseDbService.sendImg(img.src, user.email);
+        await firebaseDbService.sendImg(img.src, currentUserId);
         toast.info('image saved', { position: toast.POSITION.TOP_CENTER });
       } catch ({ message }) {
         toast.error(message, { position: toast.POSITION.TOP_CENTER });
@@ -38,7 +37,7 @@ function SaveButton({ img, user, isClean }: SaveButtonProps) {
     }
 
     currentImg.current = img.src;
-  }, [isClean, img, user]);
+  }, [isClean, img, currentUserId]);
 
   return (
     <div>
@@ -50,8 +49,8 @@ function SaveButton({ img, user, isClean }: SaveButtonProps) {
   );
 }
 
-function mapStateToProps({ drawReducer: { img, isClean }, authReducer: { user } }: RootSate) {
-  return { img, user, isClean };
+function mapStateToProps({ drawReducer: { img, isClean }, authReducer: { currentUserId } }: RootSate) {
+  return { img, isClean, currentUserId };
 }
 
 export default connect(mapStateToProps)(React.memo(SaveButton));

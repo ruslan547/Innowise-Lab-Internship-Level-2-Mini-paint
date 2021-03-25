@@ -4,11 +4,12 @@ import { User } from '../actions/auth.actions';
 export const firebaseDbService = {
   sendImg,
   onImages,
+  onUsers,
   setUserEmail,
 };
 
 export interface Image {
-  email: string;
+  uid: string;
   image: string;
 }
 
@@ -28,6 +29,18 @@ async function onImages(): Promise<Record<string, Image>> {
   });
 }
 
-function setUserEmail(user: User): void {
-  database.ref(`users/${user.uid}`).set({ email: user.email });
+function onUsers(): Promise<Record<string, User>> {
+  return new Promise((resolve) => {
+    database
+      .ref()
+      .child('users')
+      .on('value', (snapshot) => {
+        const data = snapshot.val();
+        resolve(data || {});
+      });
+  });
+}
+
+function setUserEmail(uid: string, user: User): void {
+  database.ref(`users/${uid}`).set({ email: user.email });
 }

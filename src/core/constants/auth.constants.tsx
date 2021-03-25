@@ -3,4 +3,5 @@ export enum authConstants {
   REQUEST = 'REQUEST',
   SUCCESS = 'SUCCESS',
   ERROR = 'ERROR',
+  SET_CURRENT_USER_ID = 'SET_CURRENT_USER_ID',
 }

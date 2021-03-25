@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useMemo } from 'react';
 import { connect } from 'react-redux';
+import { User } from '../../../../core/actions/auth.actions';
 import { showActions } from '../../../../core/actions/show.actions';
 import { store } from '../../../../core/helpers/store';
 import { RootSate } from '../../../../core/reducers/root.reducer';
@@ -9,24 +10,29 @@ import './Filter.scss';
 interface FilterProps {
   images: Record<string, Image>;
   filtredKey: string;
+  users: Record<string, User>;
 }
 
-function createOptions(images: Record<string, Image>): Array<JSX.Element> {
-  const emails = Object.values(images).map((item) => item.email);
+function createOptions(images: Record<string, Image>, users: Record<string, User>): Array<JSX.Element> {
+  const emails = Object.values(images)
+    .filter(({ uid }) => users.hasOwnProperty(uid))
+    .map(({ uid }) => users[uid].email);
 
-  emails.push('all');
+  const usersWithImg = Object.entries(users).filter(([_, value]) => emails.includes(value.email));
 
-  return Array.from(new Set(emails)).map((item) => {
+  usersWithImg.push(['all', { email: 'all' }]);
+
+  return usersWithImg.map(([uid, value]) => {
     return (
-      <option key={item} value={item}>
-        {item}
+      <option key={uid} value={uid}>
+        {value.email}
       </option>
     );
   });
 }
 
-function Filter({ filtredKey, images }: FilterProps) {
-  const options = useMemo(() => createOptions(images), [images]);
+function Filter({ filtredKey, images, users }: FilterProps) {
+  const options = useMemo(() => createOptions(images, users), [images, users]);
 
   const handleChange = ({ target: { value } }: ChangeEvent<HTMLSelectElement>) => {
     store.dispatch(showActions.filterImages(value));
@@ -39,8 +45,8 @@ function Filter({ filtredKey, images }: FilterProps) {
   );
 }
 
-function mapStateToProps({ showReducer: { filtredKey, images } }: RootSate) {
-  return { filtredKey, images };
+function mapStateToProps({ showReducer: { filtredKey, images, users } }: RootSate) {
+  return { filtredKey, images, users };
 }
 
 export default connect(mapStateToProps)(React.memo(Filter));

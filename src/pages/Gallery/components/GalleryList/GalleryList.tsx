@@ -15,7 +15,7 @@ function createImgList(images: Record<string, Image>, filtredKey: string) {
   let filteredImages = Object.values(images);
 
   if (filtredKey !== 'all') {
-    filteredImages = filteredImages.filter((item) => item.email === filtredKey);
+    filteredImages = filteredImages.filter((item) => item.uid === filtredKey);
   }
 
   return filteredImages.map((item, i, arr) => (
@@ -31,6 +31,7 @@ function GalleryList({ images, filtredKey }: GalleryListProps): JSX.Element {
 
   useEffect(() => {
     dispatch(showActions.getImages());
+    dispatch(showActions.getUsers());
   }, [dispatch]);
 
   useEffect(() => {

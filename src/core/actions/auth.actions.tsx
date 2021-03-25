@@ -16,7 +16,6 @@ export const authActions = {
 
 export interface User {
   email: string;
-  uid: string;
 }
 
 toast.configure();
@@ -39,7 +38,12 @@ interface SignoutAction {
   type: typeof authConstants.SIGNOUT;
 }
 
-export type AuthAction = RequestAction | SuccessAction | ErrorAction | SignoutAction;
+interface SetCurrentUserIdAction {
+  type: typeof authConstants.SET_CURRENT_USER_ID;
+  payload: string;
+}
+
+export type AuthAction = RequestAction | SuccessAction | ErrorAction | SignoutAction | SetCurrentUserIdAction;
 
 export type AuthThunkAction = ThunkAction<void, AuthState, unknown, AuthAction>;
 
@@ -67,7 +71,8 @@ function signin(email: string, password: string): AuthThunkAction {
       .then(({ user }: UserCredential) => {
         if (user) {
           const { uid, email } = user;
-          dispatch(success({ uid, email: email || 'unknowk' }));
+          dispatch(success({ email: email || 'unknowk' }));
+          dispatch(setCurrentUserId(uid));
           history.push(routeConstants.GALLERY);
         }
       })
@@ -90,9 +95,10 @@ function register(email: string, password: string): AuthThunkAction {
       .then(({ user }: UserCredential) => {
         if (user) {
           const { uid, email } = user;
-          const newUser = { uid, email: email || 'unknowk' };
+          const newUser = { email: email || 'unknowk' };
           dispatch(success(newUser));
-          firebaseDbService.setUserEmail(newUser);
+          dispatch(setCurrentUserId(uid));
+          firebaseDbService.setUserEmail(uid, newUser);
           history.push(routeConstants.GALLERY);
         }
       })
@@ -111,5 +117,12 @@ function signout(): AuthThunkAction {
     firebaseAuthService.signout().then(() => {
       dispatch({ type: authConstants.SIGNOUT });
     });
+  };
+}
+
+function setCurrentUserId(uid: string): SetCurrentUserIdAction {
+  return {
+    type: authConstants.SET_CURRENT_USER_ID,
+    payload: uid,
   };
 }

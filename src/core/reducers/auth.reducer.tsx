@@ -4,11 +4,13 @@ import { authConstants } from '../constants/auth.constants';
 const initState = {
   loading: false,
   user: null,
+  currentUserId: null,
 };
 
 export interface AuthState {
   loading: boolean;
   user: User | null;
+  currentUserId: string | null;
 }
 
 export function authReducer(state = initState, action: AuthAction): AuthState {
@@ -25,6 +27,8 @@ export function authReducer(state = initState, action: AuthAction): AuthState {
       return { ...state, loading: false };
     case authConstants.SIGNOUT:
       return initState;
+    case authConstants.SET_CURRENT_USER_ID:
+      return { ...state, currentUserId: action.payload };
     default:
       return state;
   }
