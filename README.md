@@ -31,11 +31,15 @@ You will now have app running on localhost via port 3000  http://localhost:3000
 
 ```
    mini-paint-58a48-default-rtdb
-    └── images
-        └── imageId
-            ├── email
-            └── image
-        
+    ├── images
+    │   └── imageId
+    │       ├── userId
+    │       └── image
+    │
+    └── users
+        └── userId
+            └── email
+
 ```
 
 ## Application stack
