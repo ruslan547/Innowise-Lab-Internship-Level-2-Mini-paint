@@ -1,8 +1,10 @@
 import { database } from '../../firebase';
+import { User } from '../actions/auth.actions';
 
 export const firebaseDbService = {
   sendImg,
   onImages,
+  setUserEmail,
 };
 
 export interface Image {
@@ -10,8 +12,8 @@ export interface Image {
   image: string;
 }
 
-async function sendImg(image: string, email: string): Promise<void> {
-  database.ref().child('images').push({ image, email });
+async function sendImg(image: string, uid: string): Promise<void> {
+  database.ref().child('images').push({ image, uid });
 }
 
 async function onImages(): Promise<Record<string, Image>> {
@@ -24,4 +26,8 @@ async function onImages(): Promise<Record<string, Image>> {
         resolve(data || {});
       });
   });
+}
+
+function setUserEmail(user: User): void {
+  database.ref(`users/${user.uid}`).set({ email: user.email });
 }

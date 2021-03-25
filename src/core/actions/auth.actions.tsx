@@ -6,6 +6,7 @@ import { Id, toast } from 'react-toastify';
 import { ThunkAction } from 'redux-thunk';
 import { AuthState } from '../reducers/auth.reducer';
 import { Dispatch } from '../helpers/store';
+import { firebaseDbService } from '../services/firebase.db.service';
 
 export const authActions = {
   signin,
@@ -89,7 +90,9 @@ function register(email: string, password: string): AuthThunkAction {
       .then(({ user }: UserCredential) => {
         if (user) {
           const { uid, email } = user;
-          dispatch(success({ uid, email: email || 'unknowk' }));
+          const newUser = { uid, email: email || 'unknowk' };
+          dispatch(success(newUser));
+          firebaseDbService.setUserEmail(newUser);
           history.push(routeConstants.GALLERY);
         }
       })
