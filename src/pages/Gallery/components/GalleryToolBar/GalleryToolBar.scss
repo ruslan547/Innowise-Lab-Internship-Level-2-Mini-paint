@@ -3,6 +3,7 @@
 .gallery-toolbar {
   width: 100%;
   display: flex;
+  flex-shrink: 1;
   justify-content: space-between;
   padding: 3px;
   box-sizing: border-box;

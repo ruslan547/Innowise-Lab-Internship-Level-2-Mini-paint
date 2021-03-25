@@ -7,6 +7,9 @@ import { RootSate } from '../../../../core/reducers/root.reducer';
 import { Image } from '../../../../core/services/firebase.db.service';
 import './Filter.scss';
 
+const VALUE_INDEX = 1;
+const ALL = 'all';
+
 interface FilterProps {
   images: Record<string, Image>;
   filtredKey: string;
@@ -18,9 +21,9 @@ function createOptions(images: Record<string, Image>, users: Record<string, User
     .filter(({ uid }) => users.hasOwnProperty(uid))
     .map(({ uid }) => users[uid].email);
 
-  const usersWithImg = Object.entries(users).filter((user) => emails.includes(user[1].email));
+  const usersWithImg = Object.entries(users).filter((user) => emails.includes(user[VALUE_INDEX].email));
 
-  usersWithImg.push(['all', { email: 'all' }]);
+  usersWithImg.push([ALL, { email: ALL }]);
 
   return usersWithImg.map(([uid, value]) => {
     return (
