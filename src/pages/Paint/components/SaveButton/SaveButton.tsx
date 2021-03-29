@@ -29,6 +29,7 @@ function SaveButton({ img, isClean, currentUserId }: SaveButtonProps) {
       }
     } else {
       try {
+        console.log(currentUserId);
         await firebaseDbService.sendImg(img.src, currentUserId);
         toast.info('image saved', { position: toast.POSITION.TOP_CENTER });
       } catch ({ message }) {

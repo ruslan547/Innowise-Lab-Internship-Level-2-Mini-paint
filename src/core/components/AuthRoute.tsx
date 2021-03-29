@@ -1,18 +1,17 @@
-import { useEffect } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Route } from 'react-router';
 import { auth } from '../../firebase';
 import { authActions } from '../actions/auth.actions';
-import { RootSate } from '../reducers/root.reducer';
 import Loader from './Loader/Loader';
 
 export interface AuthRouteProps {
   children: JSX.Element[];
-  loading: boolean;
 }
 
-function AuthRoute({ loading, children }: AuthRouteProps): JSX.Element {
+function AuthRoute({ children }: AuthRouteProps): JSX.Element {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     return auth.onAuthStateChanged((user) => {
@@ -21,15 +20,11 @@ function AuthRoute({ loading, children }: AuthRouteProps): JSX.Element {
         dispatch(authActions.success({ email: email || 'unknowk' }));
         dispatch(authActions.setCurrentUserId(uid));
       }
-      dispatch(authActions.setCurrentUserId(null));
+      setLoading(false);
     });
   }, [dispatch]);
 
   return <Route>{loading ? <Loader /> : children}</Route>;
 }
 
-function mapStateToProps({ authReducer: { loading } }: RootSate) {
-  return { loading };
-}
-
-export default connect(mapStateToProps)(AuthRoute);
+export default AuthRoute;

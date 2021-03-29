@@ -23,17 +23,9 @@ export interface User {
 toast.configure();
 let toastId: Id;
 
-interface RequestAction {
-  type: typeof authConstants.REQUEST;
-}
-
 interface SuccessAction {
   type: typeof authConstants.SUCCESS;
   payload: User | null;
-}
-
-interface ErrorAction {
-  type: typeof authConstants.ERROR;
 }
 
 interface SignoutAction {
@@ -42,16 +34,12 @@ interface SignoutAction {
 
 interface SetCurrentUserIdAction {
   type: typeof authConstants.SET_CURRENT_USER_ID;
-  payload: string | null;
+  payload: string;
 }
 
-export type AuthAction = RequestAction | SuccessAction | ErrorAction | SignoutAction | SetCurrentUserIdAction;
+export type AuthAction = SuccessAction | SignoutAction | SetCurrentUserIdAction;
 
 export type AuthThunkAction = ThunkAction<void, AuthState, unknown, AuthAction>;
-
-function request(): RequestAction {
-  return { type: authConstants.REQUEST };
-}
 
 function success(user: User | null): SuccessAction {
   return {
@@ -60,14 +48,8 @@ function success(user: User | null): SuccessAction {
   };
 }
 
-function error(): ErrorAction {
-  return { type: authConstants.ERROR };
-}
-
 function signin(email: string, password: string): AuthThunkAction {
   return (dispatch: Dispatch) => {
-    dispatch(request());
-
     firebaseAuthService
       .signin(email, password)
       .then(({ user }: UserCredential) => {
@@ -79,8 +61,6 @@ function signin(email: string, password: string): AuthThunkAction {
         }
       })
       .catch(({ message }) => {
-        dispatch(error());
-
         if (!toast.isActive(toastId)) {
           toastId = toast.error(message, { position: toast.POSITION.TOP_CENTER });
         }
@@ -90,8 +70,6 @@ function signin(email: string, password: string): AuthThunkAction {
 
 function register(email: string, password: string): AuthThunkAction {
   return (dispatch) => {
-    dispatch(request());
-
     firebaseAuthService
       .register(email, password)
       .then(({ user }: UserCredential) => {
@@ -105,8 +83,6 @@ function register(email: string, password: string): AuthThunkAction {
         }
       })
       .catch(({ message }) => {
-        dispatch(error());
-
         if (!toast.isActive(toastId)) {
           toastId = toast.error(message, { position: toast.POSITION.TOP_CENTER });
         }
@@ -122,7 +98,7 @@ function signout(): AuthThunkAction {
   };
 }
 
-function setCurrentUserId(uid: string | null): SetCurrentUserIdAction {
+function setCurrentUserId(uid: string): SetCurrentUserIdAction {
   return {
     type: authConstants.SET_CURRENT_USER_ID,
     payload: uid,
