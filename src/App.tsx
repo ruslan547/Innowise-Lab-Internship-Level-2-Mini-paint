@@ -7,27 +7,9 @@ import Register from './pages/Register/Register';
 import { history } from './core/helpers/history';
 import Paint from './pages/Paint/Paint';
 import Gallery from './pages/Gallery/Gallery';
-import { useEffect } from 'react';
-import { auth } from './firebase';
-import { useDispatch } from 'react-redux';
-import { authActions } from './core/actions/auth.actions';
 import AuthRoute from './core/components/AuthRoute';
 
 function App(): JSX.Element {
-  const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   return auth.onAuthStateChanged((user) => {
-  //     if (user) {
-  //       const { uid, email } = user;
-  //       dispatch(authActions.success({ email: email || 'unknowk' }));
-  //       dispatch(authActions.setCurrentUserId(uid));
-  //       // history.push(routeConstants.GALLERY);
-  //     }
-  //     dispatch(authActions.setCurrentUserId(null));
-  //   });
-  // }, []);
-
   return (
     <div className="main">
       <div className="container">

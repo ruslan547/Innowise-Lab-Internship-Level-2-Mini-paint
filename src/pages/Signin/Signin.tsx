@@ -3,14 +3,12 @@ import Form from '../../core/components/Form/Form';
 import FormButton from '../../core/components/FormButton/FormButton';
 import Modal from '../../core/components/Modal/Modal';
 import React, { ChangeEvent, useCallback, useState } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { authActions } from '../../core/actions/auth.actions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Loader from '../../core/components/Loader/Loader';
 import { history } from '../../core/helpers/history';
 import { routeConstants } from '../../core/constants/route.constants';
-import { RootSate } from '../../core/reducers/root.reducer';
 
 const FORM_BTN_VALUE = 'sign in';
 const MODAL_BTN_VALUE = 'register';
@@ -18,11 +16,7 @@ const MODAL_TEXT = 'Need an account?';
 
 toast.configure();
 
-interface SigninProps {
-  loading: boolean;
-}
-
-function Signin({ loading }: SigninProps): JSX.Element {
+function Signin(): JSX.Element {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
@@ -59,8 +53,4 @@ function Signin({ loading }: SigninProps): JSX.Element {
   );
 }
 
-function mapStateToProps({ authReducer: { loading } }: RootSate) {
-  return { loading };
-}
-
-export default connect(mapStateToProps)(React.memo(Signin));
+export default React.memo(Signin);

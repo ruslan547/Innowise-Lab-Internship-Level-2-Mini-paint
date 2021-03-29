@@ -1,10 +1,8 @@
-import { MemoExoticComponent, useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { Route, RouteProps } from 'react-router';
+import { Route } from 'react-router';
 import { auth } from '../../firebase';
-import { authActions, User } from '../actions/auth.actions';
-import { routeConstants } from '../constants/route.constants';
-import { history } from '../helpers/history';
+import { authActions } from '../actions/auth.actions';
 import { RootSate } from '../reducers/root.reducer';
 import Loader from './Loader/Loader';
 

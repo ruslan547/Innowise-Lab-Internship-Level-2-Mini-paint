@@ -1,14 +1,12 @@
 import React, { ChangeEvent, useCallback, useRef, useState } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import { authActions } from '../../core/actions/auth.actions';
 import Form from '../../core/components/Form/Form';
 import FormButton from '../../core/components/FormButton/FormButton';
-import Loader from '../../core/components/Loader/Loader';
 import Modal from '../../core/components/Modal/Modal';
 import { routeConstants } from '../../core/constants/route.constants';
 import { history } from '../../core/helpers/history';
-import { RootSate } from '../../core/reducers/root.reducer';
 import './Register.scss';
 
 const MODAL_TEXT = 'Already have an account?';
@@ -18,11 +16,7 @@ const ERROR_TEXT = 'Passwords do not match';
 
 toast.configure();
 
-interface RegisterProps {
-  loading: boolean;
-}
-
-function Register({ loading }: RegisterProps) {
+function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmation, setConfirmation] = useState('');
@@ -76,8 +70,4 @@ function Register({ loading }: RegisterProps) {
   );
 }
 
-const mapStateToProps = ({ authReducer: { loading } }: RootSate) => {
-  return { loading };
-};
-
-export default connect(mapStateToProps)(React.memo(Register));
+export default React.memo(Register);
