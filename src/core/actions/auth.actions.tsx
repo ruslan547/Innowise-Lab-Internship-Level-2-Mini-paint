@@ -42,7 +42,7 @@ interface SignoutAction {
 
 interface SetCurrentUserIdAction {
   type: typeof authConstants.SET_CURRENT_USER_ID;
-  payload: string;
+  payload: string | null;
 }
 
 export type AuthAction = RequestAction | SuccessAction | ErrorAction | SignoutAction | SetCurrentUserIdAction;
@@ -122,7 +122,7 @@ function signout(): AuthThunkAction {
   };
 }
 
-function setCurrentUserId(uid: string): SetCurrentUserIdAction {
+function setCurrentUserId(uid: string | null): SetCurrentUserIdAction {
   return {
     type: authConstants.SET_CURRENT_USER_ID,
     payload: uid,

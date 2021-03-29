@@ -11,30 +11,34 @@ import { useEffect } from 'react';
 import { auth } from './firebase';
 import { useDispatch } from 'react-redux';
 import { authActions } from './core/actions/auth.actions';
+import AuthRoute from './core/components/AuthRoute';
 
 function App(): JSX.Element {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    return auth.onAuthStateChanged((user) => {
-      if (user) {
-        const { uid, email } = user;
-        dispatch(authActions.success({ email: email || 'unknowk' }));
-        dispatch(authActions.setCurrentUserId(uid));
-        history.push(routeConstants.GALLERY);
-      }
-    });
-  }, [dispatch]);
+  // useEffect(() => {
+  //   return auth.onAuthStateChanged((user) => {
+  //     if (user) {
+  //       const { uid, email } = user;
+  //       dispatch(authActions.success({ email: email || 'unknowk' }));
+  //       dispatch(authActions.setCurrentUserId(uid));
+  //       // history.push(routeConstants.GALLERY);
+  //     }
+  //     dispatch(authActions.setCurrentUserId(null));
+  //   });
+  // }, []);
 
   return (
     <div className="main">
       <div className="container">
         <Router history={history}>
           <Switch>
-            <PrivateRoute exact path={routeConstants.GALLERY} component={Gallery} />
-            <PrivateRoute path={routeConstants.PAINT} component={Paint} />
-            <Route path={routeConstants.SIGNIN} component={Signin} />
-            <Route path={routeConstants.REGISTER} component={Register} />
+            <AuthRoute>
+              <PrivateRoute exact path={routeConstants.GALLERY} component={Gallery} />
+              <PrivateRoute path={routeConstants.PAINT} component={Paint} />
+              <Route path={routeConstants.SIGNIN} component={Signin} />
+              <Route path={routeConstants.REGISTER} component={Register} />
+            </AuthRoute>
           </Switch>
         </Router>
       </div>

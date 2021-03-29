@@ -49,7 +49,6 @@ function Signin({ loading }: SigninProps): JSX.Element {
 
   return (
     <div className="signin">
-      {loading && <Loader />}
       <ToastContainer />
       <Modal text={MODAL_TEXT} value={MODAL_BTN_VALUE} onClick={handleClick}>
         <Form onChange={handleChange} onSubmit={handleSubmit}>

@@ -59,7 +59,6 @@ function Register({ loading }: RegisterProps) {
 
   return (
     <div className="register">
-      {loading && <Loader />}
       <ToastContainer />
       <Modal text={MODAL_TEXT} value={MODAL_BTN_VALUE} onClick={handleClick}>
         <Form onChange={handleChange} onSubmit={handleSubmit}>
