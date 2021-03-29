@@ -12,6 +12,8 @@ export const authActions = {
   signin,
   register,
   signout,
+  success,
+  setCurrentUserId,
 };
 
 export interface User {
