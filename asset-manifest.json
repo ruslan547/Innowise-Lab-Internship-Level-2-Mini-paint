@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/css/main.9daa48b0.chunk.css",
-    "main.js": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/js/main.6e42aaae.chunk.js",
-    "main.js.map": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/js/main.6e42aaae.chunk.js.map",
+    "main.css": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/css/main.23a335f7.chunk.css",
+    "main.js": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/js/main.272d7cba.chunk.js",
+    "main.js.map": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/js/main.272d7cba.chunk.js.map",
     "runtime-main.js": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/js/runtime-main.c3c7deae.js",
     "runtime-main.js.map": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/js/runtime-main.c3c7deae.js.map",
     "static/css/2.3f6a4e7d.chunk.css": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/css/2.3f6a4e7d.chunk.css",
-    "static/js/2.1c188681.chunk.js": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/js/2.1c188681.chunk.js",
-    "static/js/2.1c188681.chunk.js.map": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/js/2.1c188681.chunk.js.map",
+    "static/js/2.e36abb3b.chunk.js": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/js/2.e36abb3b.chunk.js",
+    "static/js/2.e36abb3b.chunk.js.map": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/js/2.e36abb3b.chunk.js.map",
     "index.html": "/Innowise-Lab-Internship-Level-2-Mini-paint/index.html",
     "static/css/2.3f6a4e7d.chunk.css.map": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/css/2.3f6a4e7d.chunk.css.map",
-    "static/css/main.9daa48b0.chunk.css.map": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/css/main.9daa48b0.chunk.css.map",
-    "static/js/2.1c188681.chunk.js.LICENSE.txt": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/js/2.1c188681.chunk.js.LICENSE.txt",
+    "static/css/main.23a335f7.chunk.css.map": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/css/main.23a335f7.chunk.css.map",
+    "static/js/2.e36abb3b.chunk.js.LICENSE.txt": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/js/2.e36abb3b.chunk.js.LICENSE.txt",
     "static/media/circle.dddf140d.svg": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/media/circle.dddf140d.svg",
     "static/media/disk.4e36d248.svg": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/media/disk.4e36d248.svg",
     "static/media/hexagon.5fee026a.svg": "/Innowise-Lab-Internship-Level-2-Mini-paint/static/media/hexagon.5fee026a.svg",
@@ -27,8 +27,8 @@
   "entrypoints": [
     "static/js/runtime-main.c3c7deae.js",
     "static/css/2.3f6a4e7d.chunk.css",
-    "static/js/2.1c188681.chunk.js",
-    "static/css/main.9daa48b0.chunk.css",
-    "static/js/main.6e42aaae.chunk.js"
+    "static/js/2.e36abb3b.chunk.js",
+    "static/css/main.23a335f7.chunk.css",
+    "static/js/main.272d7cba.chunk.js"
   ]
 }
