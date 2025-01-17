@@ -29,11 +29,11 @@ function SaveButton({ img, isClean, currentUserId }: SaveButtonProps) {
       }
     } else {
       try {
-        console.log(currentUserId);
         await firebaseDbService.sendImg(img.src, currentUserId);
         toast.info('image saved', { position: toast.POSITION.TOP_CENTER });
-      } catch ({ message }) {
-        toast.error(message, { position: toast.POSITION.TOP_CENTER });
+      } catch (error) {
+        const errorMessage = (error as unknown as { message: string })?.message || 'An unknown error occurred.';
+        toast.error(errorMessage, { position: toast.POSITION.TOP_CENTER });
       }
     }
 

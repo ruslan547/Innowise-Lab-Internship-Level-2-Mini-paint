@@ -12,10 +12,9 @@ import React, { useCallback } from 'react';
 
 interface NavBarProps {
   dispatch: Dispatch;
-  img: HTMLImageElement;
 }
 
-function NavBar({ dispatch, img }: NavBarProps): JSX.Element {
+function NavBar({ dispatch }: NavBarProps): JSX.Element {
   const handleClick = useCallback(async () => {
     dispatch(drawActions.deleteImg());
     dispatch(drawActions.clear());
@@ -36,8 +35,8 @@ function NavBar({ dispatch, img }: NavBarProps): JSX.Element {
   );
 }
 
-function mapStateToProps({ drawReducer: { img, dispatch } }: RootSate) {
-  return { dispatch, img };
+function mapStateToProps({ drawReducer: { dispatch } }: RootSate) {
+  return { dispatch };
 }
 
 export default connect(mapStateToProps)(React.memo(NavBar));
